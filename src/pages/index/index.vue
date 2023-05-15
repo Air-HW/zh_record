@@ -10,13 +10,28 @@
 -->
 <template>
   <view class="content">
-    <image class="logo" src="/static/logo.png"></image>
-    <u-button type="primary" loading loadingText="加载中"></u-button>
+    <view class="logo"> Hello World 小张便旅! </view>
+    <u-rate :count="count" v-model="value"></u-rate>
+    <u-calendar
+      :show="show"
+      mode="single"
+      @confirm="confirm"
+      @close="show = false"
+    ></u-calendar>
+    <u-button type="primary" @click="show = true">打开</u-button>
   </view>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref } from "vue";
+const show = ref(false);
+const count = ref(5);
+const value = ref(3);
+const confirm = function (e) {
+  show.value = false;
+  console.log(e[0]);
+  console.log(show);
+};
 </script>
 
 <style>
@@ -28,9 +43,9 @@ import { ref } from 'vue'
 }
 
 .logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
+  height: 350rpx;
+  width: 350rpx;
+  margin-top: 350rpx;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 50rpx;
