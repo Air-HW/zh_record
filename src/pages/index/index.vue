@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-05-10 21:48:32
+ * @LastEditTime: 2023-05-15 21:57:03
  * @FilePath: \zh_record\src\pages\index\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -12,12 +12,8 @@
   <view class="content">
     <view class="logo"> Hello World 小张便旅! </view>
     <u-rate :count="count" v-model="value"></u-rate>
-    <u-calendar
-      :show="show"
-      mode="single"
-      @confirm="confirm"
-      @close="show = false"
-    ></u-calendar>
+    <u-calendar :show="show" mode="single" @confirm="confirm" @close="show = false"
+      :close-on-click-overlay="true"></u-calendar>
     <u-button type="primary" @click="show = true">打开</u-button>
   </view>
 </template>
