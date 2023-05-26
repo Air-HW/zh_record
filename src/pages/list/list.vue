@@ -33,12 +33,14 @@
 import { ref } from "vue";
 const border = ref('none');
 const showSex = ref(false);
-//定义一个用户性别的泛型
 
+//定义一个用户性别的泛型
 const form = ref({
   name: '',
   sex: ''
 });
+
+//下拉框数据
 const actions = ref([
   {
     name: "男",
@@ -50,6 +52,8 @@ const actions = ref([
     name: "保密",
   },
 ]);
+
+//校验规则
 const rules = ref({
   name: [{
     type: "string",
