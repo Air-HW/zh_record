@@ -1,3 +1,13 @@
+/*
+ * @Author: 张书瑞
+ * @Date: 2023-05-09 20:18:04
+ * @LastEditors: 张书瑞
+ * @LastEditTime: 2023-06-04 11:35:30
+ * @FilePath: \zh_record\src\pages.json
+ * @Description:
+ * @email: 1592955886@qq.com
+ * Copyright (c) 2023 by 张书瑞, All Rights Reserved.
+ */
 {
   "easycom": {
     // 注意一定要放在custom里，否则无效，https://ask.dcloud.net.cn/question/131175
@@ -8,59 +18,82 @@
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
+      "path": "pages/detail/index",
+      "style": {
+        "navigationBarTitleText": "明细"
+      }
+    },
+    {
       "path": "pages/index/index",
       "style": {
         "navigationBarTitleText": "首页"
       }
     },
     {
-      "path": "pages/list/list",
+      "path": "pages/list/index",
       "style": {
         "navigationBarTitleText": "分类"
       }
     },
     {
-      "path": "pages/home/home",
+      "path": "pages/home/index",
       "style": {
         "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/setting/index",
+      "style": {
+        "navigationBarTitleText": "分类配置"
+      }
+    },
+    {
+      "path": "pages/statistics/index",
+      "style": {
+        "navigationBarTitleText": "统计"
       }
     }
   ],
   "tabBar": {
-    "color": "#ADAFBC",
-    "selectedColor": "#3BCEB1",
+    "color": "#707070",
+    "selectedColor": "#3c9cff",
     "list": [
       {
         "iconPath": "static/image/tabbar/detail.png",
+        "selectedIconPath": "static/image/tabbar/detail-cur.png",
         "text": "明细",
-        "pagePath": "pages/index/index"
+        "pagePath": "pages/detail/index"
       },
       {
         "iconPath": "static/image/tabbar/statistics.png",
+        "selectedIconPath": "static/image/tabbar/statistics-cur.png",
         "text": "统计",
-        "pagePath": "pages/list/list"
+        "pagePath": "pages/statistics/index"
       },
       {
         "iconPath": "static/image/tabbar/add.png",
+        "selectedIconPath": "static/image/tabbar/add-cur.png",
         "text": "添加",
-        "pagePath": "pages/home/home"
+        "pagePath": "pages/list/index"
       },
       {
         "iconPath": "static/image/tabbar/setting.png",
+        "selectedIconPath": "static/image/tabbar/setting-cur.png",
         "text": "设置",
-        "pagePath": "pages/list/list"
+        "pagePath": "pages/setting/index"
       },
       {
         "iconPath": "static/image/tabbar/my.png",
+        "selectedIconPath": "static/image/tabbar/my-cur.png",
         "text": "我的",
-        "pagePath": "pages/index/index"
+        "pagePath": "pages/home/index"
       }
     ]
   },
   "globalStyle": {
-    "navigationBarTextStyle": "black",
+    "navigationBarTextStyle": "white",
     "navigationBarTitleText": "小张便旅",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarBackgroundColor": "#3c9cff",
+    "backgroundColor": "black"
   }
 }
