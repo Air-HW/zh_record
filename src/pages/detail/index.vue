@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-06-04 22:39:36
+ * @LastEditTime: 2023-06-05 22:31:47
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -35,8 +35,8 @@
         </view>
       </view>
     </view>
-    <view class="chart">
-      hello
+    <view class="chart" id="echarts">
+
     </view>
     <view class="date">
       <view class="datetitle">
@@ -51,7 +51,7 @@
         <view class="wrapper">
           <template v-for="item in date" :key="item.key">
             <view class="item">
-              <view class="card" @click="dateClick(item)" :class="item.key == cardCur ? 'cardCur':''">
+              <view class="card" @click="dateClick(item)" :class="item.key == cardCur ? 'cardCur' : ''">
                 <span class="card-cn">{{ item.dateCn }}</span>
                 <span class="card-en">{{ item.dateEn }}</span>
               </view>
@@ -68,6 +68,7 @@
 
 <script lang="ts" setup>
 import { onBeforeMount, onMounted, ref } from "vue";
+import * as echarts from 'echarts';
 const date = [{
   key: 1, dateCn: '一月', dateEn: 'Jen'
 },
@@ -110,10 +111,60 @@ const icon = ref("../../static/icon/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
 const cardCur = ref(1)
-onBeforeMount( async() => {
+onBeforeMount(async () => {
   const now = new Date().getMonth() + 1;
   console.log(now)
   cardCur.value = now
+})
+onMounted(async () => {
+  type EChartsOption = echarts.EChartsOption;
+  var chartDom = document.getElementById('echarts');
+  var myChart = echarts.init(chartDom);
+  var option: EChartsOption;
+  option = {
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      top: '5%',
+      left: 'center',
+      selectedMode: true
+    },
+    series: [
+      {
+        name: 'Access From',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        center: ['45%', '80%'],
+        startAngle: 180,
+        label: {
+          show: true,
+          fontSize: 12,
+          formatter: "{b}: {c}"
+        },
+        data: [
+          { value: 100, name: '购物' },
+          { value: 7.5, name: '早餐' },
+          { value: 15, name: '晚餐' },
+          { value: 20, name: '午餐' },
+          { value: 11.4, name: '交通' },
+          {
+            value: 100 + 7.5 + 15 + 20 + 11.4,
+            itemStyle: {
+              color: 'none',
+              decal: {
+                symbol: 'none'
+              }
+            },
+            label: {
+              show: false
+            }
+          }
+        ]
+      }
+    ]
+  };
+  option && myChart.setOption(option);
 })
 const latestClick = () => {
   latestActive.value = true;
@@ -245,7 +296,7 @@ const dateClick = (item: any) => {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          background-color: #dddddd;
+          background-color: #b1d7ff;
           border-radius: 10rpx;
 
           .card-cn {
