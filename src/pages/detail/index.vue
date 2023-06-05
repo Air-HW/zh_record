@@ -49,9 +49,9 @@
       </view>
       <view class="date-card" v-if="byMonthActive">
         <view class="wrapper">
-          <template v-for="item in date" :key="item.key" @click="dateClick(item)">
+          <template v-for="item in date" :key="item.key">
             <view class="item">
-              <view class="card">
+              <view class="card" @click="dateClick(item)" :class="item.key == cardCur ? 'cardCur':''">
                 <span class="card-cn">{{ item.dateCn }}</span>
                 <span class="card-en">{{ item.dateEn }}</span>
               </view>
@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 const date = [{
   key: 1, dateCn: '一月', dateEn: 'Jen'
 },
@@ -109,6 +109,12 @@ const subtitle = ref("Good morning!");
 const icon = ref("../../static/icon/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
+const cardCur = ref(1)
+onBeforeMount( async() => {
+  const now = new Date().getMonth() + 1;
+  console.log(now)
+  cardCur.value = now
+})
 const latestClick = () => {
   latestActive.value = true;
   byMonthActive.value = false;
@@ -117,8 +123,8 @@ const byMonthActiveClick = () => {
   latestActive.value = false;
   byMonthActive.value = true;
 }
-const dateClick = (index) => {
-  console.log(index)
+const dateClick = (item: any) => {
+  cardCur.value = item.key;
 }
 </script>
 
@@ -199,8 +205,8 @@ const dateClick = (index) => {
   }
 
   .date {
-    height: 150rpx;
     width: 100%;
+    margin-bottom: 30rpx;
 
     .datetitle {
       padding: 0 30rpx;
@@ -229,29 +235,34 @@ const dateClick = (index) => {
       .item {
         display: inline-block;
         vertical-align: top;
-      }
 
-      .card {
-        margin-top: 10rpx;
-        margin-right: 20rpx;
-        height: 90rpx;
-        width: 80rpx;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: #3c9cff;
-        border-radius: 10rpx;
+        .card {
+          margin-top: 10rpx;
+          margin-right: 20rpx;
+          height: 90rpx;
+          width: 80rpx;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background-color: #dddddd;
+          border-radius: 10rpx;
 
-        .card-cn {
-          font-size: 18rpx;
-          font-weight: 800;
+          .card-cn {
+            font-size: 18rpx;
+            font-weight: 800;
+            opacity: 0.8;
+          }
+
+          .card-en {
+            font-size: 8rpx;
+            color: white;
+            opacity: 0.8;
+          }
         }
 
-        .card-en {
-          font-size: 8rpx;
-          color: white;
-          opacity: 0.8;
+        .cardCur {
+          background-color: #3c9cff;
         }
       }
     }
