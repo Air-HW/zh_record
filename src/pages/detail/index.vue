@@ -41,10 +41,10 @@
     <view class="date">
       <view class="datetitle">
         <text :class="{ activeCur: latestActive }"
-          :style="{ fontSize: latestActive ? '18px' : '15px', opacity: latestActive ? 1 : 0.5 }"
+          :style="{ fontSize: latestActive ? '36rpx' : '15rpx', opacity: latestActive ? 1 : 0.5 }"
           @click="latestClick">最新</text>
         <text :class="{ activeCur: byMonthActive }"
-          :style="{ fontSize: byMonthActive ? '18px' : '15px', opacity: byMonthActive ? 1 : 0.5 }"
+          :style="{ fontSize: byMonthActive ? '36rpx' : '15rpx', opacity: byMonthActive ? 1 : 0.5 }"
           @click="byMonthActiveClick">按月份</text>
       </view>
       <view class="date-card" v-if="byMonthActive">
@@ -80,7 +80,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="80rpx" height="80rpx" src="/src/static/image/pay/default/交通1.png"
+                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/交通1.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -91,7 +91,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="80rpx" height="80rpx" src="/src/static/image/pay/default/交通1.png"
+                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/交通.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -102,7 +102,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="80rpx" height="80rpx" src="/src/static/image/pay/default/交通1.png"
+                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/交通1.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -236,7 +236,7 @@ const dateClick = (item: any) => {
 
   .book {
     margin: auto;
-    height: 200px;
+    height: 400rpx;
     border-bottom-left-radius: 20rpx;
     border-bottom-right-radius: 20rpx;
     background-color: #3c9cff;
