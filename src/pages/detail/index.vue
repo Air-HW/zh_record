@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-06-05 22:31:47
+ * @LastEditTime: 2023-06-07 00:20:21
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -60,8 +60,58 @@
         </view>
       </view>
     </view>
-    <view class="paydetail">
-      detail
+    <view v-for="item in 3" :key="item">
+      <view class="paydetail">
+        <view class="detailitem">
+          <view class="detailitem-title">
+            <view class="detailitem-title-date">
+              <text>12月31日</text>
+              <text>星期日</text>
+            </view>
+            <view class="detailitem-title-money">
+              <text>支出:</text><u-icon name="rmb" bold="true" size="10"></u-icon><text
+                style="font-weight: bold;">10000</text>
+            </view>
+            <view class="detailitem-title-money">
+              <text>收入:</text><u-icon name="rmb" bold="true" size="10"></u-icon><text
+                style="font-weight: bold;">10000</text>
+            </view>
+          </view>
+          <view class="detailitem-pay">
+            <view class="detailitem-pay-icon">
+              <view class="detailitem-pay-iconbac">
+                <u-image width="80rpx" height="80rpx" src="/src/static/image/pay/default/交通1.png"
+                  mode="aspectFill"></u-image>
+              </view>
+            </view>
+            <view class="detailitem-pay-title">
+              <u-cell size="large" title="明天几点起" :border="false" value="-100.00" label="地铁"></u-cell>
+            </view>
+          </view>
+          <view class="detailitem-pay">
+            <view class="detailitem-pay-icon">
+              <view class="detailitem-pay-iconbac">
+                <u-image width="80rpx" height="80rpx" src="/src/static/image/pay/default/交通1.png"
+                  mode="aspectFill"></u-image>
+              </view>
+            </view>
+            <view class="detailitem-pay-title">
+              <u-cell size="large" title="明天几点起" :border="false" value="-100.00" label="地铁"></u-cell>
+            </view>
+          </view>
+          <view class="detailitem-pay">
+            <view class="detailitem-pay-icon">
+              <view class="detailitem-pay-iconbac">
+                <u-image width="80rpx" height="80rpx" src="/src/static/image/pay/default/交通1.png"
+                  mode="aspectFill"></u-image>
+              </view>
+            </view>
+            <view class="detailitem-pay-title">
+              <u-cell size="large" title="明天几点起" :border="false" value="-100.00" label="地铁"></u-cell>
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -235,7 +285,7 @@ const dateClick = (item: any) => {
         .moneydetail {
           font-size: 40rpx;
           color: white;
-          top: -10rpx;
+          // top: -10rpx;
           display: flex;
           align-items: center;
         }
@@ -320,8 +370,81 @@ const dateClick = (item: any) => {
   }
 
   .paydetail {
-    border: 1rpx solid red;
-    height: 1200rpx;
+    width: 100%;
+
+    .detailitem {
+      width: 92%;
+      margin: auto;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 20rpx;
+      background-color: white;
+      margin-bottom: 50rpx;
+
+      .detailitem-title {
+        width: 100%;
+        height: 80rpx;
+        line-height: 80rpx;
+        display: flex;
+
+        .detailitem-title-date {
+          flex: 1;
+          font-size: 8rpx;
+          display: flex;
+
+          text {
+            opacity: 0.6;
+          }
+        }
+
+        .detailitem-title-date text:first-child {
+          margin-left: 30rpx;
+          margin-right: 10rpx;
+        }
+
+        .detailitem-title-money {
+          flex: 1;
+          font-size: 10rpx;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          justify-content: center;
+        }
+
+        .detailitem-title-money text:first-child {
+          opacity: 0.6;
+        }
+      }
+
+      .detailitem-pay {
+        height: 120rpx;
+        display: flex;
+
+        .detailitem-pay-icon {
+          height: 100%;
+          flex: 1;
+
+          .detailitem-pay-iconbac {
+            margin: auto;
+            width: 100rpx;
+            height: 100rpx;
+            margin-top: 10rpx;
+            border-radius: 20rpx;
+            float: right;
+            background-color: #9eceff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+
+        .detailitem-pay-title {
+          height: 100%;
+          flex: 4.4;
+        }
+      }
+    }
   }
 }
 </style>
