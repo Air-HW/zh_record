@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-06-07 00:20:21
+ * @LastEditTime: 2023-06-09 00:03:13
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -80,7 +80,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/交通1.png"
+                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/交通_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -91,23 +91,23 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/交通.png"
+                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/餐饮_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
             <view class="detailitem-pay-title">
-              <u-cell size="large" title="明天几点起" :border="false" value="-100.00" label="地铁"></u-cell>
+              <u-cell size="large" title="明天几点起" :border="false" value="-10.00" label="餐饮"></u-cell>
             </view>
           </view>
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/交通1.png"
+                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/外卖_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
             <view class="detailitem-pay-title">
-              <u-cell size="large" title="明天几点起" :border="false" value="-100.00" label="地铁"></u-cell>
+              <u-cell size="large" title="明天几点起" :border="false" value="-21.00" label="外卖"></u-cell>
             </view>
           </view>
         </view>
@@ -157,13 +157,12 @@ const date = [{
 }];
 const title = ref("嗨, 小刘");
 const subtitle = ref("Good morning!");
-const icon = ref("../../static/icon/sun.png");
+const icon = ref("/src/static/icon/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
 const cardCur = ref(1)
 onBeforeMount(async () => {
   const now = new Date().getMonth() + 1;
-  console.log(now)
   cardCur.value = now
 })
 onMounted(async () => {
@@ -303,6 +302,9 @@ const dateClick = (item: any) => {
     margin-top: -60rpx;
     margin-bottom: 50rpx;
     background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .date {

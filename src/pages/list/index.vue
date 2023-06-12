@@ -2,94 +2,106 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-05-15 22:45:05
- * @FilePath: \zh_record\src\pages\list\list.vue
+ * @LastEditTime: 2023-06-12 22:07:22
+ * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
 -->
 <template>
-  <view>
-    <!-- 注意，如果需要兼容微信小程序，最好通过setRules方法设置rules规则 -->
-    <u-form labelPosition="left" :model="form" :rules="rules" ref="uForms">
-      <u-form-item label="姓名" prop="name" borderBottom="true">
-        <u-input :border="border" v-model="form.name"></u-input>
-      </u-form-item>
-      <u-form-item label="性别" prop="sex" borderBottom="true" @click="showSex = true">
-        <u-input disabled disabledColor="#ffffff" v-model="form.sex" placeholder="请选择性别" :border="border"></u-input>
-        <template #right>
-          <u-icon name="arrow-right"></u-icon>
-        </template>
-      </u-form-item>
-    </u-form>
-    <u-button type="primary" @click="submit">提交</u-button>
-    <u-action-sheet :show="showSex" :actions="actions" title="请选择性别" description="如果选择保密会报错" @close="showSex = false"
-      @select="sexSelect">
-    </u-action-sheet>
+  <view class="u-demo-block__content">
+    <u-subsection :list="curList" mode="subsection" :current="curNow" @change="sectionChange"></u-subsection>
+  </view>
+  <view v-if="curNow == 0">
+    <GridList :list="list" />
+  </view>
+  <view v-if="curNow == 1">
+    <GridList :list="listIncome" />
   </view>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-const border = ref('none');
-const showSex = ref(false);
-
-//定义一个用户性别的泛型
-const form = ref({
-  name: '',
-  sex: ''
-});
-
-//下拉框数据
-const actions = ref([
-  {
-    name: "男",
-  },
-  {
-    name: "女",
-  },
-  {
-    name: "保密",
-  },
-]);
-
-//校验规则
-const rules = ref({
-  name: [{
-    type: "string",
-    required: true,
-    message: "请填写姓名",
-    trigger: ["blur", "change"],
-  },
-  {
-    min: 6,
-    max: 8,
-    message: '长度在6-8个字符之间',
-    trigger: ["blur", "change"]
-  }],
-  sex: {
-    type: "string",
-    max: 1,
-    required: true,
-    message: "请选择男或女",
-    trigger: ["blur", "change"],
-  },
-});
-
-const sexSelect = (e) => {
-  form.value.sex = e.name;
-};
-const uForms = ref();
-const submit = () => {
-  console.log();
-  uForms.value.validate().then(res => {
-    if (res) {
-      console.log(form.value);
-    }
-    console.log(res);
-  }).catch(err => {
-    console.log(err);
-  })
-
+import { reactive, ref } from "vue";
+import GridList from "../../components/GridList/GridList.vue"
+const curList = reactive(['支出', '收入']);
+const curNow = ref(0)
+const sectionChange = (index) => {
+  curNow.value = index;
 }
+const list = reactive([{
+  title: "餐饮",
+  url: "/src/static/image/pay/default/餐饮_white.png"
+}, {
+  title: "交通",
+  url: "/src/static/image/pay/default/交通_white.png"
+}, {
+  title: "旅游",
+  url: "/src/static/image/pay/default/旅游_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}]);
+const listIncome = reactive([{
+  title: "工资",
+  url: "/src/static/image/income/工资_white.png"
+}, {
+  title: "兼职",
+  url: "/src/static/image/income/兼职_white.png"
+}, {
+  title: "礼金",
+  url: "/src/static/image/income/礼金_white.png"
+}, {
+  title: "理财",
+  url: "/src/static/image/income/理财记录_white.png"
+}, {
+  title: "其他",
+  url: "/src/static/image/income/其他_white.png"
+}]);
 </script>
+
+<style lang="scss" scoped></style>
