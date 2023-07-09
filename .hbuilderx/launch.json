@@ -1,9 +1,9 @@
 {
-    "version" : "1.0",
-    "configurations" : [
-        {
-            "playground" : "custom",
-            "type" : "uni-app:app-android"
-        }
-    ]
+  "version": "1.0",
+  "configurations": [
+    {
+      "playground": "custom",
+      "type": "uni-app:app-android"
+    }
+  ]
 }
