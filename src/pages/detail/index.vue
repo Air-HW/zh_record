@@ -80,7 +80,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/交通_white.png"
+                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/交通_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -91,7 +91,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/餐饮_white.png"
+                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/餐饮_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -102,7 +102,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="/src/static/image/pay/default/外卖_white.png"
+                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/外卖_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -157,7 +157,7 @@ const date = [{
 }];
 const title = ref("嗨, 小刘");
 const subtitle = ref("Good morning!");
-const icon = ref("/src/static/icon/sun.png");
+const icon = ref("../../static/icon/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
 const cardCur = ref(1)
@@ -294,7 +294,7 @@ const dateClick = (item: any) => {
 
   .chart {
     /* 添加阴影样式 */
-    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0rpx 8rpx 10rpx rgba(0, 0, 0, 0.1);
     margin: auto;
     height: 400rpx;
     border-radius: 20rpx;
@@ -390,7 +390,7 @@ const dateClick = (item: any) => {
 
         .detailitem-title-date {
           flex: 1;
-          font-size: 8rpx;
+          font-size: 16rpx;
           display: flex;
 
           text {
