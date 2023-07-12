@@ -4,6 +4,13 @@
     {
       "playground": "custom",
       "type": "uni-app:app-android"
-    }
+    },
+	{
+		"mp-weixin" : 
+		{
+			"launchtype" : "local"
+		},
+		"type" : "uniCloud"
+	}
   ]
 }

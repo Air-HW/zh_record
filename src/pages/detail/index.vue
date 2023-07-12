@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-06-09 00:03:13
+ * @LastEditTime: 2023-07-11 00:50:03
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -41,10 +41,10 @@
     <view class="date">
       <view class="datetitle">
         <text :class="{ activeCur: latestActive }"
-          :style="{ fontSize: latestActive ? '36rpx' : '15rpx', opacity: latestActive ? 1 : 0.5 }"
+          :style="{ fontSize: latestActive ? '20px' : '10px', opacity: latestActive ? 1 : 0.5 }"
           @click="latestClick">最新</text>
         <text :class="{ activeCur: byMonthActive }"
-          :style="{ fontSize: byMonthActive ? '36rpx' : '15rpx', opacity: byMonthActive ? 1 : 0.5 }"
+          :style="{ fontSize: byMonthActive ? '20px' : '10px', opacity: byMonthActive ? 1 : 0.5 }"
           @click="byMonthActiveClick">按月份</text>
       </view>
       <view class="date-card" v-if="byMonthActive">
@@ -80,7 +80,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/交通_white.png"
+                <u-image width="35px" height="35px" src="~@/static/image/pay/default/交通_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -91,7 +91,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/餐饮_white.png"
+                <u-image width="35px" height="35px" src="~@/static/image/pay/default/餐饮_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -102,7 +102,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/外卖_white.png"
+                <u-image width="35px" height="35px" src="~@/static/image/pay/default/外卖_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -235,16 +235,16 @@ const dateClick = (item: any) => {
 
   .book {
     margin: auto;
-    height: 400rpx;
-    border-bottom-left-radius: 20rpx;
-    border-bottom-right-radius: 20rpx;
+    height: 200px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     background-color: #3c9cff;
 
     .title {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 30rpx;
+      padding: 15px;
 
       .titletext-container {
         display: flex;
@@ -262,8 +262,8 @@ const dateClick = (item: any) => {
       }
 
       .icon {
-        width: 80rpx;
-        height: 80rpx;
+        width: 40px;
+        height: 40px;
       }
     }
 
@@ -271,20 +271,19 @@ const dateClick = (item: any) => {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 30rpx 100rpx;
+      padding: 15px 50px;
 
       .detail-card {
 
         .detailtitle {
           color: rgba(255, 255, 255, 0.7);
           opacity: 0.7;
-          font-size: 20rpx;
+          font-size: 12px;
         }
 
         .moneydetail {
-          font-size: 40rpx;
+          font-size: 20px;
           color: white;
-          // top: -10rpx;
           display: flex;
           align-items: center;
         }
@@ -294,13 +293,13 @@ const dateClick = (item: any) => {
 
   .chart {
     /* 添加阴影样式 */
-    box-shadow: 0rpx 8rpx 10rpx rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
     margin: auto;
-    height: 400rpx;
-    border-radius: 20rpx;
+    height: 200px;
+    border-radius: 10px;
     width: 85%;
-    margin-top: -60rpx;
-    margin-bottom: 50rpx;
+    margin-top: -30px;
+    margin-bottom: 25px;
     background-color: white;
     display: flex;
     align-items: center;
@@ -309,13 +308,13 @@ const dateClick = (item: any) => {
 
   .date {
     width: 100%;
-    margin-bottom: 30rpx;
+    margin-bottom: 12px;
 
     .datetitle {
-      padding: 0 30rpx;
+      padding: 0 12px;
 
       text {
-        margin-right: 20rpx;
+        margin-right: 10px;
       }
     }
 
@@ -325,7 +324,7 @@ const dateClick = (item: any) => {
 
     .date-card {
 
-      padding: 0 30rpx;
+      padding: 0 15px;
 
       .wrapper {
         width: 100%;
@@ -340,25 +339,25 @@ const dateClick = (item: any) => {
         vertical-align: top;
 
         .card {
-          margin-top: 10rpx;
-          margin-right: 20rpx;
-          height: 90rpx;
-          width: 80rpx;
+          margin-top: 5px;
+          margin-right: 10px;
+          height: 45px;
+          width: 40px;
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
           background-color: #b1d7ff;
-          border-radius: 10rpx;
+          border-radius: 5px;
 
           .card-cn {
-            font-size: 18rpx;
+            font-size: 10px;
             font-weight: 800;
             opacity: 0.8;
           }
 
           .card-en {
-            font-size: 8rpx;
+            font-size: 10px;
             color: white;
             opacity: 0.8;
           }
@@ -378,19 +377,19 @@ const dateClick = (item: any) => {
       width: 92%;
       margin: auto;
       box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-      border-radius: 20rpx;
+      border-radius: 10px;
       background-color: white;
-      margin-bottom: 50rpx;
+      margin-bottom: 25px;
 
       .detailitem-title {
         width: 100%;
-        height: 80rpx;
-        line-height: 80rpx;
+        height: 40px;
+        line-height: 40px;
         display: flex;
 
         .detailitem-title-date {
           flex: 1;
-          font-size: 16rpx;
+          font-size: 10px;
           display: flex;
 
           text {
@@ -399,13 +398,13 @@ const dateClick = (item: any) => {
         }
 
         .detailitem-title-date text:first-child {
-          margin-left: 30rpx;
-          margin-right: 10rpx;
+          margin-left: 8px;
+          margin-right: 3px;
         }
 
         .detailitem-title-money {
           flex: 1;
-          font-size: 10rpx;
+          font-size: 10px;
           display: flex;
           align-items: center;
           overflow: hidden;
@@ -420,7 +419,7 @@ const dateClick = (item: any) => {
       }
 
       .detailitem-pay {
-        height: 120rpx;
+        height: 60px;
         display: flex;
 
         .detailitem-pay-icon {
@@ -429,10 +428,10 @@ const dateClick = (item: any) => {
 
           .detailitem-pay-iconbac {
             margin: auto;
-            width: 100rpx;
-            height: 100rpx;
-            margin-top: 10rpx;
-            border-radius: 20rpx;
+            width: 50px;
+            height: 50px;
+            margin-top: 5px;
+            border-radius: 10px;
             float: right;
             background-color: #9eceff;
             display: flex;

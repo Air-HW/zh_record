@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-06-11 22:50:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-06-13 22:20:02
+ * @LastEditTime: 2023-07-11 00:51:05
  * @FilePath: \zh_record\src\components\GridList\GridList.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -18,7 +18,7 @@
     </u-grid-item>
   </u-grid>
   <u-popup :show="show" :round="10" :closeable="true" mode="bottom" @close="close">
-    <view style="margin-top: 80rpx;">
+    <view style="margin-top: 40px;">
       <u-input shape="circle" prefixIcon="rmb" border="surround" v-model="model1.userInfo.name"></u-input>
     </view>
   </u-popup>
@@ -57,14 +57,14 @@ const model1 = reactive({
 </script>
 <style scoped lang="scss">
 .griditem-icon {
-  margin-top: 30rpx;
-  margin-bottom: 10rpx;
+  margin-top: 15px;
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 120rpx;
-  width: 120rpx;
-  border-radius: 60rpx;
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
   background-color: #b1d7ff;
 }
 
