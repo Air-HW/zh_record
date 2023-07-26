@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-07-11 00:50:03
+ * @LastEditTime: 2023-07-23 22:25:55
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -22,14 +22,14 @@
         <view class="detail-card">
           <text class="detailtitle">当月支出(元)</text>
           <view class="moneydetail">
-            <u-icon name="rmb" bold="true" size="10" color="white"></u-icon>
+            <u-icon name="rmb" :bold="true" size="10" color="white"></u-icon>
             <text>1000.00</text>
           </view>
         </view>
         <view class="detail-card">
           <text class="detailtitle">本月支出(元)</text>
           <view class="moneydetail">
-            <u-icon name="rmb" bold="true" size="10" color="white"></u-icon>
+            <u-icon name="rmb" :bold="true" size="10" color="white"></u-icon>
             <text>1000.00</text>
           </view>
         </view>
@@ -69,11 +69,11 @@
               <text>星期日</text>
             </view>
             <view class="detailitem-title-money">
-              <text>支出:</text><u-icon name="rmb" bold="true" size="10"></u-icon><text
+              <text>支出:</text><u-icon name="rmb" :bold="true" size="10"></u-icon><text
                 style="font-weight: bold;">10000</text>
             </view>
             <view class="detailitem-title-money">
-              <text>收入:</text><u-icon name="rmb" bold="true" size="10"></u-icon><text
+              <text>收入:</text><u-icon name="rmb" :bold="true" size="10"></u-icon><text
                 style="font-weight: bold;">10000</text>
             </view>
           </view>
@@ -160,7 +160,7 @@ const subtitle = ref("Good morning!");
 const icon = ref("../../static/icon/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
-const cardCur = ref(1)
+const cardCur = ref(1);
 onBeforeMount(async () => {
   const now = new Date().getMonth() + 1;
   cardCur.value = now
