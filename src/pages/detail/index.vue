@@ -36,22 +36,43 @@
       </view>
     </view>
     <view class="chart" id="echarts">
-
+      <qiun-data-charts
+        type="rose"
+        :canvas2d="true"
+        :chartData="chartData"
+        style="height: 200px; width: 100%"
+      />
     </view>
     <view class="date">
       <view class="datetitle">
-        <text :class="{ activeCur: latestActive }"
-          :style="{ fontSize: latestActive ? '20px' : '10px', opacity: latestActive ? 1 : 0.5 }"
-          @click="latestClick">最新</text>
-        <text :class="{ activeCur: byMonthActive }"
-          :style="{ fontSize: byMonthActive ? '20px' : '10px', opacity: byMonthActive ? 1 : 0.5 }"
-          @click="byMonthActiveClick">按月份</text>
+        <text
+          :class="{ activeCur: latestActive }"
+          :style="{
+            fontSize: latestActive ? '20px' : '10px',
+            opacity: latestActive ? 1 : 0.5,
+          }"
+          @click="latestClick"
+          >最新</text
+        >
+        <text
+          :class="{ activeCur: byMonthActive }"
+          :style="{
+            fontSize: byMonthActive ? '20px' : '10px',
+            opacity: byMonthActive ? 1 : 0.5,
+          }"
+          @click="byMonthActiveClick"
+          >按月份</text
+        >
       </view>
       <view class="date-card" v-if="byMonthActive">
         <view class="wrapper">
           <template v-for="item in date" :key="item.key">
             <view class="item">
-              <view class="card" @click="dateClick(item)" :class="item.key == cardCur ? 'cardCur' : ''">
+              <view
+                class="card"
+                @click="dateClick(item)"
+                :class="item.key == cardCur ? 'cardCur' : ''"
+              >
                 <span class="card-cn">{{ item.dateCn }}</span>
                 <span class="card-en">{{ item.dateEn }}</span>
               </view>
@@ -69,45 +90,77 @@
               <text>星期日</text>
             </view>
             <view class="detailitem-title-money">
-              <text>支出:</text><u-icon name="rmb" :bold="true" size="10"></u-icon><text
-                style="font-weight: bold;">10000</text>
+              <text>支出:</text>
+              <u-icon name="rmb" :bold="true" size="10"></u-icon>
+              <text style="font-weight: bold">10000</text>
             </view>
             <view class="detailitem-title-money">
-              <text>收入:</text><u-icon name="rmb" :bold="true" size="10"></u-icon><text
-                style="font-weight: bold;">10000</text>
+              <text>收入:</text>
+              <u-icon name="rmb" :bold="true" size="10"></u-icon>
+              <text style="font-weight: bold">10000</text>
             </view>
           </view>
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="35px" height="35px" src="~@/static/image/pay/default/交通_white.png"
-                  mode="aspectFill"></u-image>
+                <u-image
+                  width="35px"
+                  height="35px"
+                  src="~@/static/image/pay/default/交通_white.png"
+                  mode="aspectFill"
+                ></u-image>
               </view>
             </view>
             <view class="detailitem-pay-title">
-              <u-cell size="large" title="明天几点起" :border="false" value="-100.00" label="地铁"></u-cell>
+              <u-cell
+                size="large"
+                title="明天几点起"
+                :border="false"
+                value="-100.00"
+                label="地铁"
+              ></u-cell>
             </view>
           </view>
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="35px" height="35px" src="~@/static/image/pay/default/餐饮_white.png"
-                  mode="aspectFill"></u-image>
+                <u-image
+                  width="35px"
+                  height="35px"
+                  src="~@/static/image/pay/default/餐饮_white.png"
+                  mode="aspectFill"
+                ></u-image>
               </view>
             </view>
             <view class="detailitem-pay-title">
-              <u-cell size="large" title="明天几点起" :border="false" value="-10.00" label="餐饮"></u-cell>
+              <u-cell
+                size="large"
+                title="明天几点起"
+                :border="false"
+                value="-10.00"
+                label="餐饮"
+              ></u-cell>
             </view>
           </view>
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="35px" height="35px" src="~@/static/image/pay/default/外卖_white.png"
-                  mode="aspectFill"></u-image>
+                <u-image
+                  width="35px"
+                  height="35px"
+                  src="~@/static/image/pay/default/外卖_white.png"
+                  mode="aspectFill"
+                ></u-image>
               </view>
             </view>
             <view class="detailitem-pay-title">
-              <u-cell size="large" title="明天几点起" :border="false" value="-21.00" label="外卖"></u-cell>
+              <u-cell
+                size="large"
+                title="明天几点起"
+                :border="false"
+                value="-21.00"
+                label="外卖"
+              ></u-cell>
             </view>
           </view>
         </view>
@@ -117,115 +170,108 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, ref } from "vue";
-import * as echarts from 'echarts';
-const date = [{
-  key: 1, dateCn: '一月', dateEn: 'Jen'
-},
-{
-  key: 2, dateCn: '二月', dateEn: 'Feb'
-},
-{
-  key: 3, dateCn: '三月', dateEn: 'Mar'
-},
-{
-  key: 4, dateCn: '四月', dateEn: 'Apr'
-},
-{
-  key: 5, dateCn: '五月', dateEn: 'May'
-},
-{
-  key: 6, dateCn: '六月', dateEn: 'Jun'
-},
-{
-  key: 7, dateCn: '七月', dateEn: 'Jul'
-},
-{
-  key: 8, dateCn: '八月', dateEn: 'Aug'
-},
-{
-  key: 9, dateCn: '九月', dateEn: 'Sep'
-},
-{
-  key: 10, dateCn: '十月', dateEn: 'Oct'
-},
-{
-  key: 11, dateCn: '十一月', dateEn: 'Nov'
-},
-{
-  key: 12, dateCn: '十二月', dateEn: 'Dec'
-}];
+import { onBeforeMount, onMounted, ref, reactive } from "vue";
+// import * as echarts from 'echarts';
+const date = [
+  {
+    key: 1,
+    dateCn: "一月",
+    dateEn: "Jen",
+  },
+  {
+    key: 2,
+    dateCn: "二月",
+    dateEn: "Feb",
+  },
+  {
+    key: 3,
+    dateCn: "三月",
+    dateEn: "Mar",
+  },
+  {
+    key: 4,
+    dateCn: "四月",
+    dateEn: "Apr",
+  },
+  {
+    key: 5,
+    dateCn: "五月",
+    dateEn: "May",
+  },
+  {
+    key: 6,
+    dateCn: "六月",
+    dateEn: "Jun",
+  },
+  {
+    key: 7,
+    dateCn: "七月",
+    dateEn: "Jul",
+  },
+  {
+    key: 8,
+    dateCn: "八月",
+    dateEn: "Aug",
+  },
+  {
+    key: 9,
+    dateCn: "九月",
+    dateEn: "Sep",
+  },
+  {
+    key: 10,
+    dateCn: "十月",
+    dateEn: "Oct",
+  },
+  {
+    key: 11,
+    dateCn: "十一月",
+    dateEn: "Nov",
+  },
+  {
+    key: 12,
+    dateCn: "十二月",
+    dateEn: "Dec",
+  },
+];
 const title = ref("嗨, 小刘");
 const subtitle = ref("Good morning!");
 const icon = ref("../../static/icon/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
 const cardCur = ref(1);
+const chartData = ref({});
 onBeforeMount(async () => {
   const now = new Date().getMonth() + 1;
-  cardCur.value = now
-})
-onMounted(async () => {
-  type EChartsOption = echarts.EChartsOption;
-  var chartDom = document.getElementById('echarts');
-  var myChart = echarts.init(chartDom);
-  var option: EChartsOption;
-  option = {
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      top: '5%',
-      left: 'center',
-      selectedMode: true
-    },
+  cardCur.value = now;
+  let res = {
     series: [
       {
-        name: 'Access From',
-        type: 'pie',
-        radius: ['40%', '70%'],
-        center: ['45%', '80%'],
-        startAngle: 180,
-        label: {
-          show: true,
-          fontSize: 12,
-          formatter: "{b}: {c}"
-        },
         data: [
-          { value: 100, name: '购物' },
-          { value: 7.5, name: '早餐' },
-          { value: 15, name: '晚餐' },
-          { value: 20, name: '午餐' },
-          { value: 11.4, name: '交通' },
-          {
-            value: 100 + 7.5 + 15 + 20 + 11.4,
-            itemStyle: {
-              color: 'none',
-              decal: {
-                symbol: 'none'
-              }
-            },
-            label: {
-              show: false
-            }
-          }
-        ]
-      }
-    ]
+          { name: "一班", value: 50 },
+          { name: "二班", value: 30 },
+          { name: "三班", value: 20 },
+          { name: "四班", value: 18 },
+          { name: "五班", value: 8 },
+        ],
+      },
+    ],
   };
-  option && myChart.setOption(option);
-})
+  chartData.value = res;
+});
+onMounted(async () => {
+});
 const latestClick = () => {
   latestActive.value = true;
   byMonthActive.value = false;
-}
+};
 const byMonthActiveClick = () => {
   latestActive.value = false;
   byMonthActive.value = true;
-}
+};
 const dateClick = (item: any) => {
   cardCur.value = item.key;
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -274,7 +320,6 @@ const dateClick = (item: any) => {
       padding: 15px 50px;
 
       .detail-card {
-
         .detailtitle {
           color: rgba(255, 255, 255, 0.7);
           opacity: 0.7;
@@ -323,7 +368,6 @@ const dateClick = (item: any) => {
     }
 
     .date-card {
-
       padding: 0 15px;
 
       .wrapper {
@@ -389,11 +433,11 @@ const dateClick = (item: any) => {
 
         .detailitem-title-date {
           flex: 1;
-          font-size: 10px;
+          font-size: 12px;
           display: flex;
 
           text {
-            opacity: 0.6;
+            opacity: 0.7;
           }
         }
 
@@ -404,7 +448,7 @@ const dateClick = (item: any) => {
 
         .detailitem-title-money {
           flex: 1;
-          font-size: 10px;
+          font-size: 12px;
           display: flex;
           align-items: center;
           overflow: hidden;
@@ -414,7 +458,7 @@ const dateClick = (item: any) => {
         }
 
         .detailitem-title-money text:first-child {
-          opacity: 0.6;
+          opacity: 0.4;
         }
       }
 
