@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-07-23 22:25:55
+ * @LastEditTime: 2023-08-13 02:38:26
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -36,43 +36,24 @@
       </view>
     </view>
     <view class="chart" id="echarts">
-      <qiun-data-charts
-        type="rose"
-        :canvas2d="true"
-        :chartData="chartData"
-        style="height: 200px; width: 100%"
-      />
+      <qiun-data-charts type="rose" :canvas2d="true" :chartData="chartData" style="height: 200px; width: 100%" />
     </view>
     <view class="date">
       <view class="datetitle">
-        <text
-          :class="{ activeCur: latestActive }"
-          :style="{
-            fontSize: latestActive ? '20px' : '10px',
-            opacity: latestActive ? 1 : 0.5,
-          }"
-          @click="latestClick"
-          >最新</text
-        >
-        <text
-          :class="{ activeCur: byMonthActive }"
-          :style="{
-            fontSize: byMonthActive ? '20px' : '10px',
-            opacity: byMonthActive ? 1 : 0.5,
-          }"
-          @click="byMonthActiveClick"
-          >按月份</text
-        >
+        <text :class="{ activeCur: latestActive }" :style="{
+          fontSize: latestActive ? '20px' : '10px',
+          opacity: latestActive ? 1 : 0.5,
+        }" @click="latestClick">最新</text>
+        <text :class="{ activeCur: byMonthActive }" :style="{
+          fontSize: byMonthActive ? '20px' : '10px',
+          opacity: byMonthActive ? 1 : 0.5,
+        }" @click="byMonthActiveClick">按月份</text>
       </view>
       <view class="date-card" v-if="byMonthActive">
         <view class="wrapper">
           <template v-for="item in date" :key="item.key">
             <view class="item">
-              <view
-                class="card"
-                @click="dateClick(item)"
-                :class="item.key == cardCur ? 'cardCur' : ''"
-              >
+              <view class="card" @click="dateClick(item)" :class="item.key == cardCur ? 'cardCur' : ''">
                 <span class="card-cn">{{ item.dateCn }}</span>
                 <span class="card-en">{{ item.dateEn }}</span>
               </view>
@@ -103,64 +84,34 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image
-                  width="35px"
-                  height="35px"
-                  src="~@/static/image/pay/default/交通_white.png"
-                  mode="aspectFill"
-                ></u-image>
+                <u-image width="35px" height="35px" src="~@/static/image/pay/default/交通_white.png"
+                  mode="aspectFill"></u-image>
               </view>
             </view>
             <view class="detailitem-pay-title">
-              <u-cell
-                size="large"
-                title="明天几点起"
-                :border="false"
-                value="-100.00"
-                label="地铁"
-              ></u-cell>
+              <u-cell size="large" title="明天几点起" :border="false" value="-100.00" label="地铁"></u-cell>
             </view>
           </view>
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image
-                  width="35px"
-                  height="35px"
-                  src="~@/static/image/pay/default/餐饮_white.png"
-                  mode="aspectFill"
-                ></u-image>
+                <u-image width="35px" height="35px" src="~@/static/image/pay/default/餐饮_white.png"
+                  mode="aspectFill"></u-image>
               </view>
             </view>
             <view class="detailitem-pay-title">
-              <u-cell
-                size="large"
-                title="明天几点起"
-                :border="false"
-                value="-10.00"
-                label="餐饮"
-              ></u-cell>
+              <u-cell size="large" title="明天几点起" :border="false" value="-10.00" label="餐饮"></u-cell>
             </view>
           </view>
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image
-                  width="35px"
-                  height="35px"
-                  src="~@/static/image/pay/default/外卖_white.png"
-                  mode="aspectFill"
-                ></u-image>
+                <u-image width="35px" height="35px" src="~@/static/image/pay/default/外卖_white.png"
+                  mode="aspectFill"></u-image>
               </view>
             </view>
             <view class="detailitem-pay-title">
-              <u-cell
-                size="large"
-                title="明天几点起"
-                :border="false"
-                value="-21.00"
-                label="外卖"
-              ></u-cell>
+              <u-cell size="large" title="明天几点起" :border="false" value="-21.00" label="外卖"></u-cell>
             </view>
           </view>
         </view>
@@ -260,6 +211,7 @@ onBeforeMount(async () => {
   chartData.value = res;
 });
 onMounted(async () => {
+
 });
 const latestClick = () => {
   latestActive.value = true;
@@ -433,7 +385,7 @@ const dateClick = (item: any) => {
 
         .detailitem-title-date {
           flex: 1;
-          font-size: 12px;
+          font-size: 10px;
           display: flex;
 
           text {
