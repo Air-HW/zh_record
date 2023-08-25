@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-13 18:05:26
+ * @LastEditTime: 2023-08-20 15:00:12
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -57,7 +57,6 @@ import { reactive, ref } from "vue";
 import GridList from "../../components/GridList/GridList.vue"
 import { TimeStampFormatDate } from '../../common/helper'
 import { PayMent } from '../../types/RequestEntity'
-import { nextTick } from "vue";
 const curList = reactive(['支出', '收入']);
 const curNow = ref(0)
 const sectionChange = (index) => {
@@ -75,6 +74,30 @@ const list = reactive([{
   type: "01",
   title: "旅游",
   url: "/src/static/image/pay/default/旅游_white.png"
+}, {
+  type: "01",
+  title: "宠物",
+  url: "/src/static/image/pay/default/宠物_white.png"
+}, {
+  type: "01",
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  type: "01",
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  type: "01",
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  type: "01",
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
+}, {
+  type: "01",
+  title: "外卖",
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
@@ -238,7 +261,7 @@ const clearForm = async () => {
   }
 }
 const btnStyle = reactive({
-  marginBottom: '10px'
+  marginBottom: '20rpx'
 });
 const DataShow = ref(false);
 //打开日期选择器
@@ -272,23 +295,23 @@ const closeData = () => {
 
 
   &_goods-item {
-    margin-right: 20px;
+    margin-right: 40rpx;
     display: flex;
     align-items: center;
     flex-direction: column;
 
     &_body {
-      width: 40px;
-      height: 40px;
-      border-radius: 20px;
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: 40rpx;
       background-color: $default-color;
       display: flex;
       align-items: center;
       justify-content: center;
 
       &_image {
-        width: 30px;
-        height: 30px;
+        width: 60rpx;
+        height: 60rpx;
       }
 
     }
@@ -296,8 +319,8 @@ const closeData = () => {
 
     &_text {
       // text-align: center;
-      font-size: 12px;
-      margin-top: 5px;
+      font-size: 24rpx;
+      margin-top: 10rpx;
       text-align: center;
     }
   }

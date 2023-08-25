@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-14 23:56:07
+ * @LastEditTime: 2023-08-20 18:28:06
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -15,15 +15,18 @@
   <view class="avatar">
     <view class="avatar_header">
       <u-avatar class="uavatar" :src="avatar" size="80"></u-avatar>
+      <view class="avatar_th">
+        <u-icon @click="avatarClick" color="#000" name="photo-fill" size="20"></u-icon>
+      </view>
     </view>
     <view class="avatar_body">
       <u-cell-group>
-        <u-cell title="个人信息" isLink>
+        <u-cell title="个人信息" @click="userinfoCilck" isLink>
           <template #icon>
             <u-icon size="26" color="#3c9cff" name="account-fill"></u-icon>
           </template>
         </u-cell>
-        <u-cell title="我的账本" isLink>
+        <u-cell title="我的账本" @click="recordCilck" isLink>
           <template #icon>
             <u-icon size="26" color="#3c9cff" name="list-dot"></u-icon>
           </template>
@@ -68,6 +71,20 @@ const PayCodeOpen = () => {
 }
 const PayCodeClose = () => {
   PayCodeShow.value = false;
+}
+const avatarClick = () => {
+  console.log("头像");
+
+}
+const recordCilck = () => {
+  uni.navigateTo({
+    url: "/pages/record/record"
+  });
+}
+const userinfoCilck = () => {
+  uni.navigateTo({
+    url: "/pages/userinfo/userinfo"
+  });
 }
 </script>
 <style scoped lang="scss">
@@ -115,7 +132,20 @@ const PayCodeClose = () => {
     margin: auto;
     width: 95%;
     border-radius: 20rpx;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0rpx 0rpx 40rpx rgba(0, 0, 0, 0.1);
+  }
+
+  &_th {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(214, 213, 255);
+    width: 50rpx;
+    height: 50rpx;
+    border-radius: 25rpx;
+    margin-top: 100rpx;
+    margin-left: -50rpx;
+    z-index: 999;
   }
 }
 

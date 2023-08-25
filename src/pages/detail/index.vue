@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-13 02:38:26
+ * @LastEditTime: 2023-08-16 23:15:42
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -36,16 +36,17 @@
       </view>
     </view>
     <view class="chart" id="echarts">
-      <qiun-data-charts type="rose" :canvas2d="true" :chartData="chartData" style="height: 200px; width: 100%" />
+      <qiun-data-charts type="rose" :canvas2d="true" :opts="opts" :chartData="chartData"
+        style="height: 400rpx; width: 100%" />
     </view>
     <view class="date">
       <view class="datetitle">
         <text :class="{ activeCur: latestActive }" :style="{
-          fontSize: latestActive ? '20px' : '10px',
+          fontSize: latestActive ? '40rpx' : '20rpx',
           opacity: latestActive ? 1 : 0.5,
         }" @click="latestClick">最新</text>
         <text :class="{ activeCur: byMonthActive }" :style="{
-          fontSize: byMonthActive ? '20px' : '10px',
+          fontSize: byMonthActive ? '40rpx' : '20rpx',
           opacity: byMonthActive ? 1 : 0.5,
         }" @click="byMonthActiveClick">按月份</text>
       </view>
@@ -84,7 +85,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="35px" height="35px" src="~@/static/image/pay/default/交通_white.png"
+                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/交通_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -95,7 +96,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="35px" height="35px" src="~@/static/image/pay/default/餐饮_white.png"
+                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/餐饮_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -106,7 +107,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="35px" height="35px" src="~@/static/image/pay/default/外卖_white.png"
+                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/外卖_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -118,11 +119,12 @@
       </view>
     </view>
   </view>
+  <u-back-top :scroll-top="scrollTop" :icon-style="iconStyle" :custom-style="customStyle"></u-back-top>
 </template>
 
 <script lang="ts" setup>
+import { onPageScroll } from "@dcloudio/uni-app";
 import { onBeforeMount, onMounted, ref, reactive } from "vue";
-// import * as echarts from 'echarts';
 const date = [
   {
     key: 1,
@@ -192,6 +194,31 @@ const latestActive = ref(true);
 const byMonthActive = ref(false);
 const cardCur = ref(1);
 const chartData = ref({});
+const opts = reactive({
+  color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
+  padding: [5, 5, 5, 5],
+  enableScroll: false,
+  legend: {
+    show: true,
+    position: "left",
+    lineHeight: 25
+  },
+  extra: {
+    rose: {
+      type: "radius",
+      minRadius: 50,
+      activeOpacity: 0.5,
+      activeRadius: 10,
+      offsetAngle: 0,
+      labelWidth: 15,
+      border: true,
+      borderWidth: 2,
+      borderColor: "#FFFFFF",
+      linearType: "custom"
+    }
+  }
+})
+const scrollTop = ref(0);
 onBeforeMount(async () => {
   const now = new Date().getMonth() + 1;
   cardCur.value = now;
@@ -210,9 +237,6 @@ onBeforeMount(async () => {
   };
   chartData.value = res;
 });
-onMounted(async () => {
-
-});
 const latestClick = () => {
   latestActive.value = true;
   byMonthActive.value = false;
@@ -224,6 +248,16 @@ const byMonthActiveClick = () => {
 const dateClick = (item: any) => {
   cardCur.value = item.key;
 };
+const customStyle = reactive({
+  backgroundColor: '#3c9cff'
+});
+const iconStyle = reactive({
+  color: '#fff',
+  fontSize: '36rpx'
+});
+onPageScroll((e) => {
+  scrollTop.value = e.scrollTop;
+})
 </script>
 
 <style lang="scss" scoped>
@@ -233,16 +267,16 @@ const dateClick = (item: any) => {
 
   .book {
     margin: auto;
-    height: 200px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    height: 400rpx;
+    border-bottom-left-radius: 20rpx;
+    border-bottom-right-radius: 20rpx;
     background-color: #3c9cff;
 
     .title {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 15px;
+      padding: 30rpx;
 
       .titletext-container {
         display: flex;
@@ -260,8 +294,8 @@ const dateClick = (item: any) => {
       }
 
       .icon {
-        width: 40px;
-        height: 40px;
+        width: 80rpx;
+        height: 80rpx;
       }
     }
 
@@ -269,17 +303,17 @@ const dateClick = (item: any) => {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 15px 50px;
+      padding: 30rpx 100rpx;
 
       .detail-card {
         .detailtitle {
           color: rgba(255, 255, 255, 0.7);
           opacity: 0.7;
-          font-size: 12px;
+          font-size: 24rpx;
         }
 
         .moneydetail {
-          font-size: 20px;
+          font-size: 40rpx;
           color: white;
           display: flex;
           align-items: center;
@@ -290,13 +324,13 @@ const dateClick = (item: any) => {
 
   .chart {
     /* 添加阴影样式 */
-    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0rpx 8rpx 10rpx rgba(0, 0, 0, 0.1);
     margin: auto;
-    height: 200px;
-    border-radius: 10px;
+    height: 400rpx;
+    border-radius: 20rpx;
     width: 85%;
-    margin-top: -30px;
-    margin-bottom: 25px;
+    margin-top: -60rpx;
+    margin-bottom: 50rpx;
     background-color: white;
     display: flex;
     align-items: center;
@@ -305,13 +339,13 @@ const dateClick = (item: any) => {
 
   .date {
     width: 100%;
-    margin-bottom: 12px;
+    margin-bottom: 24rpx;
 
     .datetitle {
-      padding: 0 12px;
+      padding: 0 24rpx;
 
       text {
-        margin-right: 10px;
+        margin-right: 20rpx;
       }
     }
 
@@ -320,7 +354,7 @@ const dateClick = (item: any) => {
     }
 
     .date-card {
-      padding: 0 15px;
+      padding: 0 30rpx;
 
       .wrapper {
         width: 100%;
@@ -335,25 +369,25 @@ const dateClick = (item: any) => {
         vertical-align: top;
 
         .card {
-          margin-top: 5px;
-          margin-right: 10px;
-          height: 45px;
-          width: 40px;
+          margin-top: 10rpx;
+          margin-right: 20rpx;
+          height: 90rpx;
+          width: 80rpx;
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
           background-color: #b1d7ff;
-          border-radius: 5px;
+          border-radius: 10rpx;
 
           .card-cn {
-            font-size: 10px;
+            font-size: 20rpx;
             font-weight: 800;
             opacity: 0.8;
           }
 
           .card-en {
-            font-size: 10px;
+            font-size: 20rpx;
             color: white;
             opacity: 0.8;
           }
@@ -372,20 +406,20 @@ const dateClick = (item: any) => {
     .detailitem {
       width: 92%;
       margin: auto;
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
+      box-shadow: 0rpx 0rpx 40rpx rgba(0, 0, 0, 0.1);
+      border-radius: 20rpx;
       background-color: white;
-      margin-bottom: 25px;
+      margin-bottom: 50rpx;
 
       .detailitem-title {
         width: 100%;
-        height: 40px;
-        line-height: 40px;
+        height: 80rpx;
+        line-height: 80rpx;
         display: flex;
 
         .detailitem-title-date {
           flex: 1;
-          font-size: 10px;
+          font-size: 20rpx;
           display: flex;
 
           text {
@@ -394,13 +428,13 @@ const dateClick = (item: any) => {
         }
 
         .detailitem-title-date text:first-child {
-          margin-left: 8px;
-          margin-right: 3px;
+          margin-left: 16rpx;
+          margin-right: 6rpx;
         }
 
         .detailitem-title-money {
           flex: 1;
-          font-size: 12px;
+          font-size: 24rpx;
           display: flex;
           align-items: center;
           overflow: hidden;
@@ -415,7 +449,7 @@ const dateClick = (item: any) => {
       }
 
       .detailitem-pay {
-        height: 60px;
+        height: 120rpx;
         display: flex;
 
         .detailitem-pay-icon {
@@ -424,10 +458,10 @@ const dateClick = (item: any) => {
 
           .detailitem-pay-iconbac {
             margin: auto;
-            width: 50px;
-            height: 50px;
-            margin-top: 5px;
-            border-radius: 10px;
+            width: 100rpx;
+            height: 100rpx;
+            margin-top: 10rpx;
+            border-radius: 20rpx;
             float: right;
             background-color: #9eceff;
             display: flex;
