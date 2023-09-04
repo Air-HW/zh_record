@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:15:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-20 21:33:53
+ * @LastEditTime: 2023-08-28 21:52:14
  * @FilePath: \zh_record\src\pages\setting\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -120,8 +120,6 @@ const radioChange = (type) => {
 }
 </script>
 <style scoped lang="scss">
-@import "@/styles/_variables.scss";
-
 .griditem-icon {
   margin-top: 15px;
   margin-bottom: 5px;

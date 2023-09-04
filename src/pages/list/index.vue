@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-20 15:00:12
+ * @LastEditTime: 2023-08-28 21:43:50
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -281,8 +281,6 @@ const closeData = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_variables.scss";
-
 .formStyle {
   margin: 15px 15px;
   // border: 1px solid red;

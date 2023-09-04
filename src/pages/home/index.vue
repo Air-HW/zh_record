@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-20 18:28:06
+ * @LastEditTime: 2023-09-03 22:39:12
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -14,10 +14,7 @@
   </view>
   <view class="avatar">
     <view class="avatar_header">
-      <u-avatar class="uavatar" :src="avatar" size="80"></u-avatar>
-      <view class="avatar_th">
-        <u-icon @click="avatarClick" color="#000" name="photo-fill" size="20"></u-icon>
-      </view>
+      <u-avatar class="uavatar" :src="avatar" size="160rpx"></u-avatar>
     </view>
     <view class="avatar_body">
       <u-cell-group>
@@ -71,10 +68,6 @@ const PayCodeOpen = () => {
 }
 const PayCodeClose = () => {
   PayCodeShow.value = false;
-}
-const avatarClick = () => {
-  console.log("头像");
-
 }
 const recordCilck = () => {
   uni.navigateTo({
@@ -133,19 +126,6 @@ const userinfoCilck = () => {
     width: 95%;
     border-radius: 20rpx;
     box-shadow: 0rpx 0rpx 40rpx rgba(0, 0, 0, 0.1);
-  }
-
-  &_th {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(214, 213, 255);
-    width: 50rpx;
-    height: 50rpx;
-    border-radius: 25rpx;
-    margin-top: 100rpx;
-    margin-left: -50rpx;
-    z-index: 999;
   }
 }
 

@@ -176,8 +176,6 @@ onBeforeMount(async () => {
 });
 </script>
 <style scoped lang="scss">
-@import "@/styles/_variables.scss";
-
 .titlePick {
   height: 100rpx;
   display: flex;

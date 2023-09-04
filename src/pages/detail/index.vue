@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-16 23:15:42
+ * @LastEditTime: 2023-09-03 22:37:16
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -22,22 +22,22 @@
         <view class="detail-card">
           <text class="detailtitle">当月支出(元)</text>
           <view class="moneydetail">
-            <u-icon name="rmb" :bold="true" size="10" color="white"></u-icon>
+            <u-icon name="rmb" :bold="true" size="40rpx" color="white"></u-icon>
             <text>1000.00</text>
           </view>
         </view>
         <view class="detail-card">
           <text class="detailtitle">本月支出(元)</text>
           <view class="moneydetail">
-            <u-icon name="rmb" :bold="true" size="10" color="white"></u-icon>
+            <u-icon name="rmb" :bold="true" size="40rpx" color="white"></u-icon>
             <text>1000.00</text>
           </view>
         </view>
       </view>
     </view>
     <view class="chart" id="echarts">
-      <qiun-data-charts type="rose" :canvas2d="true" :opts="opts" :chartData="chartData"
-        style="height: 400rpx; width: 100%" />
+      <qiun-data-charts type="rose" :canvas2d="true" will :opts="opts" :chartData="chartData"
+        style="height: 100%; width: 100%" />
     </view>
     <view class="date">
       <view class="datetitle">
@@ -73,12 +73,12 @@
             </view>
             <view class="detailitem-title-money">
               <text>支出:</text>
-              <u-icon name="rmb" :bold="true" size="10"></u-icon>
+              <u-icon name="rmb" :bold="true" size="20rpx"></u-icon>
               <text style="font-weight: bold">10000</text>
             </view>
             <view class="detailitem-title-money">
               <text>收入:</text>
-              <u-icon name="rmb" :bold="true" size="10"></u-icon>
+              <u-icon name="rmb" :bold="true" size="20rpx"></u-icon>
               <text style="font-weight: bold">10000</text>
             </view>
           </view>
@@ -270,7 +270,7 @@ onPageScroll((e) => {
     height: 400rpx;
     border-bottom-left-radius: 20rpx;
     border-bottom-right-radius: 20rpx;
-    background-color: #3c9cff;
+    background-color: $selection-color;
 
     .title {
       display: flex;
@@ -285,9 +285,11 @@ onPageScroll((e) => {
 
         .titletext {
           color: white;
+          font-size: 35rpx;
         }
 
         .subtitletext {
+          font-size: 30rpx;
           color: rgba(255, 255, 255, 0.7);
           opacity: 0.7;
         }
@@ -377,12 +379,12 @@ onPageScroll((e) => {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          background-color: #b1d7ff;
+          background-color: $default-color;
           border-radius: 10rpx;
 
           .card-cn {
             font-size: 20rpx;
-            font-weight: 800;
+            // font-weight: 800;
             opacity: 0.8;
           }
 
@@ -394,7 +396,7 @@ onPageScroll((e) => {
         }
 
         .cardCur {
-          background-color: #3c9cff;
+          background-color: $selection-color;
         }
       }
     }
@@ -463,7 +465,7 @@ onPageScroll((e) => {
             margin-top: 10rpx;
             border-radius: 20rpx;
             float: right;
-            background-color: #9eceff;
+            background-color: $default-color;
             display: flex;
             align-items: center;
             justify-content: center;
