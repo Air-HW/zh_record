@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-09-03 22:38:58
+ * @LastEditTime: 2023-09-28 20:37:45
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -80,7 +80,7 @@ const cancel = () => {
 .container_one {
   border-bottom-left-radius: 30rpx;
   border-bottom-right-radius: 30rpx;
-  background-color: #3c9cff;
+  background-image: linear-gradient(to right, #cbebff, #ddffdd);
   width: 100%;
   height: 300rpx;
   margin: auto;
