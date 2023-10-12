@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:16:20
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-13 20:35:54
+ * @LastEditTime: 2023-10-13 00:22:09
  * @FilePath: \zh_record\src\pages\statistics\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -33,7 +33,7 @@
     <text class="charts_title">支出排行榜</text>
     <view class="RankPick_item">
       <view class="RankPick_item_img">
-        <image class="RankPick_item_img_style" src="../../static//image/pay/default/交通_white.png"></image>
+        <image class="RankPick_item_img_style" src="/src/assets//image/pay/default/交通_white.png"></image>
       </view>
       <view class="RankPick_item_title">
         <view class="RankPick_item_title_one">
@@ -47,7 +47,7 @@
     </view>
     <view class="RankPick_item">
       <view class="RankPick_item_img">
-        <image class="RankPick_item_img_style" src="../../static//image/pay/default/交通_white.png"></image>
+        <image class="RankPick_item_img_style" src="/src/assets//image/pay/default/交通_white.png"></image>
       </view>
       <view class="RankPick_item_title">
         <view class="RankPick_item_title_one">

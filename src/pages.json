@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-20 18:27:30
+ * @LastEditTime: 2023-10-13 00:19:16
  * @FilePath: \zh_record\src\pages.json
  * @Description:
  * @email: 1592955886@qq.com
@@ -65,32 +65,32 @@
     "selectedColor": "#3c9cff",
     "list": [
       {
-        "iconPath": "static/image/tabbar/detail.png",
-        "selectedIconPath": "static/image/tabbar/detail-cur.png",
+        "iconPath": "/src/assets/image/tabbar/detail.png",
+        "selectedIconPath": "/src/assets/image/tabbar/detail-cur.png",
         "text": "明细",
         "pagePath": "pages/detail/index"
       },
       {
-        "iconPath": "static/image/tabbar/statistics.png",
-        "selectedIconPath": "static/image/tabbar/statistics-cur.png",
+        "iconPath": "/src/assets/image/tabbar/statistics.png",
+        "selectedIconPath": "/src/assets/image/tabbar/statistics-cur.png",
         "text": "统计",
         "pagePath": "pages/statistics/index"
       },
       {
-        "iconPath": "static/image/tabbar/add.png",
-        "selectedIconPath": "static/image/tabbar/add-cur.png",
+        "iconPath": "/src/assets/image/tabbar/add.png",
+        "selectedIconPath": "/src/assets/image/tabbar/add-cur.png",
         "text": "添加",
         "pagePath": "pages/list/index"
       },
       {
-        "iconPath": "static/image/tabbar/setting.png",
-        "selectedIconPath": "static/image/tabbar/setting-cur.png",
+        "iconPath": "/src/assets/image/tabbar/setting.png",
+        "selectedIconPath": "/src/assets/image/tabbar/setting-cur.png",
         "text": "设置",
         "pagePath": "pages/setting/index"
       },
       {
-        "iconPath": "static/image/tabbar/my.png",
-        "selectedIconPath": "static/image/tabbar/my-cur.png",
+        "iconPath": "/src/assets/image/tabbar/my.png",
+        "selectedIconPath": "/src/assets/image/tabbar/my-cur.png",
         "text": "我的",
         "pagePath": "pages/home/index"
       }

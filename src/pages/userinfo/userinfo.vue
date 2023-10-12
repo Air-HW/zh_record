@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-09-28 20:37:45
+ * @LastEditTime: 2023-10-13 00:21:34
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -49,18 +49,26 @@
         </view>
         <view class="container_content_bottom">
           <u-button shape="circle" type="info" :customStyle="customStyle" class="submit-btn" @click="cancel">取消</u-button>
-          <u-button shape="circle" type="primary" :customStyle="customStyle" class="clear-btn">保存</u-button>
+          <u-button shape="circle" type="primary" :customStyle="customStyle" class="clear-btn" @click="save">保存</u-button>
         </view>
       </view>
     </view>
   </view>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+interface User {
+  nickName: string;
+  sex: number;
+}
+import { computed, reactive, ref } from 'vue';
+import { useUserStore } from '@/stores/modules/user';
 const customStyle = reactive({
   width: '250rpx',
 });
-const avatar = ref("../../static/home/avatar.jpg");
+const userStore = useUserStore();
+const user = computed(() => userStore.getUser);
+console.log(user.value);
+const avatar = ref("/src/assets/home/avatar.jpg");
 const avatarClick = () => {
   console.log("头像");
 }
@@ -68,6 +76,15 @@ const cancel = () => {
   uni.switchTab({
     url: '/pages/home/index'
   });
+}
+const save = () => {
+  const uuser: User = {
+    nickName: "ZhSir",
+    sex: 0
+  };
+  userStore.setUser(uuser);
+  console.log(userStore.getUser);
+
 }
 </script>
 <style scoped lang="scss">
