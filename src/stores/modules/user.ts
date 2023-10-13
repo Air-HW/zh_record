@@ -8,29 +8,44 @@
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
+import { TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum';
 import { defineStore } from 'pinia'
-interface User {
+interface UserInfo {
   nickName: string;
   sex: number;
+  lastUpdateTime: number;
 }
-export const useUserStore = defineStore('user', {
-  state: (): { user: User | null } => ({
-    user: null
+interface UserState {
+  userInfo: UserInfo | null | undefined;
+  token?: string;
+  lastUpdateTime: number;
+}
+
+export const useUserStore = defineStore({
+  id: 'wx-user',
+  state: (): UserState => ({
+    userInfo: null,
+    token: null,
+    lastUpdateTime: 0
   }),
   getters: {
-    getUser(): User | null {
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        return JSON.parse(userStr) as User;
-      }
-      return this.user;
+    getUser(): UserInfo | null {
+      return this.userInfo || localStorage.getItem(USER_INFO_KEY) || {};
+    },
+    getToken(): string | undefined {
+      return this.token || localStorage.getItem(TOKEN_KEY);
     }
   },
   actions: {
-    setUser(user: User): void {
+    setUser(info: UserInfo): void {
+      this.userInfo = info;
+      this.lastUpdateTime = new Date().getTime();
       // 将用户信息写入到本地存储中
-      localStorage.setItem('user', JSON.stringify(user));
-      this.user = user;
+      localStorage.setItem(USER_INFO_KEY, JSON.stringify(info));
+    },
+    setToken(token: string): void {
+      this.token = token ? token : '';
+      localStorage.setItem(TOKEN_KEY, token);
     }
   }
 });

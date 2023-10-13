@@ -62,12 +62,11 @@ interface User {
 }
 import { computed, reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/modules/user';
+// import { get } from '@/api';
 const customStyle = reactive({
   width: '250rpx',
 });
 const userStore = useUserStore();
-const user = computed(() => userStore.getUser);
-console.log(user.value);
 const avatar = ref("/src/assets/home/avatar.jpg");
 const avatarClick = () => {
   console.log("头像");
@@ -77,14 +76,17 @@ const cancel = () => {
     url: '/pages/home/index'
   });
 }
-const save = () => {
+const save = async () => {
+  // const url = "https://restapi.amap.com/v3/weather/weatherInfo?key=0465afdb8ca9bf77d66580d217453787&city=511623";
+  // console.log(await get(url));
   const uuser: User = {
     nickName: "ZhSir",
     sex: 0
   };
   userStore.setUser(uuser);
+  userStore.setToken("token");
   console.log(userStore.getUser);
-
+  console.log(userStore.getToken);
 }
 </script>
 <style scoped lang="scss">
