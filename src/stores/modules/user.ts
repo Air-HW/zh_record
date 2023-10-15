@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-12 23:46:44
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-13 00:47:30
+ * @LastEditTime: 2023-10-15 15:53:49
  * @FilePath: \zh_record\src\stores\modules\user.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -41,11 +41,19 @@ export const useUserStore = defineStore({
       this.userInfo = info;
       this.lastUpdateTime = new Date().getTime();
       // 将用户信息写入到本地存储中
-      localStorage.setItem(USER_INFO_KEY, JSON.stringify(info));
+      uni.setStorage({
+        key: USER_INFO_KEY,
+        data: JSON.stringify(info)
+      });
+      // localStorage.setItem(USER_INFO_KEY, JSON.stringify(info));
     },
     setToken(token: string): void {
       this.token = token ? token : '';
-      localStorage.setItem(TOKEN_KEY, token);
+      uni.setStorage({
+        key: TOKEN_KEY,
+        data: token
+      });
+      // localStorage.setItem(TOKEN_KEY, token);
     }
   }
 });

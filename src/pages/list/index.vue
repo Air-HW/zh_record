@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-28 21:43:50
+ * @LastEditTime: 2023-10-15 15:50:25
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -65,124 +65,124 @@ const sectionChange = (index) => {
 const list = reactive([{
   type: "01",
   title: "餐饮",
-  url: "/src/assets/image/pay/default/餐饮_white.png"
+  url: "/src/static/image/pay/default/餐饮_white.png"
 }, {
   type: "01",
   title: "交通",
-  url: "/src/assets/image/pay/default/交通_white.png"
+  url: "/src/static/image/pay/default/交通_white.png"
 }, {
   type: "01",
   title: "旅游",
-  url: "/src/assets/image/pay/default/旅游_white.png"
+  url: "/src/static/image/pay/default/旅游_white.png"
 }, {
   type: "01",
   title: "宠物",
-  url: "/src/assets/image/pay/default/宠物_white.png"
+  url: "/src/static/image/pay/default/宠物_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }, {
   type: "01",
   title: "外卖",
-  url: "/src/assets/image/pay/default/外卖_white.png"
+  url: "/src/static/image/pay/default/外卖_white.png"
 }]);
 const listIncome = reactive([{
   type: "02",
   title: "工资",
-  url: "/src/assets/image/income/工资_white.png"
+  url: "/src/static/image/income/工资_white.png"
 }, {
   type: "02",
   title: "兼职",
-  url: "/src/assets/image/income/兼职_white.png"
+  url: "/src/static/image/income/兼职_white.png"
 }, {
   type: "02",
   title: "礼金",
-  url: "/src/assets/image/income/礼金_white.png"
+  url: "/src/static/image/income/礼金_white.png"
 }, {
   type: "02",
   title: "理财",
-  url: "/src/assets/image/income/理财记录_white.png"
+  url: "/src/static/image/income/理财记录_white.png"
 }, {
   type: "02",
   title: "其他",
-  url: "/src/assets/image/income/其他_white.png"
+  url: "/src/static/image/income/其他_white.png"
 }]);
 const showPopup = ref(false);
 const selectedIndex = ref(-1);

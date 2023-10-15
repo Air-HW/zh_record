@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-13 00:21:34
+ * @LastEditTime: 2023-10-15 15:59:17
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -59,15 +59,16 @@
 interface User {
   nickName: string;
   sex: number;
+  lastUpdateTime: number;
 }
 import { computed, reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/modules/user';
-// import { get } from '@/api';
+import { post } from '@/api';
 const customStyle = reactive({
   width: '250rpx',
 });
 const userStore = useUserStore();
-const avatar = ref("/src/assets/home/avatar.jpg");
+const avatar = ref("/src/static/home/avatar.jpg");
 const avatarClick = () => {
   console.log("头像");
 }
@@ -77,11 +78,22 @@ const cancel = () => {
   });
 }
 const save = async () => {
-  // const url = "https://restapi.amap.com/v3/weather/weatherInfo?key=0465afdb8ca9bf77d66580d217453787&city=511623";
-  // console.log(await get(url));
+  const data = {
+    code: "123123",
+    nickName: "ZhSirBB",
+    headPortraitUrl: "https://alifei04.cfp.cn/cms/image/image/a1d92466761d4b648d7e138e59b2209f.png?x-oss-process=image/format,webp",
+    sex: 1,
+    phone: "18090296613",
+    brithDay: "1999-04-06 00:00:00",
+    email: "1592955886@qq.com"
+  }
+  const resutl = await post("https://localhost:7234/api/WXUser/WXLogin/wx-login", data);
+  console.log(resutl);
+
   const uuser: User = {
     nickName: "ZhSir",
-    sex: 0
+    sex: 0,
+    lastUpdateTime: new Date().getTime()
   };
   userStore.setUser(uuser);
   userStore.setToken("token");

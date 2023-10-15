@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-12 23:37:57
+ * @LastEditTime: 2023-10-15 15:45:59
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -85,7 +85,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="~@/assets/image/pay/default/交通_white.png"
+                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/交通_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -96,7 +96,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="~@/assets/image/pay/default/餐饮_white.png"
+                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/餐饮_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -107,7 +107,7 @@
           <view class="detailitem-pay">
             <view class="detailitem-pay-icon">
               <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="~@/assets/image/pay/default/外卖_white.png"
+                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/外卖_white.png"
                   mode="aspectFill"></u-image>
               </view>
             </view>
@@ -189,7 +189,7 @@ const date = [
 ];
 const title = ref("嗨, 小刘");
 const subtitle = ref("Good morning!");
-const icon = ref("/src/assets/icon/sun.png");
+const icon = ref("../../static/icon/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
 const cardCur = ref(1);

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-13 00:21:02
+ * @LastEditTime: 2023-10-15 15:55:38
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -60,8 +60,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const avatar = ref("/src/assets/home/avatar.jpg");
-const PayCode = ref("/src/assets/home/PayCode.jpg");
+const avatar = ref("/src/static/home/avatar.jpg");
+const PayCode = ref("/src/static/home/PayCode.jpg");
 const PayCodeShow = ref(false);
 const PayCodeOpen = () => {
   PayCodeShow.value = true;
@@ -84,7 +84,7 @@ const userinfoCilck = () => {
 .bgMain {
   position: relative;
   height: 300rpx;
-  background-image: url("/src/assets/home/bj.jpg");
+  background-image: url("../../static/home/bj.jpg");
   background-size: cover;
   background-position: center center;
   border-bottom-left-radius: 20rpx;

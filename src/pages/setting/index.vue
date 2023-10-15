@@ -39,16 +39,16 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
 const list = reactive([
-  { url: "/src/assets/image/pay/nodefault/KTV_white.png" },
-  { url: "/src/assets/image/pay/nodefault/奶茶_white.png" },
-  { url: "/src/assets/image/pay/nodefault/娱乐_white.png" },
-  { url: "/src/assets/image/pay/nodefault/学习_white.png" },
-  { url: "/src/assets/image/pay/nodefault/日用品_white.png" },
-  { url: "/src/assets/image/pay/nodefault/水果_white.png" },
-  { url: "/src/assets/image/pay/nodefault/游戏_white.png" },
-  { url: "/src/assets/image/pay/nodefault/爱心捐款_white.png" },
-  { url: "/src/assets/image/pay/nodefault/美容_white.png" },
-  { url: "/src/assets/image/pay/nodefault/蔬菜_white.png" }
+  { url: "/src/static/image/pay/nodefault/KTV_white.png" },
+  { url: "/src/static/image/pay/nodefault/奶茶_white.png" },
+  { url: "/src/static/image/pay/nodefault/娱乐_white.png" },
+  { url: "/src/static/image/pay/nodefault/学习_white.png" },
+  { url: "/src/static/image/pay/nodefault/日用品_white.png" },
+  { url: "/src/static/image/pay/nodefault/水果_white.png" },
+  { url: "/src/static/image/pay/nodefault/游戏_white.png" },
+  { url: "/src/static/image/pay/nodefault/爱心捐款_white.png" },
+  { url: "/src/static/image/pay/nodefault/美容_white.png" },
+  { url: "/src/static/image/pay/nodefault/蔬菜_white.png" }
 
 ]);
 const selectedIndex = ref(-1);
