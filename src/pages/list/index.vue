@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-15 15:50:25
+ * @LastEditTime: 2023-10-29 22:54:29
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -13,10 +13,10 @@
     <u-subsection :list="curList" mode="subsection" :current="curNow" @change="sectionChange"></u-subsection>
   </view>
   <view v-if="curNow == 0">
-    <GridList :list="list" @click="handleClick" :listIndex="selectedIndex" />
+    <GridList :list="state.list" @click="handleClick" :listIndex="selectedIndex" />
   </view>
   <view v-if="curNow == 1">
-    <GridList :list="listIncome" @click="handleClick" :listIndex="selectedIndex" />
+    <GridList :list="state.listIncome" @click="handleClick" :listIndex="selectedIndex" />
   </view>
   <u-popup :show="showPopup" :safeAreaInsetBottom="false" :round="10" mode="bottom" @close="closePopup">
     <view class="formStyle">
@@ -27,22 +27,22 @@
               :key="index">
               <view class="scroll-list_goods-item_body"
                 :class="{ 'selected_image': index == selectedIndex && selectedIndex !== -1 }">
-                <image class="scroll-list_goods-item_body_image" :src="item.url"></image>
+                <image class="scroll-list_goods-item_body_image" :src="item.ImageUrl"></image>
               </view>
-              <text class="scroll-list_goods-item_text">{{ item.title }}</text>
+              <text class="scroll-list_goods-item_text">{{ item.Name }}</text>
             </view>
           </view>
         </u-scroll-list>
-        <u-form-item label="金额" prop="Money" label-width="80px" class="form-item">
-          <u-input v-model="model.Money" :borderBottom="true" placeholder="请输入金额" class="input"></u-input>
+        <u-form-item label="金额" prop="amount" label-width="80px" class="form-item">
+          <u-input v-model="model.amount" :borderBottom="true" placeholder="请输入金额" class="input"></u-input>
           <template #right>
             <u-datetime-picker :show="DataShow" v-model="SelectDate" @confirm="confirmData" @cancel="closeData"
               mode="date"></u-datetime-picker>
-            <u-button type="primary" size="small" @click="ShowDataPikc">{{ model.PayDate }}</u-button>
+            <u-button type="primary" size="small" @click="ShowDataPikc">{{ model.recordTime }}</u-button>
           </template>
         </u-form-item>
-        <u-form-item label="备注" prop="Remark" label-width="80px" class="form-item">
-          <u-textarea v-model="model.Remark" placeholder="请输入备注"></u-textarea>
+        <u-form-item label="备注" prop="remarks" label-width="80px" class="form-item">
+          <u-textarea v-model="model.remarks" placeholder="请输入备注"></u-textarea>
         </u-form-item>
         <u-button :customStyle="btnStyle" shape="circle" type="primary" @click="submitForm"
           class="submit-btn">提交</u-button>
@@ -53,169 +53,76 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { onMounted, onActivated, reactive, ref } from "vue";
 import GridList from "../../components/GridList/GridList.vue"
-import { TimeStampFormatDate } from '../../common/helper'
-import { PayMent } from '../../types/RequestEntity'
+import { getIncomeExpenseType, insertAccountRecord } from "@/api/demo/list";
+import { useUserStore } from "@/stores/modules/user";
+import { TimeStampFormatDate } from "@/utils/helper";
+import { ShowToast } from "@/utils/toast";
+import { RecordData } from "./model";
+const userStore = useUserStore();
+const DefaultId = userStore.getDefaultId;
+const userinfo = userStore.getUser;
+const state = reactive<any>({
+  list: [],
+  listIncome: []
+});
+onMounted(async () => {
+  var res = await getIncomeExpenseType({
+    AccountBookId: DefaultId
+  });
+  state.list = res.data.filter(item => item.Type === 1);
+  state.listIncome = res.data.filter(item => item.Type === 0);
+})
+onActivated(async () => {
+  var res = await getIncomeExpenseType({
+    AccountBookId: DefaultId
+  });
+  state.list = res.data.filter(item => item.Type === 1);
+  state.listIncome = res.data.filter(item => item.Type === 0);
+})
 const curList = reactive(['支出', '收入']);
 const curNow = ref(0)
 const sectionChange = (index) => {
   curNow.value = index;
 }
-const list = reactive([{
-  type: "01",
-  title: "餐饮",
-  url: "/src/static/image/pay/default/餐饮_white.png"
-}, {
-  type: "01",
-  title: "交通",
-  url: "/src/static/image/pay/default/交通_white.png"
-}, {
-  type: "01",
-  title: "旅游",
-  url: "/src/static/image/pay/default/旅游_white.png"
-}, {
-  type: "01",
-  title: "宠物",
-  url: "/src/static/image/pay/default/宠物_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}, {
-  type: "01",
-  title: "外卖",
-  url: "/src/static/image/pay/default/外卖_white.png"
-}]);
-const listIncome = reactive([{
-  type: "02",
-  title: "工资",
-  url: "/src/static/image/income/工资_white.png"
-}, {
-  type: "02",
-  title: "兼职",
-  url: "/src/static/image/income/兼职_white.png"
-}, {
-  type: "02",
-  title: "礼金",
-  url: "/src/static/image/income/礼金_white.png"
-}, {
-  type: "02",
-  title: "理财",
-  url: "/src/static/image/income/理财记录_white.png"
-}, {
-  type: "02",
-  title: "其他",
-  url: "/src/static/image/income/其他_white.png"
-}]);
+
+const typeId = ref("");
 const showPopup = ref(false);
 const selectedIndex = ref(-1);
 const SelectDate = ref(TimeStampFormatDate(Date.now()));
-let scrollList = reactive(null);
+let scrollList = reactive([]);
 const handleClick = async (index) => {
-  if (curNow.value == 0) {
-    scrollList = list;
+  if (curNow.value === 0) {
+    scrollList = state.list;
   } else {
-    scrollList = listIncome;
+    scrollList = state.listIncome;
   }
   selectedIndex.value = index;
   showPopup.value = true;
+  typeId.value = scrollList[index].Id;
 }
 const scrollHandleClick = async (index) => {
   selectedIndex.value = index;
+  typeId.value = scrollList[index].Id;
 }
 //关闭弹出层
 const closePopup = () => {
   selectedIndex.value = -1;
   showPopup.value = false;
 }
-
 //入参实体
-const model = reactive<PayMent>({
-  Type: 1,
-  Money: null,
-  Remark: '',
-  PayDate: SelectDate.value
+const model = reactive<RecordData>({
+  accountBookId: DefaultId,
+  wxUserId: userinfo.Id,
+  typeId: typeId.value,
+  amount: null,
+  remarks: null,
+  recordTime: SelectDate.value
 });
 //表单校验
 const rules = ref({
-  Money: [
+  amount: [
     { required: true, message: '请输入金额', trigger: 'blur' },
     {
       pattern: /^\d+(\.\d{1,2})?$/,
@@ -230,28 +137,30 @@ const rules = ref({
 const uForms = ref();
 //提交表单
 const submitForm = async () => {
-  uForms.value.validate().then(res => {
+  uForms.value.validate().then(async (res) => {
     if (res) {
-      console.log(model);
-      uni.showToast({
-        title: "提交成功",
-        duration: 2000,
-        icon: "none"
-      });
+      model.typeId = typeId.value;
+      model.accountBookId = DefaultId;
+      model.wxUserId = userinfo.Id;
+      const data = await insertAccountRecord(model);
+      if (data.isSuccess) {
+        ShowToast("提交成功", "success");
+        clearForm();
+        closePopup();
+        SelectDate.value = TimeStampFormatDate(Date.now());
+      }
+      else {
+        ShowToast(data.msg, "error");
+      }
     }
-  }).catch(err => {
-    uni.showToast({
-      title: "校验失败",
-      duration: 2000,
-      icon: "none"
-    });
+  }).catch(() => {
   })
 }
 //表单重置
 const clearForm = async () => {
   for (const key in model) {
     if (Object.hasOwnProperty.call(model, key)) {
-      if (key == "PayDate") {
+      if (key == "recordTime") {
         SelectDate.value = TimeStampFormatDate(Date.now());
         model[key] = SelectDate.value;
         continue;
@@ -272,7 +181,7 @@ const ShowDataPikc = () => {
 const confirmData = (e) => {
   const FormatDate = TimeStampFormatDate(e.value);
   DataShow.value = false;
-  model.PayDate = FormatDate;
+  model.recordTime = FormatDate;
 };
 //关闭日期选择器
 const closeData = () => {
@@ -328,3 +237,4 @@ const closeData = () => {
   background-color: $selection-color;
 }
 </style>
+../../utils/helper/helper

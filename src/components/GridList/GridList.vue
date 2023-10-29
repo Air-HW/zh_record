@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-06-11 22:50:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-14 23:33:10
+ * @LastEditTime: 2023-10-29 17:04:18
  * @FilePath: \zh_record\src\components\GridList\GridList.vue
  * @Description: 收入、支出宫格组件
  * @email: 1592955886@qq.com
@@ -12,9 +12,9 @@
   <u-grid :border="false" col="4">
     <u-grid-item v-for="(item, index) in list" :key="index" @click="handleClick(index)">
       <view class="griditem-icon" :class="{ 'griditem-title': index == selectedIndex && selectedIndex !== -1 }">
-        <u-icon :name="item.url" :size="40"></u-icon>
+        <u-icon :name="item.ImageUrl" :size="40"></u-icon>
       </view>
-      <text class="grid-text">{{ item.title }}</text>
+      <text class="grid-text">{{ item.Name }}</text>
     </u-grid-item>
   </u-grid>
 </template>
@@ -41,10 +41,8 @@ const handleClick = (index: Number) => {
 watch(
   () => props.listIndex,
   (newValue, oldValue) => {
-    // 在 props.listIndex 变化时执行的操作
-    console.log('props.listIndex 变化了', newValue, oldValue);
     selectedIndex.value = newValue;
-  }
+  },
 );
 </script>
 <style scoped lang="scss">

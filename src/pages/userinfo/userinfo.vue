@@ -57,6 +57,7 @@
 </template>
 <script setup lang="ts">
 interface User {
+  wxUserId: string;
   nickName: string;
   sex: number;
   lastUpdateTime: number;
@@ -91,6 +92,7 @@ const save = async () => {
   console.log(resutl);
 
   const uuser: User = {
+    wxUserId: "123132",
     nickName: "ZhSir",
     sex: 0,
     lastUpdateTime: new Date().getTime()

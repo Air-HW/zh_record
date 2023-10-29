@@ -2,23 +2,28 @@
  * @Author: 张书瑞
  * @Date: 2023-10-12 23:46:44
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-15 15:53:49
+ * @LastEditTime: 2023-10-29 22:30:18
  * @FilePath: \zh_record\src\stores\modules\user.ts
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
-import { TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum';
+import { Default, TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum';
 import { defineStore } from 'pinia'
 interface UserInfo {
-  nickName: string;
-  sex: number;
-  lastUpdateTime: number;
+  Id: string;
+  NickName: string;
+  Sex: number;
+  Phone: string;
+  OpenID: string;
+  HeadPortraitUrl: string;
+  Email: string;
+  BrithDay: Date;
 }
 interface UserState {
   userInfo: UserInfo | null | undefined;
-  token?: string;
-  lastUpdateTime: number;
+  token: string;
+  defaultId: string;
 }
 
 export const useUserStore = defineStore({
@@ -26,14 +31,17 @@ export const useUserStore = defineStore({
   state: (): UserState => ({
     userInfo: null,
     token: null,
-    lastUpdateTime: 0
+    defaultId: null
   }),
   getters: {
     getUser(): UserInfo | null {
-      return this.userInfo || localStorage.getItem(USER_INFO_KEY) || {};
+      return this.userInfo || JSON.parse(uni.getStorageSync(USER_INFO_KEY)) || {};
     },
     getToken(): string | undefined {
-      return this.token || localStorage.getItem(TOKEN_KEY);
+      return this.token || uni.getStorageSync(TOKEN_KEY);
+    },
+    getDefaultId(): string | undefined {
+      return this.defaultId || uni.getStorageSync(Default);
     }
   },
   actions: {
@@ -45,7 +53,6 @@ export const useUserStore = defineStore({
         key: USER_INFO_KEY,
         data: JSON.stringify(info)
       });
-      // localStorage.setItem(USER_INFO_KEY, JSON.stringify(info));
     },
     setToken(token: string): void {
       this.token = token ? token : '';
@@ -53,7 +60,6 @@ export const useUserStore = defineStore({
         key: TOKEN_KEY,
         data: token
       });
-      // localStorage.setItem(TOKEN_KEY, token);
     }
   }
 });

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:15:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-08-28 21:52:14
+ * @LastEditTime: 2023-10-29 22:47:31
  * @FilePath: \zh_record\src\pages\setting\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -11,9 +11,9 @@
 <template>
   <view class="grid-container">
     <u-grid :border="false" col="4">
-      <u-grid-item v-for="(item, index) in list" :key="index" @click="handleClick(index)">
+      <u-grid-item v-for="(item, index) in state.list" :key="index" @click="handleClick(index)">
         <view class="griditem-icon" :class="{ 'griditem-title': index == selectedIndex && selectedIndex !== -1 }">
-          <u-icon :name="item.url" :size="40"></u-icon>
+          <u-icon :name="item.ImageUrl" :size="40"></u-icon>
         </view>
       </u-grid-item>
     </u-grid>
@@ -22,13 +22,13 @@
     <view class="popup-container">
       <view class="popup-form">
         <u-form :model="formData" :rules="formRules" ref="uForms">
-          <u-form-item label="分类" prop="Type" label-width="40px" class="form-item">
+          <u-form-item label="分类" prop="type" label-width="40px" class="form-item">
             <u-radio-group @change="radioChange" v-for="(item, index) in radiolist" v-model="radiovalue">
               <u-radio :key="index" :label="item.name" :name="item.type"></u-radio>
             </u-radio-group>
           </u-form-item>
-          <u-form-item label="标题" prop="Title" label-width="40px" class="form-item">
-            <u-input v-model="formData.Title" :borderBottom="true" placeholder="请输入标题" class="input"></u-input>
+          <u-form-item label="标题" prop="name" label-width="40px" class="form-item">
+            <u-input v-model="formData.name" :borderBottom="true" placeholder="请输入标题" class="input"></u-input>
           </u-form-item>
         </u-form>
         <u-button shape="circle" type="primary" class="submit-btn" @click="submitForm">提交</u-button>
@@ -37,34 +37,38 @@
   </u-popup>
 </template>
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
-const list = reactive([
-  { url: "/src/static/image/pay/nodefault/KTV_white.png" },
-  { url: "/src/static/image/pay/nodefault/奶茶_white.png" },
-  { url: "/src/static/image/pay/nodefault/娱乐_white.png" },
-  { url: "/src/static/image/pay/nodefault/学习_white.png" },
-  { url: "/src/static/image/pay/nodefault/日用品_white.png" },
-  { url: "/src/static/image/pay/nodefault/水果_white.png" },
-  { url: "/src/static/image/pay/nodefault/游戏_white.png" },
-  { url: "/src/static/image/pay/nodefault/爱心捐款_white.png" },
-  { url: "/src/static/image/pay/nodefault/美容_white.png" },
-  { url: "/src/static/image/pay/nodefault/蔬菜_white.png" }
+import { getCustomIncomeExpenseType, insertCustomIncomeExpenseType } from '@/api/demo/list';
+import { useUserStore } from '@/stores/modules/user';
+import { ShowToast } from '@/utils/toast';
+import { ref, reactive, onMounted } from 'vue';
+import { CustomData } from './model';
 
-]);
+const userStore = useUserStore();
+const state = reactive<any>({
+  list: []
+});
+onMounted(async () => {
+  var res = await getCustomIncomeExpenseType();
+  state.list = res.data;
+})
 const selectedIndex = ref(-1);
 const popupShow = ref(false);
 const radiovalue = ref(1);
 const radiolist = reactive([
   { name: '支出', type: 1 },
-  { name: '收入', type: 2 }
+  { name: '收入', type: 0 }
 ]);
-const formData = reactive({
-  Type: radiovalue.value,
-  Title: ""
+const formData = reactive<CustomData>({
+  accountBookId: userStore.getDefaultId,
+  wxUserId: userStore.getUser.Id,
+  isSystemDefault: false,
+  type: radiovalue.value,
+  name: "",
+  iconId: ""
 });
 //表单校验
 const formRules = ref({
-  Type: [
+  type: [
     {
       validator: (rule, value, callback) => {
         if (value < 1 || value > 2) {
@@ -76,47 +80,50 @@ const formRules = ref({
       trigger: 'blur'
     }
   ],
-  Title: [
+  name: [
     { required: true, message: '请输入标题', trigger: 'blur' },
     {
-      pattern: /^.{0,2}$/,
+      pattern: /^.{0,4}$/,
       transform(value) {
         return String(value);
       },
-      message: '最多保留两个长度'
+      message: '最多保留四个长度'
     }
   ]
 });
 const uForms = ref();
 const submitForm = async () => {
-  uForms.value.validate().then(res => {
-    console.log(formData);
+  uForms.value.validate().then(async res => {
     if (res) {
-      uni.showToast({
-        title: "提交成功",
-        duration: 2000,
-        icon: "none"
-      });
+      var data = await insertCustomIncomeExpenseType(formData);
+      console.log(data);
+      if (data.isSuccess) {
+        radiovalue.value = 1;
+        formData.name = "";
+        formData.iconId = "";
+        popupClose();
+        ShowToast("提交成功", "success");
+      } else {
+        ShowToast(data.msg, "error");
+      }
     }
   }).catch(err => {
-    uni.showToast({
-      title: "校验失败",
-      duration: 2000,
-      icon: "none"
-    });
+    ShowToast("校验失败", "error");
   })
 }
 const handleClick = (index) => {
   selectedIndex.value = index;
   popupShow.value = true;
+  formData.iconId = state.list[index].Id;
 }
 const popupClose = () => {
   popupShow.value = false;
   selectedIndex.value = -1;
+  formData.iconId = "";
 }
 const radioChange = (type) => {
   radiovalue.value = type;
-  formData.Type = type;
+  formData.type = type;
 }
 </script>
 <style scoped lang="scss">
