@@ -7,7 +7,7 @@ export interface UserInfo {
   NickName: string;
   /** 性别 */
   Sex: number;
-  /** 电话好嘛 */
+  /** 电话号码 */
   Phone: string;
   OpenID: string;
   /** 微信头像地址 */

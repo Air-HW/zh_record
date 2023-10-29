@@ -10,7 +10,6 @@
  */
 
 import axiosInstance from '@/utils/http/axios';
-import { ApiResult } from '../model/baseModel';
 import { UserInfoResultModel } from './model/UserModel';
 
 enum Api {

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-12 23:46:44
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-29 22:30:18
+ * @LastEditTime: 2023-10-29 23:17:35
  * @FilePath: \zh_record\src\stores\modules\user.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -35,7 +35,14 @@ export const useUserStore = defineStore({
   }),
   getters: {
     getUser(): UserInfo | null {
-      return this.userInfo || JSON.parse(uni.getStorageSync(USER_INFO_KEY)) || {};
+      if (this.userInfo) {
+        return this.userInfo;
+      }
+      const userinfo = uni.getStorageSync(USER_INFO_KEY);
+      if (userinfo) {
+        return JSON.parse(userinfo);
+      }
+      return null;
     },
     getToken(): string | undefined {
       return this.token || uni.getStorageSync(TOKEN_KEY);

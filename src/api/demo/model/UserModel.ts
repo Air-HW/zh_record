@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 22:57:36
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-29 22:58:30
+ * @LastEditTime: 2023-10-29 23:29:23
  * @FilePath: \zh_record\src\api\demo\model\UserModel.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -18,7 +18,7 @@ export interface UserInfo {
   NickName: string;
   /** 性别 */
   Sex: number;
-  /** 电话好嘛 */
+  /** 电话号码 */
   Phone: string;
   OpenID: string;
   /** 微信头像地址 */

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-29 23:06:51
+ * @LastEditTime: 2023-10-29 23:34:21
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -14,7 +14,7 @@
   </view>
   <view class="avatar">
     <view class="avatar_header">
-      <u-avatar class="uavatar" :src="userinfo.HeadPortraitUrl" size="160rpx"></u-avatar>
+      <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="160rpx"></u-avatar>
     </view>
     <view class="avatar_body">
       <u-cell-group>
@@ -60,22 +60,27 @@
 <script setup lang="ts">
 import { getUserInfo } from '@/api/demo/user';
 import { useUserStore } from '@/stores/modules/user';
-import { onMounted, reactive } from 'vue';
-import { ref } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
 import { UserInfo } from './model';
 const userStore = useUserStore();
-const userinfo = ref<UserInfo>()
+const userData = ref<UserInfo>({
+  Id: "",
+  NickName: "",
+  Sex: 0,
+  Phone: "",
+  OpenID: "",
+  HeadPortraitUrl: "",
+  Email: "",
+  BrithDay: new Date()
+})
 onMounted(async () => {
   const res = await getUserInfo();
   if (res.isSuccess) {
-    console.log(res.data);
     userStore.setUser(res.data);
-    userinfo.value = res.data;
+    userData.value = res.data;
+    console.log(userData);
   }
-
 })
-
-const avatar = ref("/src/static/home/avatar.jpg");
 const PayCode = ref("/src/static/home/PayCode.jpg");
 const PayCodeShow = ref(false);
 const PayCodeOpen = () => {
