@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-15 15:59:17
+ * @LastEditTime: 2023-10-31 00:41:06
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -12,7 +12,7 @@
   <view class="container">
     <view class="container_one">
       <view class="container_one_header">
-        <u-avatar class="uavatar" :src="avatar" size="200rpx"></u-avatar>
+        <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="200rpx"></u-avatar>
         <view class="container_one_th">
           <u-icon @click="avatarClick" color="#000" name="photo-fill" size="20"></u-icon>
         </view>
@@ -26,25 +26,25 @@
         <view class="container_content_body">
           <text class="container_content_body_title">昵称</text>
           <view class="container_content_body_content">
-            <u-input :borderBottom="true" placeholder="昵称" class="input"></u-input>
+            <u-input :borderBottom="true" placeholder="昵称" class="input" v-model="userData.NickName"></u-input>
           </view>
         </view>
         <view class="container_content_body">
           <text class="container_content_body_title">联系电话</text>
           <view class="container_content_body_content">
-            <u-input :borderBottom="true" placeholder="联系电话" class="input"></u-input>
+            <u-input :borderBottom="true" placeholder="联系电话" class="input" v-model="userData.Phone"></u-input>
           </view>
         </view>
         <view class="container_content_body">
           <text class="container_content_body_title">出生日期</text>
           <view class="container_content_body_content">
-            <u-input :borderBottom="true" placeholder="出生日期" class="input"></u-input>
+            <u-input :borderBottom="true" placeholder="出生日期" class="input" v-model="userData.BrithDay"></u-input>
           </view>
         </view>
         <view class="container_content_body">
           <text class="container_content_body_title">性别</text>
           <view class="container_content_body_content">
-            <u-input :borderBottom="true" placeholder="性别" class="input"></u-input>
+            <u-input :borderBottom="true" placeholder="性别" class="input" v-model="userData.Sex"></u-input>
           </view>
         </view>
         <view class="container_content_bottom">
@@ -56,22 +56,53 @@
   </view>
 </template>
 <script setup lang="ts">
-interface User {
-  wxUserId: string;
-  nickName: string;
-  sex: number;
-  lastUpdateTime: number;
-}
-import { computed, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/modules/user';
-import { post } from '@/api';
+import { UserInfo } from '@/api/demo/model/UserModel';
+import { LoginProviderEnum } from '@/enums/loginProviderEnum';
 const customStyle = reactive({
   width: '250rpx',
 });
 const userStore = useUserStore();
-const avatar = ref("/src/static/home/avatar.jpg");
+const userData = ref<UserInfo>({
+  Id: "",
+  NickName: "",
+  Sex: 0,
+  Phone: "",
+  OpenID: "",
+  HeadPortraitUrl: "",
+  Email: "",
+  BrithDay: new Date()
+})
+onMounted(() => {
+  userData.value = userStore.getUser;
+})
 const avatarClick = () => {
-  console.log("头像");
+  uni.login({
+    provider: LoginProviderEnum.微信,
+    success: (res) => {
+      console.log('微信登录成功', res.code)
+    },
+    fail: (res) => {
+      console.log('微信登录失败', res)
+    }
+  });
+  uni.getUserProfile({
+    provider: LoginProviderEnum.微信,
+    desc: "授权登录",
+    success: (info) => {
+      console.log(info.userInfo);
+    },
+    fail: (infoerror) => {
+      console.log('getUserProfile', infoerror)
+    }
+  })
+  uni.getUserInfo({
+    provider: 'weixin',
+    success: function (infoRes) {
+      console.log(infoRes.userInfo);
+    }
+  });
 }
 const cancel = () => {
   uni.switchTab({
@@ -79,28 +110,11 @@ const cancel = () => {
   });
 }
 const save = async () => {
-  const data = {
-    code: "123123",
-    nickName: "ZhSirBB",
-    headPortraitUrl: "https://alifei04.cfp.cn/cms/image/image/a1d92466761d4b648d7e138e59b2209f.png?x-oss-process=image/format,webp",
-    sex: 1,
-    phone: "18090296613",
-    brithDay: "1999-04-06 00:00:00",
-    email: "1592955886@qq.com"
-  }
-  const resutl = await post("https://localhost:7234/api/WXUser/WXLogin/wx-login", data);
-  console.log(resutl);
-
-  const uuser: User = {
-    wxUserId: "123132",
-    nickName: "ZhSir",
-    sex: 0,
-    lastUpdateTime: new Date().getTime()
-  };
-  userStore.setUser(uuser);
-  userStore.setToken("token");
-  console.log(userStore.getUser);
-  console.log(userStore.getToken);
+  userData.value.Sex = 0;
+  userStore.setUser(userData.value);
+  // userStore.setToken("token");
+  // console.log(userStore.getUser);
+  // console.log(userStore.getToken);
 }
 </script>
 <style scoped lang="scss">

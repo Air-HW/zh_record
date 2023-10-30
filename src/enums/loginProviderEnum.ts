@@ -9,13 +9,13 @@
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
 
- /**
-   * @description: 登录方式
+/**
+  * @description: 登录方式
 */
-export enum RequestEnum {
-    微信 = 'weixin',
-    QQ登录 = 'qq',
-    支付宝登录 = 'alipay',
-    苹果登录 = 'apple',
-    新浪微博登录 = 'sinaweibo'
+export enum LoginProviderEnum {
+  微信 = 'weixin',
+  QQ登录 = 'qq',
+  支付宝登录 = 'alipay',
+  苹果登录 = 'apple',
+  新浪微博登录 = 'sinaweibo'
 }

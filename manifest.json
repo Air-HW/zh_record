@@ -1,0 +1,11 @@
+{
+    "mp-weixin" : {
+        "appid" : "wx2d1d131367669b6b"
+    },
+    "appid" : "__UNI__5DB1420",
+    "vueVersion" : "3",
+    "locale" : "zh-Hans",
+    "fallbackLocale" : "zh-Hans",
+    "name" : "随手记",
+    "versionName" : "随手记v1.0"
+}

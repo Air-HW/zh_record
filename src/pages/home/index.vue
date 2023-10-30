@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-29 23:34:21
+ * @LastEditTime: 2023-10-31 00:27:40
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -109,7 +109,8 @@ const userinfoCilck = () => {
 .bgMain {
   position: relative;
   height: 300rpx;
-  background-image: url("../../static/home/bj.jpg");
+  // background-image: url("../../static/home/bj.jpg");
+  background-image: linear-gradient(to right, #3ab3ff, #ddffdd);
   background-size: cover;
   background-position: center center;
   border-bottom-left-radius: 20rpx;
