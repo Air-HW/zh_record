@@ -59,7 +59,7 @@ import { getIncomeExpenseType, insertAccountRecord } from "@/api/demo/list";
 import { useUserStore } from "@/stores/modules/user";
 import { TimeStampFormatDate } from "@/utils/helper";
 import { ShowToast } from "@/utils/toast";
-import { RecordData } from "./model";
+import { RecordRequestData } from "@/api/demo/model/RecordModel";
 const userStore = useUserStore();
 const DefaultId = userStore.getDefaultId;
 const userinfo = userStore.getUser;
@@ -112,7 +112,7 @@ const closePopup = () => {
   showPopup.value = false;
 }
 //入参实体
-const model = reactive<RecordData>({
+const model = reactive<RecordRequestData>({
   accountBookId: DefaultId,
   wxUserId: userinfo.Id,
   typeId: typeId.value,

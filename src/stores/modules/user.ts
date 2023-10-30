@@ -8,18 +8,9 @@
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
+import { UserInfo } from '@/api/demo/model/UserModel';
 import { Default, TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum';
 import { defineStore } from 'pinia'
-interface UserInfo {
-  Id: string;
-  NickName: string;
-  Sex: number;
-  Phone: string;
-  OpenID: string;
-  HeadPortraitUrl: string;
-  Email: string;
-  BrithDay: Date;
-}
 interface UserState {
   userInfo: UserInfo | null | undefined;
   token: string;

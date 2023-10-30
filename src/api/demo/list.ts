@@ -9,8 +9,9 @@
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
 import axiosInstance from '@/utils/http/axios';
-import { CustomIncomeExpenseTypeListResultModel, IncomeExpenseTypeResultModel } from './model/IncomeExpenseTypeModel';
+import { CustomIncomeExpenseTypeListResultModel, CustomRequestData, IncomeExpenseTypeResultModel } from './model/IncomeExpenseTypeModel';
 import { ApiResult } from '../model/baseModel';
+import { RecordRequestData } from './model/RecordModel';
 
 enum Api {
   IncomeExpenseType = '/api/IncomeExpenseType',
@@ -31,10 +32,10 @@ export const getIncomeExpenseType = async (params?: any) => {
 
 /**
  * 新增账单明细
- * @param params 
+ * @param params 收支入参
  * @returns 
  */
-export const insertAccountRecord = async (params: any) => {
+export const insertAccountRecord = async (params: RecordRequestData) => {
   const response = await axiosInstance.post<ApiResult<boolean>>(Api.InsertAccountRecord, params);
   return response.data;
 }
@@ -50,11 +51,11 @@ export const getCustomIncomeExpenseType = async () => {
 }
 
 /**
- * 新增账单明细
- * @param params 
+ * 新增用户自定义收支类型
+ * @param params 自定义收支入参
  * @returns 
  */
-export const insertCustomIncomeExpenseType = async (params: any) => {
+export const insertCustomIncomeExpenseType = async (params: CustomRequestData) => {
   const response = await axiosInstance.post<ApiResult<boolean>>(Api.InsetCustomIncomeExpenseType, params);
   return response.data;
 }

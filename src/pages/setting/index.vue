@@ -38,10 +38,10 @@
 </template>
 <script lang="ts" setup>
 import { getCustomIncomeExpenseType, insertCustomIncomeExpenseType } from '@/api/demo/list';
+import { CustomRequestData } from '@/api/demo/model/IncomeExpenseTypeModel';
 import { useUserStore } from '@/stores/modules/user';
 import { ShowToast } from '@/utils/toast';
 import { ref, reactive, onMounted } from 'vue';
-import { CustomData } from './model';
 
 const userStore = useUserStore();
 const state = reactive<any>({
@@ -58,7 +58,7 @@ const radiolist = reactive([
   { name: '支出', type: 1 },
   { name: '收入', type: 0 }
 ]);
-const formData = reactive<CustomData>({
+const formData = reactive<CustomRequestData>({
   accountBookId: userStore.getDefaultId,
   wxUserId: userStore.getUser.Id,
   isSystemDefault: false,

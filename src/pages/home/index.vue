@@ -61,7 +61,7 @@
 import { getUserInfo } from '@/api/demo/user';
 import { useUserStore } from '@/stores/modules/user';
 import { onMounted, ref, reactive } from 'vue';
-import { UserInfo } from './model';
+import { UserInfo } from '@/api/demo/model/UserModel';
 const userStore = useUserStore();
 const userData = ref<UserInfo>({
   Id: "",
@@ -74,11 +74,16 @@ const userData = ref<UserInfo>({
   BrithDay: new Date()
 })
 onMounted(async () => {
-  const res = await getUserInfo();
-  if (res.isSuccess) {
-    userStore.setUser(res.data);
-    userData.value = res.data;
-    console.log(userData);
+  var userinfo: UserInfo = userStore.getUser;
+  if (userinfo === null) {
+    const res = await getUserInfo();
+    if (res.isSuccess) {
+      userStore.setUser(res.data);
+      userData.value = res.data;
+      console.log(userData);
+    }
+  } else {
+    userData.value = userinfo;
   }
 })
 const PayCode = ref("/src/static/home/PayCode.jpg");

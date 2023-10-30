@@ -46,7 +46,9 @@ axiosInstance.interceptors.response.use(
         }
       }
     })
-    if (error.response && error.response.status === 401) {
+    if (error.message.includes("Network Error")) {
+      ShowToast("网络异常", "error");
+    } else if (error.response && error.response.status === 401) {
       if (!IsKey) {
         ShowToast("请登录", "error");
       } else {
