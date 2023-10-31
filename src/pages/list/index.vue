@@ -60,10 +60,15 @@ import { useUserStore } from "@/stores/modules/user";
 import { TimeStampFormatDate } from "@/utils/helper";
 import { ShowToast } from "@/utils/toast";
 import { RecordRequestData } from "@/api/demo/model/RecordModel";
+import { IncomeExpenseTypeList } from "@/api/demo/model/IncomeExpenseTypeModel";
 const userStore = useUserStore();
 const DefaultId = userStore.getDefaultId;
 const userinfo = userStore.getUser;
-const state = reactive<any>({
+interface IncomeExpenseType{
+  list: IncomeExpenseTypeList[],
+  listIncome: IncomeExpenseTypeList[],
+}
+const state = reactive<IncomeExpenseType>({
   list: [],
   listIncome: []
 });
@@ -114,7 +119,7 @@ const closePopup = () => {
 //入参实体
 const model = reactive<RecordRequestData>({
   accountBookId: DefaultId,
-  wxUserId: userinfo.Id,
+  wxUserId: userinfo?.Id,
   typeId: typeId.value,
   amount: null,
   remarks: null,

@@ -60,6 +60,7 @@ import { onMounted, reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/modules/user';
 import { UserInfo } from '@/api/demo/model/UserModel';
 import { LoginProviderEnum } from '@/enums/loginProviderEnum';
+import { putUserInfo } from '@/api/demo/user';
 const customStyle = reactive({
   width: '250rpx',
 });
@@ -72,7 +73,7 @@ const userData = ref<UserInfo>({
   OpenID: "",
   HeadPortraitUrl: "",
   Email: "",
-  BrithDay: new Date()
+  BrithDay: null
 })
 onMounted(() => {
   userData.value = userStore.getUser;
@@ -110,11 +111,17 @@ const cancel = () => {
   });
 }
 const save = async () => {
-  userData.value.Sex = 0;
-  userStore.setUser(userData.value);
-  // userStore.setToken("token");
-  // console.log(userStore.getUser);
-  // console.log(userStore.getToken);
+  const formData = new URLSearchParams();
+  formData.append('Id', userData.value.Id);
+  formData.append('NickName', userData.value.NickName);
+  formData.append('Sex', userData.value.Sex.toString());
+  formData.append('Phone', userData.value.Phone);
+  formData.append('OpenID', userData.value.OpenID);
+  formData.append('HeadPortraitUrl', userData.value.HeadPortraitUrl);
+  formData.append('Email', userData.value.Email);
+  formData.append('BrithDay', userData.value.BrithDay?.toString() || '');
+  const res = await putUserInfo(userData.value.Id, formData);
+  userStore.setUser(res.data);
 }
 </script>
 <style scoped lang="scss">

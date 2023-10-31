@@ -38,13 +38,18 @@
 </template>
 <script lang="ts" setup>
 import { getCustomIncomeExpenseType, insertCustomIncomeExpenseType } from '@/api/demo/list';
-import { CustomRequestData } from '@/api/demo/model/IncomeExpenseTypeModel';
+import { CustomRequestData, CustomIncomeExpenseTypeList } from '@/api/demo/model/IncomeExpenseTypeModel';
 import { useUserStore } from '@/stores/modules/user';
 import { ShowToast } from '@/utils/toast';
 import { ref, reactive, onMounted } from 'vue';
 
 const userStore = useUserStore();
-const state = reactive<any>({
+const DefaultId = userStore.getDefaultId;
+const userinfo = userStore.getUser;
+interface CustomIncomeExpenseType{
+  list: CustomIncomeExpenseTypeList[]
+}
+const state = reactive<CustomIncomeExpenseType>({
   list: []
 });
 onMounted(async () => {
@@ -59,8 +64,8 @@ const radiolist = reactive([
   { name: '收入', type: 0 }
 ]);
 const formData = reactive<CustomRequestData>({
-  accountBookId: userStore.getDefaultId,
-  wxUserId: userStore.getUser.Id,
+  accountBookId: DefaultId,
+  wxUserId: userinfo?.Id,
   isSystemDefault: false,
   type: radiovalue.value,
   name: "",
@@ -95,8 +100,8 @@ const uForms = ref();
 const submitForm = async () => {
   uForms.value.validate().then(async res => {
     if (res) {
+      console.log(formData);
       var data = await insertCustomIncomeExpenseType(formData);
-      console.log(data);
       if (data.isSuccess) {
         radiovalue.value = 1;
         formData.name = "";
@@ -107,8 +112,6 @@ const submitForm = async () => {
         ShowToast(data.msg, "error");
       }
     }
-  }).catch(err => {
-    ShowToast("校验失败", "error");
   })
 }
 const handleClick = (index) => {
