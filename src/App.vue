@@ -13,5 +13,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "uview-plus/index.scss";
+@import "@/uni_modules/uview-plus/index.scss";
 </style>

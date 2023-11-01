@@ -12,10 +12,7 @@
   <view class="container">
     <view class="container_one">
       <view class="container_one_header">
-        <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="200rpx"></u-avatar>
-        <view class="container_one_th">
-          <u-icon @click="avatarClick" color="#000" name="photo-fill" size="20"></u-icon>
-        </view>
+        <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="200rpx" @click="avatarClick"></u-avatar>
       </view>
     </view>
     <view class="container_two">
@@ -81,36 +78,45 @@ const userData = ref<UserInfo>({
   Email: "",
   BrithDay: null
 })
+var flie;
 onMounted(() => {
   userData.value = { ...userinfo };
-  console.log(userData.value);
 })
 const avatarClick = () => {
-  uni.login({
-    provider: LoginProviderEnum.微信,
+  // uni.login({
+  //   provider: LoginProviderEnum.微信,
+  //   success: (res) => {
+  //     console.log('微信登录成功', res.code)
+  //   },
+  //   fail: (res) => {
+  //     console.log('微信登录失败', res)
+  //   }
+  // });
+  // uni.getUserProfile({
+  //   provider: LoginProviderEnum.微信,
+  //   desc: "授权登录",
+  //   success: (info) => {
+  //     console.log(info.userInfo);
+  //   },
+  //   fail: (infoerror) => {
+  //     console.log('getUserProfile', infoerror)
+  //   }
+  // })
+  // uni.getUserInfo({
+  //   provider: 'weixin',
+  //   success: function (infoRes) {
+  //     console.log(infoRes.userInfo);
+  //   }
+  // });
+  console.log("头像");
+  uni.chooseImage({
+    count: 1, // 最多选择1张图片
     success: (res) => {
-      console.log('微信登录成功', res.code)
-    },
-    fail: (res) => {
-      console.log('微信登录失败', res)
-    }
-  });
-  uni.getUserProfile({
-    provider: LoginProviderEnum.微信,
-    desc: "授权登录",
-    success: (info) => {
-      console.log(info.userInfo);
-    },
-    fail: (infoerror) => {
-      console.log('getUserProfile', infoerror)
+      console.log(res);
+      userData.value.HeadPortraitUrl = res.tempFilePaths[0];
+      flie = res.tempFiles[0];
     }
   })
-  uni.getUserInfo({
-    provider: 'weixin',
-    success: function (infoRes) {
-      console.log(infoRes.userInfo);
-    }
-  });
 }
 const cancel = () => {
   uni.switchTab({
@@ -119,12 +125,10 @@ const cancel = () => {
 }
 const save = async () => {
   const formData = new URLSearchParams();
-  formData.append('Id', userData.value.Id);
   formData.append('NickName', userData.value.NickName);
+  formData.append('File', flie);
   formData.append('Sex', userData.value.Sex.toString());
   formData.append('Phone', userData.value.Phone);
-  formData.append('OpenID', userData.value.OpenID);
-  formData.append('HeadPortraitUrl', userData.value.HeadPortraitUrl);
   formData.append('Email', userData.value.Email);
   formData.append('BrithDay', userData.value.BrithDay?.toString() || '');
   const res = await putUserInfo(userData.value.Id, formData);
@@ -166,19 +170,6 @@ const save = async () => {
     width: 95%;
     border-radius: 20rpx;
     box-shadow: 0rpx 0rpx 40rpx rgba(0, 0, 0, 0.1);
-  }
-
-  &_th {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(214, 213, 255);
-    width: 60rpx;
-    height: 60rpx;
-    border-radius: 30rpx;
-    margin-top: 110rpx;
-    margin-left: -50rpx;
-    z-index: 999;
   }
 }
 

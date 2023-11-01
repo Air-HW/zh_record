@@ -9,7 +9,7 @@
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
 
-import uviewPlus from 'uview-plus'
+import uviewPlus from '@/uni_modules/uview-plus'
 import { createSSRApp } from "vue";
 import App from "./App.vue";
 import dayjs from "dayjs"
