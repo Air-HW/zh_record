@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-31 00:41:06
+ * @LastEditTime: 2023-10-31 22:57:12
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -44,7 +44,11 @@
         <view class="container_content_body">
           <text class="container_content_body_title">性别</text>
           <view class="container_content_body_content">
-            <u-input :borderBottom="true" placeholder="性别" class="input" v-model="userData.Sex"></u-input>
+            <u-radio-group v-model="userData.Sex" placement="row">
+              <u-radio :customStyle="{ marginRight: '30rpx' }" label="男" name="0" />
+              <u-radio :customStyle="{ marginRight: '30rpx' }" label="女" name="1" />
+              <u-radio :customStyle="{ marginRight: '30rpx' }" label="保密" name="2" />
+            </u-radio-group>
           </view>
         </view>
         <view class="container_content_bottom">
@@ -61,10 +65,12 @@ import { useUserStore } from '@/stores/modules/user';
 import { UserInfo } from '@/api/demo/model/UserModel';
 import { LoginProviderEnum } from '@/enums/loginProviderEnum';
 import { putUserInfo } from '@/api/demo/user';
+import { ShowToast } from '@/utils/toast';
 const customStyle = reactive({
   width: '250rpx',
 });
 const userStore = useUserStore();
+const userinfo = userStore.getUser;
 const userData = ref<UserInfo>({
   Id: "",
   NickName: "",
@@ -76,7 +82,8 @@ const userData = ref<UserInfo>({
   BrithDay: null
 })
 onMounted(() => {
-  userData.value = userStore.getUser;
+  userData.value = { ...userinfo };
+  console.log(userData.value);
 })
 const avatarClick = () => {
   uni.login({
@@ -121,7 +128,12 @@ const save = async () => {
   formData.append('Email', userData.value.Email);
   formData.append('BrithDay', userData.value.BrithDay?.toString() || '');
   const res = await putUserInfo(userData.value.Id, formData);
-  userStore.setUser(res.data);
+  if (res.isSuccess) {
+    userStore.setUser(res.data);
+    ShowToast("修改成功", "success");
+  } else {
+    ShowToast(res.msg, "error");
+  }
 }
 </script>
 <style scoped lang="scss">

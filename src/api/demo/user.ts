@@ -33,7 +33,7 @@ export const getUserInfo = async () => {
  * @param param 更新入参
  * @returns 
  */
-export const putUserInfo = async (WxUserId: string, param: any) => {
+export const putUserInfo = async (WxUserId: string, param: URLSearchParams) => {
   const response = await axiosInstance.put<UserInfoResultModel>(Api.PutUserInfo + "/" + WxUserId, param);
   return response.data;
 }
