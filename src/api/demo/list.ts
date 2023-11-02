@@ -12,6 +12,7 @@ import axiosInstance from '@/utils/http/axios';
 import { CustomIncomeExpenseTypeListResultModel, CustomRequestData, IncomeExpenseTypeResultModel } from './model/IncomeExpenseTypeModel';
 import { ApiResult } from '../model/baseModel';
 import { RecordRequestData } from './model/RecordModel';
+import { request } from '@/utils/http/unirequest';
 
 enum Api {
   IncomeExpenseType = '/api/IncomeExpenseType',
@@ -26,8 +27,8 @@ enum Api {
  * @returns 
  */
 export const getIncomeExpenseType = async (params?: any) => {
-  const response = await axiosInstance.get<IncomeExpenseTypeResultModel>(Api.IncomeExpenseType, { params });
-  return response.data;
+  const response = await request<IncomeExpenseTypeResultModel>(Api.IncomeExpenseType, 'GET', params);
+  return response;
 }
 
 /**
@@ -36,8 +37,8 @@ export const getIncomeExpenseType = async (params?: any) => {
  * @returns 
  */
 export const insertAccountRecord = async (params: RecordRequestData) => {
-  const response = await axiosInstance.post<ApiResult<boolean>>(Api.InsertAccountRecord, params);
-  return response.data;
+  const response = await request<ApiResult<boolean>>(Api.InsertAccountRecord, 'POST', params);
+  return response;
 }
 
 /**
@@ -46,8 +47,8 @@ export const insertAccountRecord = async (params: RecordRequestData) => {
  * @returns 
  */
 export const getCustomIncomeExpenseType = async () => {
-  const response = await axiosInstance.get<CustomIncomeExpenseTypeListResultModel>(Api.CustomIncomeExpenseType);
-  return response.data;
+  const response = await request<CustomIncomeExpenseTypeListResultModel>(Api.CustomIncomeExpenseType, 'GET');
+  return response;
 }
 
 /**
@@ -56,6 +57,6 @@ export const getCustomIncomeExpenseType = async () => {
  * @returns 
  */
 export const insertCustomIncomeExpenseType = async (params: CustomRequestData) => {
-  const response = await axiosInstance.post<ApiResult<boolean>>(Api.InsetCustomIncomeExpenseType, params);
-  return response.data;
+  const response = await request<ApiResult<boolean>>(Api.InsetCustomIncomeExpenseType, 'POST', params);
+  return response;
 }

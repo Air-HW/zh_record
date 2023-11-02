@@ -11,6 +11,7 @@
 
 import axiosInstance from '@/utils/http/axios';
 import { UserInfoResultModel } from './model/UserModel';
+import { request } from '@/utils/http/unirequest';
 
 enum Api {
   UserInfo = '/api/WxUser/user-info',
@@ -23,8 +24,8 @@ enum Api {
  * @returns 
  */
 export const getUserInfo = async () => {
-  const response = await axiosInstance.get<UserInfoResultModel>(Api.UserInfo);
-  return response.data;
+  const response = await request<UserInfoResultModel>(Api.UserInfo, 'GET');
+  return response;
 }
 
 //#region 弃用
@@ -35,7 +36,7 @@ export const getUserInfo = async () => {
  * @returns
  */
 export const updateUserInfo = async (WxUserId: string, data: any) => {
-  const response = await axiosInstance.post<UserInfoResultModel>(Api.PutUserInfo + "/" + WxUserId, data);
-  return response.data;
+  const response = await request<UserInfoResultModel>(Api.PutUserInfo + "/" + WxUserId, 'POST', data, { "Content-Type": "application/x-www-form-urlencoded" });
+  return response;
 }
 //#endregion

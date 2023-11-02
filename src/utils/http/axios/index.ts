@@ -13,26 +13,23 @@ import { ShowToast } from '@/utils/toast';
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig, AxiosError, AxiosAdapter } from 'axios';
 import mpAdapter from 'axios-miniprogram-adapter';
 
-export const BASE_URL = "http://localhost/";
+export const BASE_URL = "http://localhost:8081/";
 const TIMEOUT = 10000;
 
 // 配置 Axios 使用适配器
-axios.defaults.adapter = mpAdapter as any;
+axios.defaults.adapter = mpAdapter as AxiosAdapter;
 
 // 创建一个axios实例,配置请求
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: BASE_URL, // 根据实际情况填写接口的基本URL
-  timeout: TIMEOUT, // 设置请求超时时间（单位：毫秒）
+  baseURL: BASE_URL,
+  timeout: TIMEOUT,
 });
 
 // 添加请求拦截器
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig<any>): InternalAxiosRequestConfig<any> => {
-    // 在每个请求发送前，判断是否需要添加JWT请求头
-    if (config.url !== '/login') {
-      const token = uni.getStorageSync(TOKEN_KEY); // 从localStorage获取JWT Token
-      config.headers.Authorization = token ? `Bearer ${token}` : ''; // 添加JWT请求头
-    }
+    const token = uni.getStorageSync(TOKEN_KEY);
+    config.headers.Authorization = token ? `Bearer ${token}` : '';
     return config;
   },
   (error: AxiosError) => {
