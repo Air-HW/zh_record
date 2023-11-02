@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-29 22:54:29
+ * @LastEditTime: 2023-11-02 00:27:10
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onActivated, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import GridList from "../../components/GridList/GridList.vue"
 import { getIncomeExpenseType, insertAccountRecord } from "@/api/demo/list";
 import { useUserStore } from "@/stores/modules/user";
@@ -61,10 +61,11 @@ import { TimeStampFormatDate } from "@/utils/helper";
 import { ShowToast } from "@/utils/toast";
 import { RecordRequestData } from "@/api/demo/model/RecordModel";
 import { IncomeExpenseTypeList } from "@/api/demo/model/IncomeExpenseTypeModel";
+import { onShow } from "@dcloudio/uni-app";
 const userStore = useUserStore();
 const DefaultId = userStore.getDefaultId;
 const userinfo = userStore.getUser;
-interface IncomeExpenseType{
+interface IncomeExpenseType {
   list: IncomeExpenseTypeList[],
   listIncome: IncomeExpenseTypeList[],
 }
@@ -72,14 +73,7 @@ const state = reactive<IncomeExpenseType>({
   list: [],
   listIncome: []
 });
-onMounted(async () => {
-  var res = await getIncomeExpenseType({
-    AccountBookId: DefaultId
-  });
-  state.list = res.data.filter(item => item.Type === 1);
-  state.listIncome = res.data.filter(item => item.Type === 0);
-})
-onActivated(async () => {
+onShow(async () => {
   var res = await getIncomeExpenseType({
     AccountBookId: DefaultId
   });

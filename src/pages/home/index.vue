@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-31 00:27:40
+ * @LastEditTime: 2023-11-02 00:26:16
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -60,8 +60,9 @@
 <script setup lang="ts">
 import { getUserInfo } from '@/api/demo/user';
 import { useUserStore } from '@/stores/modules/user';
-import { onMounted, ref, reactive } from 'vue';
+import { ref } from 'vue';
 import { UserInfo } from '@/api/demo/model/UserModel';
+import { onShow } from '@dcloudio/uni-app';
 const userStore = useUserStore();
 const userData = ref<UserInfo>({
   Id: "",
@@ -71,19 +72,17 @@ const userData = ref<UserInfo>({
   OpenID: "",
   HeadPortraitUrl: "",
   Email: "",
-  BrithDay: new Date()
+  BrithDay: null
 })
-onMounted(async () => {
-  var userinfo: UserInfo = userStore.getUser;
-  if (userinfo === null) {
+onShow(async () => {
+  console.log("show");
+  userData.value = userStore.getUser;
+  if (userData.value == null) {
     const res = await getUserInfo();
     if (res.isSuccess) {
       userStore.setUser(res.data);
       userData.value = res.data;
-      console.log(userData);
     }
-  } else {
-    userData.value = userinfo;
   }
 })
 const PayCode = ref("/src/static/home/PayCode.jpg");
@@ -100,7 +99,7 @@ const recordCilck = () => {
   });
 }
 const userinfoCilck = () => {
-  uni.navigateTo({
+  uni.redirectTo({
     url: "/pages/userinfo/userinfo"
   });
 }

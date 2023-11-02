@@ -1,13 +1,23 @@
+/*
+ * @Author: 张书瑞
+ * @Date: 2023-10-15 14:27:38
+ * @LastEditors: 张书瑞
+ * @LastEditTime: 2023-11-02 01:27:37
+ * @FilePath: \zh_record\src\utils\http\axios\index.ts
+ * @Description: 
+ * @email: 1592955886@qq.com
+ * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
+ */
 import { TOKEN_KEY } from '@/enums/cacheEnum';
 import { ShowToast } from '@/utils/toast';
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig, AxiosError, AxiosAdapter } from 'axios';
 import mpAdapter from 'axios-miniprogram-adapter';
 
-const BASE_URL = "https://localhost:7234/";
+export const BASE_URL = "http://localhost/";
 const TIMEOUT = 10000;
 
 // 配置 Axios 使用适配器
-axios.defaults.adapter = mpAdapter as AxiosAdapter;;
+axios.defaults.adapter = mpAdapter as any;
 
 // 创建一个axios实例,配置请求
 const axiosInstance: AxiosInstance = axios.create({
@@ -37,23 +47,10 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    // 处理响应错误
-    let IsKey = false;
-    uni.getStorageInfo({
-      success: function (res) {
-        if (res.keys.includes(TOKEN_KEY)) {
-          IsKey = true;
-        }
-      }
-    })
     if (error.message.includes("Network Error")) {
       ShowToast("网络异常", "error");
     } else if (error.response && error.response.status === 401) {
-      if (!IsKey) {
-        ShowToast("请登录", "error");
-      } else {
-        ShowToast("身份已过期，请重新登录", "error");
-      }
+      ShowToast("请登录", "error");
     }
     return Promise.reject(error);
   },

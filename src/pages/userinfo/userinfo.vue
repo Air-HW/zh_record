@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-31 22:57:12
+ * @LastEditTime: 2023-11-02 01:01:53
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -57,12 +57,15 @@
   </view>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/modules/user';
 import { UserInfo } from '@/api/demo/model/UserModel';
 import { LoginProviderEnum } from '@/enums/loginProviderEnum';
-import { putUserInfo } from '@/api/demo/user';
 import { ShowToast } from '@/utils/toast';
+import { ApiResult } from '@/api/model/baseModel';
+import { BASE_URL } from '@/utils/http/axios';
+import { updateUserInfo } from '@/api/demo/user';
+import { onShow } from '@dcloudio/uni-app';
 const customStyle = reactive({
   width: '250rpx',
 });
@@ -78,11 +81,12 @@ const userData = ref<UserInfo>({
   Email: "",
   BrithDay: null
 })
-var flie;
-onMounted(() => {
+onShow(() => {
   userData.value = { ...userinfo };
 })
+let avatarFile = null;
 const avatarClick = () => {
+  //#region 登录
   // uni.login({
   //   provider: LoginProviderEnum.微信,
   //   success: (res) => {
@@ -108,36 +112,70 @@ const avatarClick = () => {
   //     console.log(infoRes.userInfo);
   //   }
   // });
-  console.log("头像");
+  //#endregion
   uni.chooseImage({
-    count: 1, // 最多选择1张图片
+    count: 1,
     success: (res) => {
-      console.log(res);
+      avatarFile = res.tempFilePaths[0];
       userData.value.HeadPortraitUrl = res.tempFilePaths[0];
-      flie = res.tempFiles[0];
     }
   })
+}
+const save = async () => {
+  if (avatarFile !== null) {
+    uni.uploadFile({
+      url: `${BASE_URL}api/WxUser/${userData.value.Id}`,
+      filePath: avatarFile,
+      name: 'File',
+      header: {
+        "Authorization": `Bearer ${userStore.getToken}`
+      },
+      formData: {
+        'NickName': userData.value.NickName,
+        'Sex': userData.value.Sex,
+        'Phone': userData.value.Phone,
+        'Email': userData.value.Email,
+        'BrithDay': userData.value.BrithDay
+      },
+      success: (res) => {
+        const data = JSON.parse(res.data) as ApiResult<UserInfo>;
+        if (data.isSuccess) {
+          userStore.setUser(data.data);
+          ShowToast("修改成功", "success");
+        } else {
+          ShowToast(data.msg, "error");
+        }
+      },
+      fail: (err) => {
+        console.log(err);
+
+        ShowToast(err.errMsg, "error");
+      }
+    })
+  } else {
+    //#region 弃用
+    // const formData = new FormData();
+    // formData.append('NickName', userData.value.NickName);
+    // formData.append('File', null);
+    // formData.append('Sex', userData.value.Sex.toString());
+    // formData.append('Phone', userData.value.Phone);
+    // formData.append('Email', userData.value.Email);
+    // formData.append('BrithDay', userData.value.BrithDay?.toString() || '');
+
+    const res = await updateUserInfo(userData.value.Id, userData.value);
+    if (res.isSuccess) {
+      userStore.setUser(res.data);
+      ShowToast("修改成功", "success");
+    } else {
+      ShowToast(res.msg, "error");
+    }
+    //#endregion
+  }
 }
 const cancel = () => {
   uni.switchTab({
     url: '/pages/home/index'
   });
-}
-const save = async () => {
-  const formData = new URLSearchParams();
-  formData.append('NickName', userData.value.NickName);
-  formData.append('File', flie);
-  formData.append('Sex', userData.value.Sex.toString());
-  formData.append('Phone', userData.value.Phone);
-  formData.append('Email', userData.value.Email);
-  formData.append('BrithDay', userData.value.BrithDay?.toString() || '');
-  const res = await putUserInfo(userData.value.Id, formData);
-  if (res.isSuccess) {
-    userStore.setUser(res.data);
-    ShowToast("修改成功", "success");
-  } else {
-    ShowToast(res.msg, "error");
-  }
 }
 </script>
 <style scoped lang="scss">

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 22:55:47
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-29 22:58:49
+ * @LastEditTime: 2023-11-01 23:53:28
  * @FilePath: \zh_record\src\api\demo\user.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -27,13 +27,15 @@ export const getUserInfo = async () => {
   return response.data;
 }
 
+//#region 弃用
 /**
  * 更新、编辑用户基本信息
  * @param WxUserId 微信用户Id
- * @param param 更新入参
- * @returns 
+ * @param data 更新入参
+ * @returns
  */
-export const putUserInfo = async (WxUserId: string, param: URLSearchParams) => {
-  const response = await axiosInstance.put<UserInfoResultModel>(Api.PutUserInfo + "/" + WxUserId, param);
+export const updateUserInfo = async (WxUserId: string, data: any) => {
+  const response = await axiosInstance.post<UserInfoResultModel>(Api.PutUserInfo + "/" + WxUserId, data);
   return response.data;
 }
+//#endregion

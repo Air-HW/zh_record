@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:15:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-29 22:47:31
+ * @LastEditTime: 2023-11-02 00:27:36
  * @FilePath: \zh_record\src\pages\setting\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -41,18 +41,19 @@ import { getCustomIncomeExpenseType, insertCustomIncomeExpenseType } from '@/api
 import { CustomRequestData, CustomIncomeExpenseTypeList } from '@/api/demo/model/IncomeExpenseTypeModel';
 import { useUserStore } from '@/stores/modules/user';
 import { ShowToast } from '@/utils/toast';
-import { ref, reactive, onMounted } from 'vue';
+import { onShow } from '@dcloudio/uni-app';
+import { ref, reactive } from 'vue';
 
 const userStore = useUserStore();
 const DefaultId = userStore.getDefaultId;
 const userinfo = userStore.getUser;
-interface CustomIncomeExpenseType{
+interface CustomIncomeExpenseType {
   list: CustomIncomeExpenseTypeList[]
 }
 const state = reactive<CustomIncomeExpenseType>({
   list: []
 });
-onMounted(async () => {
+onShow(async () => {
   var res = await getCustomIncomeExpenseType();
   state.list = res.data;
 })
