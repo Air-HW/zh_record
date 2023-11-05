@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-15 15:45:59
+ * @LastEditTime: 2023-11-05 20:57:32
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -123,7 +123,10 @@
 </template>
 
 <script lang="ts" setup>
-import { onPageScroll } from "@dcloudio/uni-app";
+import { GetRecordRequestData } from "@/api/demo/model/RecordModel";
+import { getRecord } from "@/api/demo/record";
+import { useUserStore } from "@/stores/modules/user";
+import { onPageScroll, onShow } from "@dcloudio/uni-app";
 import { onBeforeMount, onMounted, ref, reactive } from "vue";
 const date = [
   {
@@ -219,6 +222,22 @@ const opts = reactive({
   }
 })
 const scrollTop = ref(0);
+
+const store = useUserStore();
+const getReordParam = ref<GetRecordRequestData>({
+  Id: null,
+  WxUserId: null,
+  TypeId: null,
+  Amount: null,
+  Remarks: null
+})
+onShow(async () => {
+  const userinfo = store.getUser;
+  getReordParam.value.Id = store.getDefaultId;
+  getReordParam.value.WxUserId = userinfo.Id;
+  const data = await getRecord(getReordParam.value);
+  console.log(data);
+})
 onBeforeMount(async () => {
   const now = new Date().getMonth() + 1;
   cardCur.value = now;

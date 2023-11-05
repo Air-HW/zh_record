@@ -1,6 +1,17 @@
+/*
+ * @Author: 张书瑞
+ * @Date: 2023-11-02 18:35:57
+ * @LastEditors: 张书瑞
+ * @LastEditTime: 2023-11-05 20:57:24
+ * @FilePath: \zh_record\src\utils\http\unirequest\index.ts
+ * @Description: 
+ * @email: 1592955886@qq.com
+ * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
+ */
 import { TOKEN_KEY } from "@/enums/cacheEnum";
+import { ShowToast } from "@/utils/toast";
 
-const BASE_URL = "http://localhost:8081";
+const BASE_URL = "https://localhost:7234";
 const TIMEOUT = 10000;
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -13,44 +24,37 @@ type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
  * @returns 
  */
 export const request = <T>(api: string, method: Method, data?: any, header?: object) => {
-    const url = BASE_URL + api;
-    const token = uni.getStorageSync(TOKEN_KEY);
-    if (token) {
-        header = { ...header, "Authorization": `Bearer ${token}` }
-    }
-    //异步封装接口，使用Promise处理异步请求
-    return new Promise<T>((resolve, reject) => {
-        uni.request({
-            url,
-            method,
-            data,
-            header: header,
-            timeout: TIMEOUT,
-            dataType: 'json',
-            success: (res) => {
-                console.log('success');
-                console.log(res);
-                if (res.statusCode === 200) {
-                    resolve(res.data as T);
-                } else {
-                    reject(res.data);
-                }
-            },
-            fail: (err) => {
-                reject(err);
-            },
-            complete: (res) => {
-                console.log(res);
-                // if (res.statusCode === 200) {
-                //     if (res.data.errno === 0 || res.data.errno === 401) {
-                //         uni.hideLoading()
-                //     } else {
-                //         utils.toast(res.data.msg)
-                //     }
-                // } else {
-                //     utils.toast('服务器开小差了~')
-                // }
-            }
-        })
+  uni.showLoading({
+    title: "请求中...",
+    mask: true
+  });
+  const url = BASE_URL + api;
+  const token = uni.getStorageSync(TOKEN_KEY);
+  if (token) {
+    header = { ...header, "Authorization": `Bearer ${token}` }
+  }
+  //异步封装接口，使用Promise处理异步请求
+  return new Promise<T>((resolve, reject) => {
+    uni.request({
+      url,
+      method,
+      data,
+      header: header,
+      timeout: TIMEOUT,
+      dataType: 'json',
+      success: (res) => {
+        if (res.statusCode === 200) {
+          resolve(res.data as T);
+        } else {
+          reject(res.data);
+        }
+        uni.hideLoading();
+      },
+      fail: (err) => {
+        uni.hideLoading();
+        ShowToast("请求失败", "error");
+        reject(err);
+      }
     })
+  })
 }

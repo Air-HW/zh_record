@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-02 00:27:10
+ * @LastEditTime: 2023-11-05 21:49:10
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -33,16 +33,16 @@
             </view>
           </view>
         </u-scroll-list>
-        <u-form-item label="金额" prop="amount" label-width="80px" class="form-item">
-          <u-input v-model="model.amount" :borderBottom="true" placeholder="请输入金额" class="input"></u-input>
+        <u-form-item label="金额" prop="Amount" label-width="80px" class="form-item">
+          <u-input v-model="model.Amount" :borderBottom="true" placeholder="请输入金额" class="input"></u-input>
           <template #right>
             <u-datetime-picker :show="DataShow" v-model="SelectDate" @confirm="confirmData" @cancel="closeData"
               mode="date"></u-datetime-picker>
-            <u-button type="primary" size="small" @click="ShowDataPikc">{{ model.recordTime }}</u-button>
+            <u-button type="primary" size="small" @click="ShowDataPikc">{{ model.RecordTime }}</u-button>
           </template>
         </u-form-item>
-        <u-form-item label="备注" prop="remarks" label-width="80px" class="form-item">
-          <u-textarea v-model="model.remarks" placeholder="请输入备注"></u-textarea>
+        <u-form-item label="备注" prop="Remarks" label-width="80px" class="form-item">
+          <u-textarea v-model="model.Remarks" placeholder="请输入备注"></u-textarea>
         </u-form-item>
         <u-button :customStyle="btnStyle" shape="circle" type="primary" @click="submitForm"
           class="submit-btn">提交</u-button>
@@ -59,12 +59,12 @@ import { getIncomeExpenseType, insertAccountRecord } from "@/api/demo/list";
 import { useUserStore } from "@/stores/modules/user";
 import { TimeStampFormatDate } from "@/utils/helper";
 import { ShowToast } from "@/utils/toast";
-import { RecordRequestData } from "@/api/demo/model/RecordModel";
+import { InsertRecordRequestData } from "@/api/demo/model/RecordModel";
 import { IncomeExpenseTypeList } from "@/api/demo/model/IncomeExpenseTypeModel";
 import { onShow } from "@dcloudio/uni-app";
 const userStore = useUserStore();
-const DefaultId = userStore.getDefaultId;
-const userinfo = userStore.getUser;
+let DefaultId = userStore.getDefaultId;
+let userinfo = userStore.getUser;
 interface IncomeExpenseType {
   list: IncomeExpenseTypeList[],
   listIncome: IncomeExpenseTypeList[],
@@ -74,6 +74,8 @@ const state = reactive<IncomeExpenseType>({
   listIncome: []
 });
 onShow(async () => {
+  DefaultId = userStore.getDefaultId;
+  userinfo = userStore.getUser;
   var res = await getIncomeExpenseType({
     AccountBookId: DefaultId
   });
@@ -111,17 +113,17 @@ const closePopup = () => {
   showPopup.value = false;
 }
 //入参实体
-const model = reactive<RecordRequestData>({
-  accountBookId: DefaultId,
-  wxUserId: userinfo?.Id,
-  typeId: typeId.value,
-  amount: null,
-  remarks: null,
-  recordTime: SelectDate.value
+const model = reactive<InsertRecordRequestData>({
+  AccountBookId: DefaultId,
+  WxUserId: userinfo?.Id,
+  TypeId: typeId.value,
+  Amount: null,
+  Remarks: null,
+  RecordTime: SelectDate.value
 });
 //表单校验
 const rules = ref({
-  amount: [
+  Amount: [
     { required: true, message: '请输入金额', trigger: 'blur' },
     {
       pattern: /^\d+(\.\d{1,2})?$/,
@@ -138,9 +140,9 @@ const uForms = ref();
 const submitForm = async () => {
   uForms.value.validate().then(async (res) => {
     if (res) {
-      model.typeId = typeId.value;
-      model.accountBookId = DefaultId;
-      model.wxUserId = userinfo.Id;
+      model.TypeId = typeId.value;
+      model.AccountBookId = DefaultId;
+      model.WxUserId = userinfo.Id;
       const data = await insertAccountRecord(model);
       if (data.isSuccess) {
         ShowToast("提交成功", "success");
@@ -180,7 +182,7 @@ const ShowDataPikc = () => {
 const confirmData = (e) => {
   const FormatDate = TimeStampFormatDate(e.value);
   DataShow.value = false;
-  model.recordTime = FormatDate;
+  model.RecordTime = FormatDate;
 };
 //关闭日期选择器
 const closeData = () => {

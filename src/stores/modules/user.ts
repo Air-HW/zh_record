@@ -58,6 +58,13 @@ export const useUserStore = defineStore({
         key: TOKEN_KEY,
         data: token
       });
+    },
+    setDefaultId(defaultId: string): void {
+      this.defaultId = defaultId ? defaultId : '';
+      uni.setStorage({
+        key: Default,
+        data: defaultId
+      });
     }
   }
 });

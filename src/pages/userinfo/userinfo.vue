@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-02 01:01:53
+ * @LastEditTime: 2023-11-04 14:58:37
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com

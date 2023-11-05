@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-15 15:40:36
+ * @LastEditTime: 2023-11-04 15:42:56
  * @FilePath: \zh_record\src\pages.json
  * @Description:
  * @email: 1592955886@qq.com
@@ -48,7 +48,7 @@
       }
     },
     {
-      "path": "pages/record/record",
+      "path": "pages/accountbook/accountbook",
       "style": {
         "navigationBarTitleText": "我的账本"
       }

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-02 00:26:16
+ * @LastEditTime: 2023-11-05 21:47:38
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -23,7 +23,7 @@
             <u-icon size="26" color="#3c9cff" name="account-fill"></u-icon>
           </template>
         </u-cell>
-        <u-cell title="我的账本" @click="recordCilck" isLink>
+        <u-cell title="我的账本" @click="accountbookCilck" isLink>
           <template #icon>
             <u-icon size="26" color="#3c9cff" name="list-dot"></u-icon>
           </template>
@@ -65,24 +65,24 @@ import { UserInfo } from '@/api/demo/model/UserModel';
 import { onShow } from '@dcloudio/uni-app';
 const userStore = useUserStore();
 const userData = ref<UserInfo>({
-  Id: "",
-  NickName: "",
+  Id: null,
+  NickName: null,
   Sex: 0,
-  Phone: "",
-  OpenID: "",
-  HeadPortraitUrl: "",
-  Email: "",
+  Phone: null,
+  OpenID: null,
+  HeadPortraitUrl: null,
+  Email: null,
   BrithDay: null
 })
 onShow(async () => {
-  console.log("show");
-  userData.value = userStore.getUser;
-  if (userData.value == null) {
+  if (userData.value.Id === null) {
     const res = await getUserInfo();
     if (res.isSuccess) {
       userStore.setUser(res.data);
       userData.value = res.data;
     }
+  } else {
+    userData.value = { ...userStore.getUser };
   }
 })
 const PayCode = ref("/src/static/home/PayCode.jpg");
@@ -93,13 +93,13 @@ const PayCodeOpen = () => {
 const PayCodeClose = () => {
   PayCodeShow.value = false;
 }
-const recordCilck = () => {
+const accountbookCilck = () => {
   uni.navigateTo({
-    url: "/pages/record/record"
+    url: "/pages/accountbook/accountbook"
   });
 }
 const userinfoCilck = () => {
-  uni.redirectTo({
+  uni.navigateTo({
     url: "/pages/userinfo/userinfo"
   });
 }
@@ -133,7 +133,7 @@ const userinfoCilck = () => {
   margin: auto;
   display: flex;
   flex-direction: column;
-  margin-top: -80rpx;
+  margin-top: -90rpx;
 
   &_header {
     z-index: 1;

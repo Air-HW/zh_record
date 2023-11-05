@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 15:37:29
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-29 22:04:41
+ * @LastEditTime: 2023-11-05 21:55:52
  * @FilePath: \zh_record\src\api\demo\list.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -11,7 +11,7 @@
 import axiosInstance from '@/utils/http/axios';
 import { CustomIncomeExpenseTypeListResultModel, CustomRequestData, IncomeExpenseTypeResultModel } from './model/IncomeExpenseTypeModel';
 import { ApiResult } from '../model/baseModel';
-import { RecordRequestData } from './model/RecordModel';
+import { InsertRecordRequestData } from './model/RecordModel';
 import { request } from '@/utils/http/unirequest';
 
 enum Api {
@@ -36,7 +36,7 @@ export const getIncomeExpenseType = async (params?: any) => {
  * @param params 收支入参
  * @returns 
  */
-export const insertAccountRecord = async (params: RecordRequestData) => {
+export const insertAccountRecord = async (params: InsertRecordRequestData) => {
   const response = await request<ApiResult<boolean>>(Api.InsertAccountRecord, 'POST', params);
   return response;
 }
