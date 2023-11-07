@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 15:43:40
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-29 16:43:24
+ * @LastEditTime: 2023-11-07 22:39:39
  * @FilePath: \zh_record\src\api\demo\model\IncomeExpenseTypeModel.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -16,9 +16,9 @@ import { ApiResult } from "@/api/model/baseModel";
  */
 export interface IncomeExpenseTypeList {
   Id: string,
-  Type: Number,
+  Type: number,
   Name: string,
-  WXUserId: Number | null | undefined,
+  WXUserId: string,
   IsSystemDefault: boolean,
   ImageUrl: string
 }
@@ -41,7 +41,7 @@ export interface CustomRequestData {
   /** 是否为系统默认 */
   isSystemDefault: boolean,
   /** 收支类型 */
-  type: Number,
+  type: number,
   /** 名称 */
   name: string,
   /** 图标Id */

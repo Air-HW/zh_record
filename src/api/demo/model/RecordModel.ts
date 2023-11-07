@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 22:44:15
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-05 21:56:52
+ * @LastEditTime: 2023-11-07 23:20:03
  * @FilePath: \zh_record\src\api\demo\model\RecordModel.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -20,7 +20,7 @@ export interface InsertRecordRequestData {
   /** 收支类型Id */
   TypeId: string,
   /** 金额 */
-  Amount: Number,
+  Amount: number,
   /** 备注 */
   Remarks: string,
   /** 记录日期 */
@@ -33,9 +33,41 @@ export interface GetRecordRequestData {
   /** 微信用户Id */
   WxUserId: string,
   /** 收支类型Id */
-  TypeId: string,
+  TypeId?: string,
+  /** 年 */
+  Year: number,
+  /** 月 */
+  Month: number,
   /** 金额 */
-  Amount: Number,
+  Amount?: number,
   /** 备注 */
-  Remarks: string
+  Remarks?: string
 }
+/** 收支返参实体 */
+export interface RecordDetail {
+  /** 明细Id */
+  Id: string,
+  /** 微信用户Id */
+  WxUserId: string,
+  /** 账本Id */
+  AccountBookId: string,
+  /** 收支类型Id */
+  TypeId: string,
+  /** 微信用户昵称 */
+  NickName: string,
+  /** 金额 */
+  Amount: number,
+  /** 记账日期 */
+  RecordTime: string,
+  /** 备注 */
+  Remarks: string,
+  /** 收入 or 支出(0 or 1) */
+  Type: number,
+  /** 图标标题 */
+  IncomeExpenseName: string,
+  /** 图标Url */
+  IncomeExpenseUrl: number,
+  /** 创建时间 */
+  CreationTime: Date
+}
+export type RecordDetailResultModel = ApiResult<RecordDetail[]>;

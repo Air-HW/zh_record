@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-05 20:57:32
+ * @LastEditTime: 2023-11-07 23:22:22
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -23,14 +23,14 @@
           <text class="detailtitle">当月支出(元)</text>
           <view class="moneydetail">
             <u-icon name="rmb" :bold="true" size="40rpx" color="white"></u-icon>
-            <text>1000.00</text>
+            <text>{{ TotalExpense }}</text>
           </view>
         </view>
         <view class="detail-card">
-          <text class="detailtitle">本月支出(元)</text>
+          <text class="detailtitle">本月收入(元)</text>
           <view class="moneydetail">
             <u-icon name="rmb" :bold="true" size="40rpx" color="white"></u-icon>
-            <text>1000.00</text>
+            <text>{{ TotalIncome }}</text>
           </view>
         </view>
       </view>
@@ -63,71 +63,55 @@
         </view>
       </view>
     </view>
-    <view v-for="item in 3" :key="item">
+    <view v-for="(item, index) in recordDetailList" :key="index">
       <view class="paydetail">
         <view class="detailitem">
           <view class="detailitem-title">
             <view class="detailitem-title-date">
-              <text>12月31日</text>
+              <text>{{ item.MonthDay }}</text>
               <text>星期日</text>
             </view>
             <view class="detailitem-title-money">
               <text>支出:</text>
               <u-icon name="rmb" :bold="true" size="20rpx"></u-icon>
-              <text style="font-weight: bold">10000</text>
+              <text style="font-weight: bold">{{ item.Expense }}</text>
             </view>
             <view class="detailitem-title-money">
               <text>收入:</text>
               <u-icon name="rmb" :bold="true" size="20rpx"></u-icon>
-              <text style="font-weight: bold">10000</text>
+              <text style="font-weight: bold">{{ item.Income }}</text>
             </view>
           </view>
-          <view class="detailitem-pay">
-            <view class="detailitem-pay-icon">
-              <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/交通_white.png"
-                  mode="aspectFill"></u-image>
+          <view v-for="(data, dataindex) in item.RecordData" :key="dataindex">
+            <view class="detailitem-pay">
+              <view class="detailitem-pay-icon">
+                <view class="detailitem-pay-iconbac">
+                  <u-image width="70rpx" height="70rpx" :src="data.IncomeExpenseUrl" mode="aspectFill"></u-image>
+                </view>
               </view>
-            </view>
-            <view class="detailitem-pay-title">
-              <u-cell size="large" title="明天几点起" :border="false" value="-100.00" label="地铁"></u-cell>
-            </view>
-          </view>
-          <view class="detailitem-pay">
-            <view class="detailitem-pay-icon">
-              <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/餐饮_white.png"
-                  mode="aspectFill"></u-image>
+              <view class="detailitem-pay-title">
+                <u-cell size="large" :title="data.NickName" :border="false"
+                  :value="data.Type == 0 ? `+${data.Amount}` : `-${data.Amount}`"
+                  :label="data.IncomeExpenseName"></u-cell>
               </view>
-            </view>
-            <view class="detailitem-pay-title">
-              <u-cell size="large" title="明天几点起" :border="false" value="-10.00" label="餐饮"></u-cell>
-            </view>
-          </view>
-          <view class="detailitem-pay">
-            <view class="detailitem-pay-icon">
-              <view class="detailitem-pay-iconbac">
-                <u-image width="70rpx" height="70rpx" src="~@/static/image/pay/default/外卖_white.png"
-                  mode="aspectFill"></u-image>
-              </view>
-            </view>
-            <view class="detailitem-pay-title">
-              <u-cell size="large" title="明天几点起" :border="false" value="-21.00" label="外卖"></u-cell>
             </view>
           </view>
         </view>
       </view>
     </view>
   </view>
+  <u-empty mode="data" :show="!IsDataEmpty" />
   <u-back-top :scroll-top="scrollTop" :icon-style="iconStyle" :custom-style="customStyle"></u-back-top>
 </template>
 
 <script lang="ts" setup>
-import { GetRecordRequestData } from "@/api/demo/model/RecordModel";
+import { GetRecordRequestData, RecordDetail } from "@/api/demo/model/RecordModel";
 import { getRecord } from "@/api/demo/record";
 import { useUserStore } from "@/stores/modules/user";
+import { ShowToast } from "@/utils/toast";
 import { onPageScroll, onShow } from "@dcloudio/uni-app";
-import { onBeforeMount, onMounted, ref, reactive } from "vue";
+import { ref, reactive } from "vue";
+import { RecordDetailView, processRecordData } from ".";
 const date = [
   {
     key: 1,
@@ -195,8 +179,13 @@ const subtitle = ref("Good morning!");
 const icon = ref("../../static/icon/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
-const cardCur = ref(1);
+const nowMonth = new Date().getMonth() + 1;
+const nowYear = new Date().getFullYear();
+const cardCur = ref<number>(nowMonth);
 const chartData = ref({});
+const IsDataEmpty = ref<boolean>(false);
+const TotalIncome = ref<number>(0);
+const TotalExpense = ref<number>(0);
 const opts = reactive({
   color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
   padding: [5, 5, 5, 5],
@@ -227,20 +216,24 @@ const store = useUserStore();
 const getReordParam = ref<GetRecordRequestData>({
   Id: null,
   WxUserId: null,
-  TypeId: null,
-  Amount: null,
-  Remarks: null
+  Year: nowYear,
+  Month: nowMonth
 })
+const recordDtail = ref<RecordDetail[]>(null)
+const recordDetailList = ref<RecordDetailView[]>([])
 onShow(async () => {
   const userinfo = store.getUser;
   getReordParam.value.Id = store.getDefaultId;
   getReordParam.value.WxUserId = userinfo.Id;
-  const data = await getRecord(getReordParam.value);
-  console.log(data);
-})
-onBeforeMount(async () => {
-  const now = new Date().getMonth() + 1;
-  cardCur.value = now;
+  const req = await getRecord(getReordParam.value);
+  if (req.isSuccess) {
+    recordDetailList.value = processRecordData(req.data);
+    TotalIncome.value = req.data.filter(s => s.Type === 0).reduce((amount, item) => amount + item.Amount, 0) / 100;
+    TotalExpense.value = req.data.filter(s => s.Type === 1).reduce((amount, item) => amount + item.Amount, 0) / 100;
+    IsDataEmpty.value = recordDetailList.value.length > 0;
+  } else {
+    ShowToast(req.msg, "error");
+  }
   let res = {
     series: [
       {
@@ -255,7 +248,7 @@ onBeforeMount(async () => {
     ],
   };
   chartData.value = res;
-});
+})
 const latestClick = () => {
   latestActive.value = true;
   byMonthActive.value = false;
@@ -264,8 +257,16 @@ const byMonthActiveClick = () => {
   latestActive.value = false;
   byMonthActive.value = true;
 };
-const dateClick = (item: any) => {
+const dateClick = async (item: any) => {
   cardCur.value = item.key;
+  getReordParam.value.Month = item.key;
+  const req = await getRecord(getReordParam.value);
+  if (req.isSuccess) {
+    recordDetailList.value = processRecordData(req.data);
+    IsDataEmpty.value = recordDetailList.value.length > 0;
+  } else {
+    ShowToast(req.msg, "error");
+  }
 };
 const customStyle = reactive({
   backgroundColor: '#3c9cff'
@@ -440,11 +441,11 @@ onPageScroll((e) => {
 
         .detailitem-title-date {
           flex: 1;
-          font-size: 20rpx;
+          font-size: 25rpx;
           display: flex;
 
           text {
-            opacity: 0.7;
+            opacity: 0.8;
           }
         }
 
@@ -465,12 +466,12 @@ onPageScroll((e) => {
         }
 
         .detailitem-title-money text:first-child {
-          opacity: 0.4;
+          opacity: 0.8;
         }
       }
 
       .detailitem-pay {
-        height: 120rpx;
+        height: 130rpx;
         display: flex;
 
         .detailitem-pay-icon {

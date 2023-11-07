@@ -6,6 +6,6 @@ export interface GridListItem {
   ImageUrl: string;
   IsSystemDefault: boolean;
   Name: string;
-  Type: Number;
-  WXUserId: Number | null | undefined;
+  Type: number;
+  WXUserId: string;
 };

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-04 14:58:37
+ * @LastEditTime: 2023-11-07 00:30:56
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -63,9 +63,9 @@ import { UserInfo } from '@/api/demo/model/UserModel';
 import { LoginProviderEnum } from '@/enums/loginProviderEnum';
 import { ShowToast } from '@/utils/toast';
 import { ApiResult } from '@/api/model/baseModel';
-import { BASE_URL } from '@/utils/http/axios';
 import { updateUserInfo } from '@/api/demo/user';
 import { onShow } from '@dcloudio/uni-app';
+import { BASE_URL } from '@/utils/http/unirequest';
 const customStyle = reactive({
   width: '250rpx',
 });

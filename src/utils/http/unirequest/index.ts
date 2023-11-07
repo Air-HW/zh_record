@@ -11,7 +11,7 @@
 import { TOKEN_KEY } from "@/enums/cacheEnum";
 import { ShowToast } from "@/utils/toast";
 
-const BASE_URL = "https://localhost:7234";
+export const BASE_URL = "https://localhost:7234";
 const TIMEOUT = 10000;
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 

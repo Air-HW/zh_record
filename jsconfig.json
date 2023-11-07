@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "target": "es2015", //设置为 "es2015" 或更高版本，可以告诉编译器允许对 Set 类型进行循环访问
+    "downlevelIteration": true,
+    "moduleResolution": "node",
     "baseUrl": ".",
     "types": ["@dcloudio/types", "miniprogram-api-typings", "mini-types"],
     "paths": {

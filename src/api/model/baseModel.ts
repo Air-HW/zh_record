@@ -2,7 +2,7 @@
  * 接口统一返回格式
  */
 export interface ApiResult<T> {
-  status: Number;
+  status: number;
   isSuccess: boolean;
   data: T;
   msg: string;

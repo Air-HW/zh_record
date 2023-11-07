@@ -1,5 +1,5 @@
 import { request } from "@/utils/http/unirequest";
-import { GetRecordRequestData, RecordResultModel } from "./model/RecordModel";
+import { GetRecordRequestData, RecordDetailResultModel } from "./model/RecordModel";
 
 enum Api {
   GetRecord = '/api/AccountRecord'
@@ -11,6 +11,6 @@ enum Api {
  * @returns 
  */
 export const getRecord = async (param: GetRecordRequestData) => {
-  const response = await request<RecordResultModel>(Api.GetRecord, 'GET', param);
+  const response = await request<RecordDetailResultModel>(Api.GetRecord, 'GET', param);
   return response;
 }
