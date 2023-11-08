@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-05 21:49:10
+ * @LastEditTime: 2023-11-08 21:02:41
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -161,7 +161,7 @@ const submitForm = async () => {
 const clearForm = async () => {
   for (const key in model) {
     if (Object.hasOwnProperty.call(model, key)) {
-      if (key == "recordTime") {
+      if (key == "RecordTime") {
         SelectDate.value = TimeStampFormatDate(Date.now());
         model[key] = SelectDate.value;
         continue;

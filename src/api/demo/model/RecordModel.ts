@@ -58,7 +58,7 @@ export interface RecordDetail {
   /** 金额 */
   Amount: number,
   /** 记账日期 */
-  RecordTime: string,
+  RecordTime: Date,
   /** 备注 */
   Remarks: string,
   /** 收入 or 支出(0 or 1) */

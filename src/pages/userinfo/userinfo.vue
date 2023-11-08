@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-07 00:30:56
+ * @LastEditTime: 2023-11-08 23:16:44
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -124,7 +124,7 @@ const avatarClick = () => {
 const save = async () => {
   if (avatarFile !== null) {
     uni.uploadFile({
-      url: `${BASE_URL}api/WxUser/${userData.value.Id}`,
+      url: `${BASE_URL}/api/WxUser/${userData.value.Id}`,
       filePath: avatarFile,
       name: 'File',
       header: {
@@ -147,21 +147,10 @@ const save = async () => {
         }
       },
       fail: (err) => {
-        console.log(err);
-
         ShowToast(err.errMsg, "error");
       }
     })
   } else {
-    //#region 弃用
-    // const formData = new FormData();
-    // formData.append('NickName', userData.value.NickName);
-    // formData.append('File', null);
-    // formData.append('Sex', userData.value.Sex.toString());
-    // formData.append('Phone', userData.value.Phone);
-    // formData.append('Email', userData.value.Email);
-    // formData.append('BrithDay', userData.value.BrithDay?.toString() || '');
-
     const res = await updateUserInfo(userData.value.Id, userData.value);
     if (res.isSuccess) {
       userStore.setUser(res.data);
@@ -169,7 +158,6 @@ const save = async () => {
     } else {
       ShowToast(res.msg, "error");
     }
-    //#endregion
   }
 }
 const cancel = () => {
