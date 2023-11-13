@@ -9,7 +9,7 @@
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
 
-export enum WeekDayZn {
+export enum WeekDayCn {
   星期日,
   星期一,
   星期二,
@@ -19,7 +19,7 @@ export enum WeekDayZn {
   星期六
 }
 
-export enum WeekDayCn {
+export enum WeekDayEn {
   Sunday,
   Monday,
   Tuesday,

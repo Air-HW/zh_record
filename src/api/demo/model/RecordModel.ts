@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 22:44:15
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-07 23:20:03
+ * @LastEditTime: 2023-11-12 00:02:25
  * @FilePath: \zh_record\src\api\demo\model\RecordModel.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -30,8 +30,6 @@ export interface InsertRecordRequestData {
 export interface GetRecordRequestData {
   /** 账本Id */
   Id: string,
-  /** 微信用户Id */
-  WxUserId: string,
   /** 收支类型Id */
   TypeId?: string,
   /** 年 */

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-08 23:52:13
+ * @LastEditTime: 2023-11-12 00:23:47
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -113,7 +113,7 @@ import { useUserStore } from "@/stores/modules/user";
 import { ShowToast } from "@/utils/toast";
 import { onPageScroll, onShow } from "@dcloudio/uni-app";
 import { ref, reactive } from "vue";
-import { RecordDetailView, processChartData, processRecordData } from ".";
+import { RecordDetailView, PieChartData, processRecordData } from ".";
 const date = [
   {
     key: 1,
@@ -177,7 +177,7 @@ const date = [
   },
 ];
 const title = ref("嗨, 小刘");
-const subtitle = ref("Good morning！");
+const subtitle = ref("Good morning!");
 const icon = ref("../../static/icon/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
@@ -217,81 +217,62 @@ const scrollTop = ref(0);
 const store = useUserStore();
 const getReordParam = ref<GetRecordRequestData>({
   Id: null,
-  WxUserId: null,
   Year: nowYear,
   Month: nowMonth
 })
 const recordDetailList = ref<RecordDetailView[]>([])
 
-onShow(async () => {
+onShow(() => {
   const now = new Date();
   const currentHour = now.getHours();
-  const period = currentHour >= 0 && currentHour < 11 ? 'Good morning！' :
-    currentHour >= 11 && currentHour <= 13 ? 'Good afternoon！' :
-      currentHour >= 14 && currentHour <= 17 ? 'Good afternoon！' :
-        currentHour >= 18 && currentHour <= 23 ? 'Good evening！' : 'Good morning！';
-  subtitle.value = period;
+  const subtitleEn = currentHour >= 0 && currentHour < 11 ? 'Good morning!' :
+    currentHour >= 11 && currentHour <= 13 ? 'Good afternoon!' :
+      currentHour >= 14 && currentHour <= 17 ? 'Good afternoon!' :
+        currentHour >= 18 && currentHour <= 23 ? 'Good evening!' : 'Good morning!';
+  subtitle.value = subtitleEn;
   const userinfo = store.getUser;
   title.value = `嗨，${userinfo.NickName}`;
   getReordParam.value.Id = store.getDefaultId;
-  getReordParam.value.WxUserId = userinfo.Id;
-  const req = await getRecord(getReordParam.value);
-  const charData = await getChartData(getReordParam.value);
-  if (req.isSuccess) {
-    IsChartDataEmpty.value = charData.data.length > 0;
-    IsDataEmpty.value = req.data.length > 0;
-    TotalIncome.value = req.data.filter(s => s.Type === 0).reduce((amount, item) => amount + item.Amount, 0);
-    TotalExpense.value = req.data.filter(s => s.Type === 1).reduce((amount, item) => amount + item.Amount, 0);
-    recordDetailList.value = processRecordData(req.data);
-    chartData.value = processChartData(charData.data);
-  } else {
-    ShowToast(req.msg, "error");
-  }
+  RefreshData();
 })
 
-const latestClick = async () => {
+const latestClick = () => {
   if (cardCur.value != nowMonth && getReordParam.value.Month != nowMonth) {
     cardCur.value = nowMonth;
     getReordParam.value.Month = nowMonth;
-    const req = await getRecord(getReordParam.value);
-    const charData = await getChartData(getReordParam.value);
-    if (req.isSuccess) {
-      IsChartDataEmpty.value = charData.data.length > 0;
-      IsDataEmpty.value = req.data.length > 0;
-      recordDetailList.value = processRecordData(req.data);
-      TotalIncome.value = req.data.filter(s => s.Type === 0).reduce((amount, item) => amount + item.Amount, 0);
-      TotalExpense.value = req.data.filter(s => s.Type === 1).reduce((amount, item) => amount + item.Amount, 0);
-      chartData.value = processChartData(charData.data);
-    } else {
-      ShowToast(req.msg, "error");
-    }
+    RefreshData();
   }
   latestActive.value = true;
   byMonthActive.value = false;
 };
 
-const byMonthActiveClick = () => {
-  latestActive.value = false;
-  byMonthActive.value = true;
-};
-
-const dateClick = async (item: any) => {
+const dateClick = (item: any) => {
   if (cardCur.value != item.key && getReordParam.value.Month != item.key) {
     cardCur.value = item.key;
     getReordParam.value.Month = item.key;
-    const req = await getRecord(getReordParam.value);
-    const charData = await getChartData(getReordParam.value);
-    if (req.isSuccess) {
-      IsChartDataEmpty.value = charData.data.length > 0;
-      IsDataEmpty.value = req.data.length > 0;
-      recordDetailList.value = processRecordData(req.data);
-      TotalIncome.value = req.data.filter(s => s.Type === 0).reduce((amount, item) => amount + item.Amount, 0);
-      TotalExpense.value = req.data.filter(s => s.Type === 1).reduce((amount, item) => amount + item.Amount, 0);
-      chartData.value = processChartData(charData.data);
-    } else {
-      ShowToast(req.msg, "error");
-    }
+    RefreshData();
   }
+};
+
+/** 数据刷新 */
+const RefreshData = async () => {
+  const req = await getRecord(getReordParam.value);
+  const charData = await getChartData(getReordParam.value);
+  if (req.isSuccess) {
+    IsChartDataEmpty.value = charData.data.length > 0;
+    IsDataEmpty.value = req.data.length > 0;
+    recordDetailList.value = processRecordData(req.data);
+    TotalIncome.value = req.data.filter(s => s.Type === 0).reduce((amount, item) => amount + item.Amount, 0);
+    TotalExpense.value = req.data.filter(s => s.Type === 1).reduce((amount, item) => amount + item.Amount, 0);
+    chartData.value = PieChartData(charData.data);
+  } else {
+    ShowToast(req.msg, "error");
+  }
+}
+
+const byMonthActiveClick = () => {
+  latestActive.value = false;
+  byMonthActive.value = true;
 };
 
 const customStyle = reactive({

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:16:20
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-15 15:46:27
+ * @LastEditTime: 2023-11-12 22:04:12
  * @FilePath: \zh_record\src\pages\statistics\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -11,7 +11,7 @@
 <template>
   <view class="titlePick">
     <view class="titlePick_cur">
-      <u-subsection :list="curList" mode="subsection" :current="curIndex" @change="sectionCurChange"></u-subsection>
+      <u-subsection :list="typeList" mode="subsection" :current="typeIndex" @change="sectionCurChange"></u-subsection>
     </view>
     <view class="titlePick_date">
       <u-subsection :list="dateCurList" mode="subsection" :current="DateCurIndex"
@@ -19,81 +19,53 @@
     </view>
   </view>
   <view>
-    <u-tabs :list="dateList" current="5"></u-tabs>
+    <u-tabs :list="dateList" current="0" @click="dateClikc"></u-tabs>
   </view>
   <view class="datePikc">
-    <text class="charts_title">总支出趋势</text>
-    <qiun-data-charts type="line" :opts="LineOpts" :canvas2d="true" :chartData="LineChartData" />
+    <text class="charts_title">总{{ typeList[typeIndex] }}趋势</text>
+    <qiun-data-charts type="line" :opts="LineOpts" :canvas2d="true" :chartData="LineData" />
   </view>
   <view class="ringPikc">
-    <text class="charts_title">支出分类占比</text>
-    <qiun-data-charts type="ring" :canvas2d="true" :opts="PieOpts" :chartData="PieChartData" />
+    <text class="charts_title">{{ typeList[typeIndex] }}分类占比</text>
+    <qiun-data-charts type="ring" :canvas2d="true" :opts="PieOpts" :chartData="PieData" />
   </view>
   <view class="RankPick">
-    <text class="charts_title">支出排行榜</text>
-    <view class="RankPick_item">
-      <view class="RankPick_item_img">
-        <image class="RankPick_item_img_style" src="../../static/image/pay/default/交通_white.png"></image>
-      </view>
-      <view class="RankPick_item_title">
-        <view class="RankPick_item_title_one">
-          <text>交通</text>
-          <text style="float: right;">1000.00</text>
+    <text class="charts_title">{{ typeList[typeIndex] }}排行榜</text>
+    <view v-for="(item, index) in  RankData " :key="index">
+      <view class="RankPick_item">
+        <view class="RankPick_item_img">
+          <image class="RankPick_item_img_style" :src="item.IncomeExpenseUrl"></image>
         </view>
-        <view class="RankPick_item_title_two">
-          <u-line-progress active-color="#3c9cff" :percentage="75"></u-line-progress>
-        </view>
-      </view>
-    </view>
-    <view class="RankPick_item">
-      <view class="RankPick_item_img">
-        <image class="RankPick_item_img_style" src="../../static/image/pay/default/交通_white.png"></image>
-      </view>
-      <view class="RankPick_item_title">
-        <view class="RankPick_item_title_one">
-          <text>餐饮</text>
-          <text style="float: right;">100.00</text>
-        </view>
-        <view class="RankPick_item_title_two">
-          <u-line-progress active-color="#3c9cff" :percentage="25"></u-line-progress>
+        <view class="RankPick_item_title">
+          <view class="RankPick_item_title_one">
+            <text>{{ item.IncomeExpenseName }}</text>
+            <text style="float: right;">{{ item.Amount }}</text>
+          </view>
+          <view class="RankPick_item_title_two">
+            <u-line-progress active-color="#3c9cff" :percentage="item.Rang"></u-line-progress>
+          </view>
         </view>
       </view>
     </view>
   </view>
+  <u-back-top :scroll-top="scrollTop" :icon-style="iconStyle" :custom-style="customStyle"></u-back-top>
 </template>
 <script setup lang="ts">
-import { onBeforeMount, reactive, ref } from 'vue';
-const curList = reactive(['支出', '收入']);
-const dateCurList = reactive(['周', '月', '年']);
-const curIndex = ref(0);
+import { onPageScroll, onShow } from '@dcloudio/uni-app';
+import { reactive, ref } from 'vue';
+import { WeeksInYear, getWeeksInYear } from '.';
+import { GetStatisticsRankRequestData, StatisticsRankData } from '@/api/demo/model/StatisticsModel';
+import { useUserStore } from '@/stores/modules/user';
+import { getStatisticsRank, getStatisticsPie } from '@/api/demo/statistics';
+import { formatDate } from '@/utils/helper';
+const userStore = useUserStore();
+let DefaultId = userStore.getDefaultId;
+const typeList = ref(['支出', '收入']);
+const dateCurList = ref(['周', '月', '年']);
+const typeIndex = ref(0);
 const DateCurIndex = ref(0);
-const sectionCurChange = (index) => {
-  curIndex.value = index;
-}
-const sectionDateCurChange = (index) => {
-  console.log(curList[index])
-  DateCurIndex.value = index;
-}
-const dateList = reactive([{
-  name: '关注',
-}, {
-  name: '推荐',
-}, {
-  name: '电影'
-}, {
-  name: '科技'
-}, {
-  name: '音乐'
-}, {
-  name: '美食'
-}, {
-  name: '文化'
-}, {
-  name: '财经'
-}, {
-  name: '手工'
-}]);
-const LineChartData = ref({});
+const dateList = ref<WeeksInYear[]>([]);
+const LineData = ref({});
 const LineOpts = reactive({
   color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
   padding: [15, 10, 0, 15],
@@ -145,9 +117,31 @@ const PieOpts = reactive({
     }
   }
 });
-const PieChartData = ref({});
-onBeforeMount(async () => {
-  let LineData = {
+const PieData = ref({});
+const requestData = ref<GetStatisticsRankRequestData>({
+  Id: DefaultId,
+  StartTime: formatDate(new Date(2023, 1, 1)),
+  EndTime: formatDate(new Date(2023, 12, 31)),
+  Type: 1
+});
+const RankData = ref<StatisticsRankData[]>([]);
+onShow(async () => {
+  const pie = {
+    series: [
+      {
+        data: []
+      }
+    ]
+  };
+  const reqRank = await getStatisticsRank(requestData.value);
+  const reqPie = await getStatisticsPie(requestData.value);
+  RankData.value = reqRank.data;
+  pie.series[0].data = reqPie.data;
+  PieData.value = pie;
+  dateList.value = getWeeksInYear(2023);
+
+
+  let line = {
     categories: ["2018", "2019", "2020", "2021", "2022", "2023"],
     series: [
       {
@@ -164,16 +158,47 @@ onBeforeMount(async () => {
       }
     ]
   };
-  LineChartData.value = LineData;
-  let PieData = {
-    series: [
-      {
-        data: [{ "name": "一班", "value": 50 }, { "name": "二班", "value": 30 }, { "name": "三班", "value": 20 }, { "name": "四班", "value": 18 }, { "name": "五班", "value": 8 }]
-      }
-    ]
-  };
-  PieChartData.value = PieData;
+  LineData.value = line;
 });
+/** 分类切换 */
+const sectionCurChange = async (index) => {
+  const type = typeList.value[index] === "支出" ? 1 : 0;
+  if (type !== requestData.value.Type) {
+    const pie = {
+      series: [
+        {
+          data: []
+        }
+      ]
+    };
+    requestData.value.Type = type;
+    const res = await getStatisticsRank(requestData.value);
+    const reqPie = await getStatisticsPie(requestData.value);
+    pie.series[0].data = reqPie.data;
+    PieData.value = pie;
+    RankData.value = res.data;
+    typeIndex.value = index;
+  }
+}
+/** 查询日期类型切换 */
+const sectionDateCurChange = (index) => {
+  console.log(dateCurList.value[index])
+  DateCurIndex.value = index;
+}
+const dateClikc = (data: WeeksInYear) => {
+  console.log(data.index);
+}
+const scrollTop = ref(0);
+const iconStyle = reactive({
+  color: '#fff',
+  fontSize: '36rpx'
+});
+const customStyle = reactive({
+  backgroundColor: '#3c9cff'
+});
+onPageScroll((e) => {
+  scrollTop.value = e.scrollTop;
+})
 </script>
 <style scoped lang="scss">
 .titlePick {
@@ -201,6 +226,12 @@ onBeforeMount(async () => {
 .ringPikc {
   margin-top: 20rpx;
   height: 440rpx;
+}
+
+.charts_title {
+  margin-left: 30rpx;
+  font-size: 20rpx;
+  opacity: 0.7;
 }
 
 .RankPick {
@@ -239,11 +270,5 @@ onBeforeMount(async () => {
       }
     }
   }
-}
-
-.charts_title {
-  margin-left: 30rpx;
-  font-size: 20rpx;
-  opacity: 0.7;
 }
 </style>

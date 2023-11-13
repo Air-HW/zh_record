@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-07 20:31:02
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-08 23:40:30
+ * @LastEditTime: 2023-11-12 00:16:31
  * @FilePath: \zh_record\src\pages\detail\index.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -11,7 +11,7 @@
 
 import { RecordDetail } from "@/api/demo/model/RecordModel";
 import { ChartData } from "@/api/demo/model/StatisticsModel";
-import { WeekDayZn } from "@/enums/WeekDayEnum";
+import { WeekDayCn } from "@/enums/WeekDayEnum";
 
 /**
  * 收支数据列表渲染实体
@@ -43,7 +43,7 @@ export const processRecordData = (data: RecordDetail[]): RecordDetailView[] => {
     const ExpenseAmount = listdata.filter(s => s.Type === 1).reduce((amount, item) => amount + item.Amount, 0);
     return {
       MonthDay: formattedDate(date),
-      WeekDay: WeekDayZn[date.getDay()],
+      WeekDay: WeekDayCn[date.getDay()],
       Income: IncomeAmount,
       Expense: ExpenseAmount,
       RecordData: listdata
@@ -51,13 +51,15 @@ export const processRecordData = (data: RecordDetail[]): RecordDetailView[] => {
   });
 }
 
+/** 月日格式化（xx月xx日） */
 const formattedDate = (date: Date) => {
   const month = date.getMonth() + 1; // 月份从0开始，需要加1  
   const day = date.getDate();
   return `${month}月${day}日`;
 };
 
-export const processChartData = (charData: ChartData[]) => {
+/** 饼图返回格式 */
+export const PieChartData = (charData: ChartData[]) => {
   let res = {
     series: [
       {
