@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:16:20
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-12 22:04:12
+ * @LastEditTime: 2023-11-20 22:49:13
  * @FilePath: \zh_record\src\pages\statistics\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -19,17 +19,17 @@
     </view>
   </view>
   <view>
-    <u-tabs :list="dateList" current="0" @click="dateClikc"></u-tabs>
+    <u-tabs :list="dateList" :current="DataIndex" @click="dateClikc"></u-tabs>
   </view>
   <view class="datePikc">
     <text class="charts_title">总{{ typeList[typeIndex] }}趋势</text>
-    <qiun-data-charts type="line" :opts="LineOpts" :canvas2d="true" :chartData="LineData" />
+    <qiun-data-charts type="line" :opts="LineOpts" :canvas2d="true" :chartData="LineData" :ontouch="true" />
   </view>
-  <view class="ringPikc">
+  <view class="ringPikc" v-if="!IsDataEmpty">
     <text class="charts_title">{{ typeList[typeIndex] }}分类占比</text>
     <qiun-data-charts type="ring" :canvas2d="true" :opts="PieOpts" :chartData="PieData" />
   </view>
-  <view class="RankPick">
+  <view class="RankPick" v-if="!IsDataEmpty">
     <text class="charts_title">{{ typeList[typeIndex] }}排行榜</text>
     <view v-for="(item, index) in  RankData " :key="index">
       <view class="RankPick_item">
@@ -48,33 +48,40 @@
       </view>
     </view>
   </view>
+  <view class="empty" v-if="IsDataEmpty">
+    <u-empty mode="data" />
+  </view>
   <u-back-top :scroll-top="scrollTop" :icon-style="iconStyle" :custom-style="customStyle"></u-back-top>
 </template>
 <script setup lang="ts">
 import { onPageScroll, onShow } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue';
-import { WeeksInYear, getWeeksInYear } from '.';
-import { GetStatisticsRankRequestData, StatisticsRankData } from '@/api/demo/model/StatisticsModel';
+import { WeeksInYear, getMonthInDate, getWeeksInYear } from '.';
+import { GetStatisticsRankRequestData, PostStatisticsLineRequestData, StatisticsRankData } from '@/api/demo/model/StatisticsModel';
 import { useUserStore } from '@/stores/modules/user';
-import { getStatisticsRank, getStatisticsPie } from '@/api/demo/statistics';
-import { formatDate } from '@/utils/helper';
+import { postStatisticsRank, postStatisticsPie, postStatisticsLine } from '@/api/demo/statistics';
 const userStore = useUserStore();
 let DefaultId = userStore.getDefaultId;
+const nowYear = ref<number>(new Date().getFullYear());
 const typeList = ref(['支出', '收入']);
-const dateCurList = ref(['周', '月', '年']);
 const typeIndex = ref(0);
+const dateCurList = ref(['周', '月', '年']);
 const DateCurIndex = ref(0);
 const dateList = ref<WeeksInYear[]>([]);
+const DataIndex = ref<number>(0);
 const LineData = ref({});
-const LineOpts = reactive({
+const PieData = ref({});
+const RankData = ref<StatisticsRankData[]>([]);
+const IsDataEmpty = ref<boolean>(false);
+const LineOpts = {
   color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
   padding: [15, 10, 0, 15],
-  dataLabel: false,
-  dataPointShape: false,
-  enableScroll: false,
+  enableScroll: true,
   legend: {},
   xAxis: {
-    disableGrid: true
+    disableGrid: true,
+    scrollShow: true,
+    itemCount: 10
   },
   yAxis: {
     gridType: "dash",
@@ -88,8 +95,8 @@ const LineOpts = reactive({
       linearType: "custom",
     }
   }
-});
-const PieOpts = reactive({
+};
+const PieOpts = {
   rotate: false,
   rotateLock: false,
   color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
@@ -116,77 +123,105 @@ const PieOpts = reactive({
       linearType: "custom"
     }
   }
-});
-const PieData = ref({});
-const requestData = ref<GetStatisticsRankRequestData>({
+};
+const requestRankData = ref<GetStatisticsRankRequestData>({
   Id: DefaultId,
-  StartTime: formatDate(new Date(2023, 1, 1)),
-  EndTime: formatDate(new Date(2023, 12, 31)),
+  StartTime: null,
+  EndTime: null,
   Type: 1
 });
-const RankData = ref<StatisticsRankData[]>([]);
+const requestLineData = ref<PostStatisticsLineRequestData>({
+  Id: DefaultId,
+  DateType: null,
+  Year: 0
+});
 onShow(async () => {
-  const pie = {
-    series: [
-      {
-        data: []
-      }
-    ]
-  };
-  const reqRank = await getStatisticsRank(requestData.value);
-  const reqPie = await getStatisticsPie(requestData.value);
-  RankData.value = reqRank.data;
-  pie.series[0].data = reqPie.data;
-  PieData.value = pie;
-  dateList.value = getWeeksInYear(2023);
-
-
-  let line = {
-    categories: ["2018", "2019", "2020", "2021", "2022", "2023"],
-    series: [
-      {
-        name: "成交量A",
-        data: [35, 8, 25, 37, 4, 20]
-      },
-      {
-        name: "成交量B",
-        data: [70, 40, 65, 100, 44, 68]
-      },
-      {
-        name: "成交量C",
-        data: [100, 80, 95, 150, 112, 132]
-      }
-    ]
-  };
-  LineData.value = line;
+  typeIndex.value = 0;
+  DateCurIndex.value = 0;
+  dateList.value = getWeeksInYear(nowYear.value);
+  var now = new Date();
+  dateList.value.filter(s => {
+    var startDay = new Date(`${s.startDay} 00:00:00`); // 给定的 fristDay
+    var endDay = new Date(`${s.endDay} 23:59:59`); // 给定的 endDay
+    if (startDay <= now && endDay >= now) {
+      DataIndex.value = s.index
+      requestRankData.value.StartTime = s.startDay;
+      requestRankData.value.EndTime = s.endDay;
+      requestLineData.value.StartTime = s.startDay;
+      requestLineData.value.EndTime = s.endDay;
+    }
+  })
+  requestLineData.value.DateType = '日';
+  await RefreshData();
 });
 /** 分类切换 */
 const sectionCurChange = async (index) => {
   const type = typeList.value[index] === "支出" ? 1 : 0;
-  if (type !== requestData.value.Type) {
-    const pie = {
-      series: [
-        {
-          data: []
-        }
-      ]
-    };
-    requestData.value.Type = type;
-    const res = await getStatisticsRank(requestData.value);
-    const reqPie = await getStatisticsPie(requestData.value);
-    pie.series[0].data = reqPie.data;
-    PieData.value = pie;
-    RankData.value = res.data;
+  if (type !== requestRankData.value.Type) {
+    requestRankData.value.Type = type;
+    requestLineData.value.DateType = dateCurList.value[DateCurIndex.value] === "年" ? '年' : '日';
     typeIndex.value = index;
+    await RefreshData();
   }
 }
 /** 查询日期类型切换 */
-const sectionDateCurChange = (index) => {
-  console.log(dateCurList.value[index])
+const sectionDateCurChange = async (index) => {
   DateCurIndex.value = index;
+  var name = dateCurList.value[index];
+  var now = new Date();
+  if (name === '周') {
+    dateList.value = getWeeksInYear(nowYear.value);
+    dateList.value.filter(s => {
+      var startDay = new Date(`${s.startDay}`); // 给定的 fristDay
+      var endDay = new Date(`${s.endDay}`); // 给定的 endDay
+      if (startDay <= now && endDay >= now) {
+        DataIndex.value = s.index
+        requestLineData.value.DateType = '日';
+        requestLineData.value.StartTime = s.startDay;
+        requestLineData.value.EndTime = s.endDay;
+        requestRankData.value.StartTime = s.startDay;
+        requestRankData.value.EndTime = s.endDay;
+      }
+    })
+  } else if (name === '月') {
+    var nowDate = new Date();
+    dateList.value = getMonthInDate('2022-02-15');
+    var monthIndex = dateList.value.findIndex(s => {
+      const startDate = new Date(s.startDay);
+      const endDate = new Date(s.endDay);
+      return startDate <= nowDate && endDate >= nowDate;
+    });
+    DataIndex.value = monthIndex;
+    requestLineData.value.DateType = '日';
+    requestLineData.value.StartTime = dateList.value[monthIndex].startDay;
+    requestLineData.value.EndTime = dateList.value[monthIndex].endDay;
+    requestRankData.value.StartTime = dateList.value[monthIndex].startDay;
+    requestRankData.value.EndTime = dateList.value[monthIndex].endDay;
+  } else if (name === '年') {
+    dateList.value = [
+      { name: "2022", startDay: '2022-01-01', endDay: '2022-12-31', index: 0 },
+      { name: "2023", startDay: '2023-01-01', endDay: '2023-12-31', index: 1 }
+    ];
+    var date = dateList.value.filter(s => s.name === nowYear.value.toString());
+    DataIndex.value = date[0].index;
+    requestLineData.value.DateType = '年';
+    requestLineData.value.Year = parseInt(date[0].name);
+  }
+  await RefreshData();
 }
-const dateClikc = (data: WeeksInYear) => {
-  console.log(data.index);
+const dateClikc = async (data: WeeksInYear) => {
+  var dateType = dateCurList.value[DateCurIndex.value];
+  if (dateType === '周' || dateType === '月') {
+    requestLineData.value.DateType = '日';
+    requestLineData.value.StartTime = data.startDay;
+    requestLineData.value.EndTime = data.endDay;
+    requestRankData.value.StartTime = data.startDay;
+    requestRankData.value.EndTime = data.endDay;
+  } else if (dateType === '年') {
+    requestLineData.value.DateType = '年';
+    requestLineData.value.Year = parseInt(data.name);
+  }
+  await RefreshData();
 }
 const scrollTop = ref(0);
 const iconStyle = reactive({
@@ -199,8 +234,37 @@ const customStyle = reactive({
 onPageScroll((e) => {
   scrollTop.value = e.scrollTop;
 })
+
+const RefreshData = async () => {
+  const reqLine = await postStatisticsLine(requestLineData.value);
+  LineData.value = reqLine.data;
+  const pie = {
+    series: [
+      {
+        data: []
+      }
+    ]
+  };
+  const reqRank = await postStatisticsRank(requestRankData.value);
+  const reqPie = await postStatisticsPie(requestRankData.value);
+  if (reqRank.data.length <= 0) {
+    IsDataEmpty.value = true;
+  } else {
+    IsDataEmpty.value = false;
+  }
+  RankData.value = reqRank.data;
+  pie.series[0].data = reqPie.data;
+  PieData.value = pie;
+}
 </script>
 <style scoped lang="scss">
+.empty {
+  height: 400rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .titlePick {
   height: 100rpx;
   display: flex;

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-12 00:23:47
+ * @LastEditTime: 2023-11-21 00:21:47
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -52,14 +52,14 @@
       </view>
       <view class="date-card" v-if="byMonthActive">
         <view class="wrapper">
-          <template v-for="item in date" :key="item.key">
+          <view v-for="item in date" :key="item.key">
             <view class="item">
               <view class="card" @click="dateClick(item)" :class="item.key == cardCur ? 'cardCur' : ''">
                 <span class="card-cn">{{ item.dateCn }}</span>
                 <span class="card-en">{{ item.dateEn }}</span>
               </view>
             </view>
-          </template>
+          </view>
         </view>
       </view>
     </view>
@@ -83,7 +83,7 @@
             </view>
           </view>
           <view v-for="(data, dataindex) in item.RecordData" :key="dataindex">
-            <view class="detailitem-pay">
+            <view class="detailitem-pay" @click="clikcRecordItem(data)">
               <view class="detailitem-pay-icon">
                 <view class="detailitem-pay-iconbac">
                   <u-image width="70rpx" height="70rpx" :src="data.IncomeExpenseUrl" mode="aspectFill"></u-image>
@@ -91,8 +91,8 @@
               </view>
               <view class="detailitem-pay-title">
                 <u-cell size="large" :title="data.NickName" :border="false"
-                  :value="data.Type == 0 ? `+${data.Amount}` : `-${data.Amount}`"
-                  :label="data.IncomeExpenseName"></u-cell>
+                  :value="data.Type == 0 ? `+${data.Amount}` : `-${data.Amount}`" :label="data.IncomeExpenseName"
+                  @click="clikcRecordItem(data)"></u-cell>
               </view>
             </view>
           </view>
@@ -107,7 +107,7 @@
 </template>
 
 <script lang="ts" setup>
-import { GetRecordRequestData } from "@/api/demo/model/RecordModel";
+import { GetRecordRequestData, RecordDetail } from "@/api/demo/model/RecordModel";
 import { getChartData, getRecord } from "@/api/demo/record";
 import { useUserStore } from "@/stores/modules/user";
 import { ShowToast } from "@/utils/toast";
@@ -270,6 +270,11 @@ const RefreshData = async () => {
   }
 }
 
+const clikcRecordItem = async (item: RecordDetail) => {
+  alert('编辑');
+  console.log(item);
+}
+
 const byMonthActiveClick = () => {
   latestActive.value = false;
   byMonthActive.value = true;
@@ -388,20 +393,21 @@ onPageScroll((e) => {
       padding: 0 30rpx;
 
       .wrapper {
+        display: flex;
         width: 100%;
         white-space: nowrap;
-        overflow-x: scroll;
+        overflow: scroll;
         /* 在 iOS 设备上开启硬件加速，提高滚动流畅度 */
         -webkit-overflow-scrolling: touch;
       }
 
       .item {
+        margin-top: 10rpx;
+        margin-right: 15rpx;
         display: inline-block;
         vertical-align: top;
 
         .card {
-          margin-top: 10rpx;
-          margin-right: 20rpx;
           height: 90rpx;
           width: 80rpx;
           display: flex;
@@ -412,9 +418,7 @@ onPageScroll((e) => {
           border-radius: 10rpx;
 
           .card-cn {
-            font-size: 20rpx;
-            // font-weight: 800;
-            opacity: 0.8;
+            font-size: 22rpx;
           }
 
           .card-en {

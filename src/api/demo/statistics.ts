@@ -2,18 +2,19 @@
  * @Author: 张书瑞
  * @Date: 2023-11-12 16:34:16
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-12 21:19:51
+ * @LastEditTime: 2023-11-16 23:35:29
  * @FilePath: \zh_record\src\api\demo\statistics.ts
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
 import { request } from "@/utils/http/unirequest";
-import { GetStatisticsRankRequestData, StatisticsPieResultModel, StatisticsRankResultModel } from "./model/StatisticsModel";
+import { GetStatisticsRankRequestData, PostStatisticsLineRequestData, StatisticsLineResultModel, StatisticsPieResultModel, StatisticsRankResultModel } from "./model/StatisticsModel";
 
 enum Api {
-  GetStatisticsRank = '/api/Statistics/get-statistics-rank',
-  GetStatisticsPie = '/api/Statistics/get-statistics-pie'
+  PostStatisticsRank = '/api/Statistics/statistics-rank',
+  PostStatisticsPie = '/api/Statistics/statistics-pie',
+  PostStatisticsLine = '/api/Statistics/statistics-line'
 }
 
 /**
@@ -21,8 +22,8 @@ enum Api {
  * @param params 
  * @returns 
  */
-export const getStatisticsRank = async (param: GetStatisticsRankRequestData) => {
-  const response = await request<StatisticsRankResultModel>(Api.GetStatisticsRank, 'GET', param);
+export const postStatisticsRank = async (param: GetStatisticsRankRequestData) => {
+  const response = await request<StatisticsRankResultModel>(Api.PostStatisticsRank, 'POST', param);
   return response;
 }
 
@@ -31,7 +32,17 @@ export const getStatisticsRank = async (param: GetStatisticsRankRequestData) => 
  * @param params 
  * @returns 
  */
-export const getStatisticsPie = async (param: GetStatisticsRankRequestData) => {
-  const response = await request<StatisticsPieResultModel>(Api.GetStatisticsPie, 'GET', param);
+export const postStatisticsPie = async (param: GetStatisticsRankRequestData) => {
+  const response = await request<StatisticsPieResultModel>(Api.PostStatisticsPie, 'POST', param);
+  return response;
+}
+
+/**
+ * 获取折线图数据
+ * @param params 
+ * @returns 
+ */
+export const postStatisticsLine = async (param: PostStatisticsLineRequestData) => {
+  const response = await request<StatisticsLineResultModel>(Api.PostStatisticsLine, 'POST', param);
   return response;
 }
