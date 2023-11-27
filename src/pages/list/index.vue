@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-08 21:02:41
+ * @LastEditTime: 2023-11-26 22:55:15
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -59,7 +59,7 @@ import { getIncomeExpenseType, insertAccountRecord } from "@/api/demo/list";
 import { useUserStore } from "@/stores/modules/user";
 import { TimeStampFormatDate } from "@/utils/helper";
 import { ShowToast } from "@/utils/toast";
-import { InsertRecordRequestData } from "@/api/demo/model/RecordModel";
+import { InsertOrUpdateRecordRequestData } from "@/api/demo/model/RecordModel";
 import { IncomeExpenseTypeList } from "@/api/demo/model/IncomeExpenseTypeModel";
 import { onShow } from "@dcloudio/uni-app";
 const userStore = useUserStore();
@@ -113,7 +113,7 @@ const closePopup = () => {
   showPopup.value = false;
 }
 //入参实体
-const model = reactive<InsertRecordRequestData>({
+const model = reactive<InsertOrUpdateRecordRequestData>({
   AccountBookId: DefaultId,
   WxUserId: userinfo?.Id,
   TypeId: typeId.value,

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-12 16:34:16
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-16 23:35:29
+ * @LastEditTime: 2023-11-26 17:27:44
  * @FilePath: \zh_record\src\api\demo\statistics.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -14,7 +14,8 @@ import { GetStatisticsRankRequestData, PostStatisticsLineRequestData, Statistics
 enum Api {
   PostStatisticsRank = '/api/Statistics/statistics-rank',
   PostStatisticsPie = '/api/Statistics/statistics-pie',
-  PostStatisticsLine = '/api/Statistics/statistics-line'
+  PostStatisticsLine = '/api/Statistics/statistics-line',
+  BookEarliest = '/api/AccountBook/book-earliest'
 }
 
 /**
@@ -44,5 +45,15 @@ export const postStatisticsPie = async (param: GetStatisticsRankRequestData) => 
  */
 export const postStatisticsLine = async (param: PostStatisticsLineRequestData) => {
   const response = await request<StatisticsLineResultModel>(Api.PostStatisticsLine, 'POST', param);
+  return response;
+}
+
+/**
+ * 获取账本最早记录时间
+ * @param params 账本Id
+ * @returns 
+ */
+export const getBookEarliest = async (Id: string) => {
+  const response = await request(`${Api.BookEarliest}/${Id}`, 'GET');
   return response;
 }

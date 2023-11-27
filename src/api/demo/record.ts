@@ -14,7 +14,7 @@ import { ChartDataResultModel } from "./model/StatisticsModel";
 
 enum Api {
   GetRecord = '/api/AccountRecord',
-  GetChart = '/api/Statistics/get-detail-chart'
+  GetChart = '/api/Statistics/get-detail-chart',
 }
 
 /**

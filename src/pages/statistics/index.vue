@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:16:20
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-20 22:49:13
+ * @LastEditTime: 2023-11-26 23:44:39
  * @FilePath: \zh_record\src\pages\statistics\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -56,10 +56,10 @@
 <script setup lang="ts">
 import { onPageScroll, onShow } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue';
-import { WeeksInYear, getMonthInDate, getWeeksInYear } from '.';
+import { WeeksInYear, getMonthInDate, getWeeksInDate, getWeeksInYear, getYearsInDate } from '.';
 import { GetStatisticsRankRequestData, PostStatisticsLineRequestData, StatisticsRankData } from '@/api/demo/model/StatisticsModel';
 import { useUserStore } from '@/stores/modules/user';
-import { postStatisticsRank, postStatisticsPie, postStatisticsLine } from '@/api/demo/statistics';
+import { postStatisticsRank, postStatisticsPie, postStatisticsLine, getBookEarliest } from '@/api/demo/statistics';
 const userStore = useUserStore();
 let DefaultId = userStore.getDefaultId;
 const nowYear = ref<number>(new Date().getFullYear());
@@ -73,6 +73,7 @@ const LineData = ref({});
 const PieData = ref({});
 const RankData = ref<StatisticsRankData[]>([]);
 const IsDataEmpty = ref<boolean>(false);
+let BookEarliestTimeStr: string;
 const LineOpts = {
   color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
   padding: [15, 10, 0, 15],
@@ -136,23 +137,27 @@ const requestLineData = ref<PostStatisticsLineRequestData>({
   Year: 0
 });
 onShow(async () => {
+  // var time: any = await getBookEarliest(DefaultId);
+  // BookEarliestTimeStr = time.data;
   typeIndex.value = 0;
   DateCurIndex.value = 0;
-  dateList.value = getWeeksInYear(nowYear.value);
-  var now = new Date();
-  dateList.value.filter(s => {
-    var startDay = new Date(`${s.startDay} 00:00:00`); // 给定的 fristDay
-    var endDay = new Date(`${s.endDay} 23:59:59`); // 给定的 endDay
-    if (startDay <= now && endDay >= now) {
-      DataIndex.value = s.index
-      requestRankData.value.StartTime = s.startDay;
-      requestRankData.value.EndTime = s.endDay;
-      requestLineData.value.StartTime = s.startDay;
-      requestLineData.value.EndTime = s.endDay;
-    }
-  })
-  requestLineData.value.DateType = '日';
-  await RefreshData();
+  dateList.value = getWeeksInDate('2023-11-02');
+  console.log(dateList.value);
+
+  // var now = new Date();
+  // dateList.value.filter(s => {
+  //   var startDay = new Date(`${s.startDay} 00:00:00`); // 给定的 fristDay
+  //   var endDay = new Date(`${s.endDay} 23:59:59`); // 给定的 endDay
+  //   if (startDay <= now && endDay >= now) {
+  //     DataIndex.value = s.index
+  //     requestRankData.value.StartTime = s.startDay;
+  //     requestRankData.value.EndTime = s.endDay;
+  //     requestLineData.value.StartTime = s.startDay;
+  //     requestLineData.value.EndTime = s.endDay;
+  //   }
+  // })
+  // requestLineData.value.DateType = '日';
+  // await RefreshData();
 });
 /** 分类切换 */
 const sectionCurChange = async (index) => {
@@ -185,7 +190,7 @@ const sectionDateCurChange = async (index) => {
     })
   } else if (name === '月') {
     var nowDate = new Date();
-    dateList.value = getMonthInDate('2022-02-15');
+    dateList.value = getMonthInDate(BookEarliestTimeStr);
     var monthIndex = dateList.value.findIndex(s => {
       const startDate = new Date(s.startDay);
       const endDate = new Date(s.endDay);
@@ -198,14 +203,11 @@ const sectionDateCurChange = async (index) => {
     requestRankData.value.StartTime = dateList.value[monthIndex].startDay;
     requestRankData.value.EndTime = dateList.value[monthIndex].endDay;
   } else if (name === '年') {
-    dateList.value = [
-      { name: "2022", startDay: '2022-01-01', endDay: '2022-12-31', index: 0 },
-      { name: "2023", startDay: '2023-01-01', endDay: '2023-12-31', index: 1 }
-    ];
-    var date = dateList.value.filter(s => s.name === nowYear.value.toString());
-    DataIndex.value = date[0].index;
+    dateList.value = getYearsInDate(BookEarliestTimeStr);
+    var YearIndex = dateList.value.findIndex(s => s.name === nowYear.value.toString());
+    DataIndex.value = YearIndex;
     requestLineData.value.DateType = '年';
-    requestLineData.value.Year = parseInt(date[0].name);
+    requestLineData.value.Year = parseInt(dateList.value[YearIndex].name);
   }
   await RefreshData();
 }

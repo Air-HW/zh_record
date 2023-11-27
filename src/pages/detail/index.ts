@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-07 20:31:02
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-12 00:16:31
+ * @LastEditTime: 2023-11-26 23:09:00
  * @FilePath: \zh_record\src\pages\detail\index.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -22,9 +22,9 @@ export interface RecordDetailView {
   /** 星期几 */
   WeekDay: string,
   /** 收入 */
-  Income: number,
+  Income: string,
   /** 支出 */
-  Expense: number,
+  Expense: string,
   /** 收支返参实体 */
   RecordData: RecordDetail[]
 }
@@ -39,8 +39,8 @@ export const processRecordData = (data: RecordDetail[]): RecordDetailView[] => {
   return MonthDayList.map(key => {
     var date = new Date(key);
     const listdata = data.filter(s => s.RecordTime === key);
-    const IncomeAmount = listdata.filter(s => s.Type === 0).reduce((amount, item) => amount + item.Amount, 0);
-    const ExpenseAmount = listdata.filter(s => s.Type === 1).reduce((amount, item) => amount + item.Amount, 0);
+    const IncomeAmount = listdata.filter(s => s.Type === 0).reduce((amount, item) => amount + item.Amount, 0).toFixed(2);
+    const ExpenseAmount = listdata.filter(s => s.Type === 1).reduce((amount, item) => amount + item.Amount, 0).toFixed(2);
     return {
       MonthDay: formattedDate(date),
       WeekDay: WeekDayCn[date.getDay()],

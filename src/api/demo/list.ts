@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 15:37:29
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-05 21:55:52
+ * @LastEditTime: 2023-11-26 22:57:00
  * @FilePath: \zh_record\src\api\demo\list.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -11,14 +11,16 @@
 import axiosInstance from '@/utils/http/axios';
 import { CustomIncomeExpenseTypeListResultModel, CustomRequestData, IncomeExpenseTypeResultModel } from './model/IncomeExpenseTypeModel';
 import { ApiResult } from '../model/baseModel';
-import { InsertRecordRequestData } from './model/RecordModel';
+import { InsertOrUpdateRecordRequestData } from './model/RecordModel';
 import { request } from '@/utils/http/unirequest';
 
 enum Api {
   IncomeExpenseType = '/api/IncomeExpenseType',
   InsertAccountRecord = '/api/AccountRecord',
   CustomIncomeExpenseType = '/api/IncomeExpenseType/icon',
-  InsetCustomIncomeExpenseType = '/api/IncomeExpenseType',
+  InsertCustomIncomeExpenseType = '/api/IncomeExpenseType',
+  UpdateAccountRecord = '/api/AccountRecord',
+  DeleteAccountRecord = '/api/AccountRecord',
 }
 
 /**
@@ -36,8 +38,30 @@ export const getIncomeExpenseType = async (params?: any) => {
  * @param params 收支入参
  * @returns 
  */
-export const insertAccountRecord = async (params: InsertRecordRequestData) => {
+export const insertAccountRecord = async (params: InsertOrUpdateRecordRequestData) => {
   const response = await request<ApiResult<boolean>>(Api.InsertAccountRecord, 'POST', params);
+  return response;
+}
+
+/**
+ * 修改账单明细
+ * @param Id 明细Id
+ * @param params 收支入参
+ * @returns
+ */
+export const updateAccountRecord = async (Id: string, params: InsertOrUpdateRecordRequestData) => {
+  const response = await request<ApiResult<boolean>>(`${Api.UpdateAccountRecord}/${Id}`, 'PUT', params);
+  return response;
+}
+
+/**
+ * 删除账单明细
+ * @param Id 明细Id
+ * @param params 收支入参
+ * @returns
+ */
+export const deleteAccountRecord = async (Id: string) => {
+  const response = await request<ApiResult<boolean>>(`${Api.DeleteAccountRecord}/${Id}`, 'DELETE');
   return response;
 }
 
@@ -57,6 +81,6 @@ export const getCustomIncomeExpenseType = async () => {
  * @returns 
  */
 export const insertCustomIncomeExpenseType = async (params: CustomRequestData) => {
-  const response = await request<ApiResult<boolean>>(Api.InsetCustomIncomeExpenseType, 'POST', params);
+  const response = await request<ApiResult<boolean>>(Api.InsertCustomIncomeExpenseType, 'POST', params);
   return response;
 }

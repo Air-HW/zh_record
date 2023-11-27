@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 22:44:15
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-12 00:02:25
+ * @LastEditTime: 2023-11-26 22:54:26
  * @FilePath: \zh_record\src\api\demo\model\RecordModel.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -11,8 +11,8 @@
 
 import { ApiResult } from "@/api/model/baseModel";
 
-/** 新增收支明细入参实体 */
-export interface InsertRecordRequestData {
+/** 新增或编辑收支明细入参实体 */
+export interface InsertOrUpdateRecordRequestData {
   /** 账本Id */
   AccountBookId: string,
   /** 微信用户Id */
