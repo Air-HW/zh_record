@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-12 13:40:29
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-26 23:39:59
+ * @LastEditTime: 2023-11-27 23:02:43
  * @FilePath: \zh_record\src\pages\statistics\index.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -61,25 +61,28 @@ export function getWeeksInYear(year: number): WeeksInYear[] {
  */
 export function getMonthInDate(date: string): WeeksInYear[] {
   const weeksInYear: WeeksInYear[] = [];
-  const startDate = new Date(date);
-  const currentDate = new Date();
-  let currentMonth = startDate.getMonth();
-  let currentYear = startDate.getFullYear();
-  let endDay = new Date(currentYear, currentMonth + 1, 0).getDate();
-  while (currentYear * 12 + currentMonth <= currentDate.getFullYear() * 12 + currentDate.getMonth()) {
+  const currDate = new Date(date);
+  const nowDate = new Date();
+  //获取开始计算日期
+  const StartComputeDate = currDate > nowDate ? nowDate :currDate;
+  //获取结束计算日期
+  const EndComputeDate = currDate > nowDate ? currDate :nowDate;
+  let StartComputeMonth = StartComputeDate.getMonth();
+  let StartComputeYear = StartComputeDate.getFullYear();
+  let endDay = new Date(StartComputeYear, StartComputeMonth + 1, 0).getDate();
+  while (StartComputeYear * 12 + StartComputeMonth <= EndComputeDate.getFullYear() * 12 + EndComputeDate.getMonth()) {
     weeksInYear.push({
-      name: `${currentYear}年${(currentMonth + 1).toString().padStart(2, '0')}月`,
-      startDay: `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-01`,
-      endDay: `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${endDay.toString().padStart(2, '0')}`
+      name: `${StartComputeYear}年${(StartComputeMonth + 1).toString().padStart(2, '0')}月`,
+      startDay: `${StartComputeYear}-${(StartComputeMonth + 1).toString().padStart(2, '0')}-01`,
+      endDay: `${StartComputeYear}-${(StartComputeMonth + 1).toString().padStart(2, '0')}-${endDay.toString().padStart(2, '0')}`
     });
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
+    StartComputeMonth++;
+    if (StartComputeMonth > 11) {
+      StartComputeMonth = 0;
+      StartComputeYear++;
     }
-    endDay = new Date(currentYear, currentMonth + 1, 0).getDate();
+    endDay = new Date(StartComputeYear, StartComputeMonth + 1, 0).getDate();
   }
-  console.log(weeksInYear);
   return weeksInYear;
 }
 
@@ -90,57 +93,62 @@ export function getMonthInDate(date: string): WeeksInYear[] {
  */
 export function getWeeksInDate(date: string): WeeksInYear[] {
   const Weeks: WeeksInYear[] = [];
+  const dateNow = new Date();
+  const currDate = new Date(date);
   //最早的记录日期
-  const StartRecordDate = new Date(date);
-  let StartRecordYear = StartRecordDate.getFullYear();
+  //注明：如果传入的日期大于当前日期，则最早的记录日期赋值为当前时间，反正赋值为传入的日期
+  const StartRecordDate = currDate > dateNow ? dateNow : currDate;
+  const StartRecordYear = StartRecordDate.getFullYear();
   let StartRecordDay = StartRecordDate.getDay();
-  //获取传入的时间的开始计算日期 例如：2023-05-02则开始计算日期为2023-01-01
-  const StartComputeData = new Date(StartRecordDate.getFullYear(), 1, 1);
-  //获取结束计算日期
-  const EndComputeData = new Date();
   while (StartRecordDay !== 1) {
     StartRecordDate.setDate(StartRecordDate.getDate() - 1);
     StartRecordDay = StartRecordDate.getDay();
   }
-  console.log(`${StartRecordDate.getFullYear()}-${StartRecordDate.getMonth() + 1}-${StartRecordDate.getDate()}`);
-  console.log(StartRecordDate.getTime());
-  const sss = new Date(StartRecordDate.getTime() + 6 * 24 * 60 * 60 * 1000);
-  console.log(`${sss.getFullYear()}-${sss.getMonth() + 1}-${sss.getDate()}`);
-  console.log(sss.getTime());
 
+  //获取开始计算日期
+  const StartComputeData = new Date(StartRecordYear, 0, 1);
+  let StartComputeDay = StartComputeData.getDay();
+  while (StartComputeDay !== 1) {
+    StartComputeData.setDate(StartComputeData.getDate() - 1);
+    StartComputeDay = StartComputeData.getDay();
+  }
 
+  //获取结束计算日期
+  //注明：如果传入的日期大于当前日期，则结束计算日期赋值为传入的日期，反正赋值为当前时间
+  const EndComputeData = currDate > dateNow ? currDate : new Date();
+  let EndComputeDay = EndComputeData.getDay();
+  while (EndComputeDay !== 0) {
+    EndComputeData.setDate(EndComputeData.getDate() + 1);
+    EndComputeDay = EndComputeData.getDay();
+  }
 
-
-  // const startDate = new Date(date);
-  // const startYear = new Date(startDate.getFullYear(),1,1);
-  // const EndDate = new Date();
-  // let day = startDate.getDay();
-  // while (day !== 1) {
-  //   startDate.setDate(startDate.getDate() - 1);
-  //   day = startDate.getDay();
-  // }
-  // // 将时间戳转换为天数差异
-  // var diffTime = Math.abs(EndDate.getTime() - startDate.getTime());
-  // var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  // // 计算总周数
-  // var totalWeeks = Math.ceil(diffDays / 7);
-  // for (let i = 0; i < totalWeeks; i++) {
-  //   const year = startDate.getFullYear();
-  //   const FristDay = new Date(year, 0, startDate.getDate() + (i * 7));
-  //   const EndDay = new Date(year, 0, startDate.getDate() + (7 * (i + 1) - 1));
-  //   const FristDayStr = formatDate(FristDay);
-  //   if (FristDayStr.slice(0, 4) != year.toString()) break;
-  //   const EndDayStr = formatDate(EndDay);
-  //   const week = <WeeksInYear>({
-  //     name: `${FristDay.getFullYear()}年第${i + 1}周`,
-  //     startDay: FristDayStr,
-  //     endDay: EndDayStr,
-  //     index: i
-  //   });
-  //   weeks.push(week);
-  // }
-  // console.log(weeks);
-  return Weeks;
+  let weekNumber = 0;
+  let weekYear = StartComputeData.getFullYear();
+  while (StartComputeData <= EndComputeData) {
+    const year = StartComputeData.getFullYear();
+    if (year !== weekYear) {
+      weekYear = StartComputeData.getFullYear();
+      weekNumber = 0;
+    }
+    weekNumber++;
+    const EndDay = new Date(year, StartComputeData.getMonth(), StartComputeData.getDate() + 6);
+    Weeks.push({
+      name: `${weekYear}年第${weekNumber}周`,
+      startDay: formatDate(StartComputeData),
+      endDay: formatDate(EndDay)
+    });
+    StartComputeData.setDate(StartComputeData.getDate() + 7);
+  }
+  const ReturnWeeks = Weeks.filter(s => new Date(s.startDay) >= StartRecordDate);
+  ReturnWeeks.map(s => {
+    var startDay = new Date(`${s.startDay} 00:00:00`);
+    var endDay = new Date(`${s.endDay} 23:59:59`);
+    if (startDay <= dateNow && endDay >= dateNow) {
+      s.name = '本周'
+    }
+    return s;
+  })
+  return ReturnWeeks;
 }
 
 /**
@@ -149,19 +157,20 @@ export function getWeeksInDate(date: string): WeeksInYear[] {
  * @returns 
  */
 export function getYearsInDate(date: string): WeeksInYear[] {
+
   const weeksInYear: WeeksInYear[] = [];
-  const now = new Date();
-  const startDate = new Date(date);
-  //最早年份
-  const EarliestYear = startDate.getFullYear();
-  //最新年份
-  const LastYear = now.getFullYear();
-  const DifYear = LastYear - EarliestYear;
+  const currDateYear = new Date(date).getFullYear();
+  const nowDateYear = new Date().getFullYear();
+  //获取开始计算年份
+  const StartComputeYear = currDateYear <= nowDateYear ? currDateYear : nowDateYear;
+  //获取结束计算年份
+  const EndComputeYear = currDateYear <= nowDateYear ? nowDateYear : currDateYear;
+  const DifYear = EndComputeYear - StartComputeYear;
   for (let index = 0; index <= DifYear; index++) {
-    const year = LastYear + index;
+    const year = StartComputeYear + index;
     weeksInYear.push({
       name: `${year}`,
-      startDay: `${LastYear}-01-01`,
+      startDay: `${StartComputeYear}-01-01`,
       endDay: `${year}-12-31`
     });
   }

@@ -2,66 +2,71 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:16:20
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-26 23:44:39
+ * @LastEditTime: 2023-11-27 23:47:45
  * @FilePath: \zh_record\src\pages\statistics\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
 -->
 <template>
-  <view class="titlePick">
-    <view class="titlePick_cur">
-      <u-subsection :list="typeList" mode="subsection" :current="typeIndex" @change="sectionCurChange"></u-subsection>
+  <view class="empty" v-if="IsViewEmpty">
+    <u-empty mode="data" />
+  </view>
+  <view v-if="!IsViewEmpty">
+    <view class="titlePick">
+      <view class="titlePick_cur">
+        <u-subsection :list="typeList" mode="subsection" :current="typeIndex" @change="sectionCurChange"></u-subsection>
+      </view>
+      <view class="titlePick_date">
+        <u-subsection :list="dateCurList" mode="subsection" :current="DateCurIndex"
+          @change="sectionDateCurChange"></u-subsection>
+      </view>
     </view>
-    <view class="titlePick_date">
-      <u-subsection :list="dateCurList" mode="subsection" :current="DateCurIndex"
-        @change="sectionDateCurChange"></u-subsection>
+    <view>
+      <u-tabs :list="dateList" :current="DataIndex" @click="dateClikc"></u-tabs>
     </view>
-  </view>
-  <view>
-    <u-tabs :list="dateList" :current="DataIndex" @click="dateClikc"></u-tabs>
-  </view>
-  <view class="datePikc">
-    <text class="charts_title">总{{ typeList[typeIndex] }}趋势</text>
-    <qiun-data-charts type="line" :opts="LineOpts" :canvas2d="true" :chartData="LineData" :ontouch="true" />
-  </view>
-  <view class="ringPikc" v-if="!IsDataEmpty">
-    <text class="charts_title">{{ typeList[typeIndex] }}分类占比</text>
-    <qiun-data-charts type="ring" :canvas2d="true" :opts="PieOpts" :chartData="PieData" />
-  </view>
-  <view class="RankPick" v-if="!IsDataEmpty">
-    <text class="charts_title">{{ typeList[typeIndex] }}排行榜</text>
-    <view v-for="(item, index) in  RankData " :key="index">
-      <view class="RankPick_item">
-        <view class="RankPick_item_img">
-          <image class="RankPick_item_img_style" :src="item.IncomeExpenseUrl"></image>
-        </view>
-        <view class="RankPick_item_title">
-          <view class="RankPick_item_title_one">
-            <text>{{ item.IncomeExpenseName }}</text>
-            <text style="float: right;">{{ item.Amount }}</text>
+    <view class="datePikc">
+      <text class="charts_title">总{{ typeList[typeIndex] }}趋势</text>
+      <qiun-data-charts type="line" :opts="LineOpts" :canvas2d="true" :chartData="LineData" :ontouch="true" />
+    </view>
+    <view class="ringPikc" v-if="!IsDataEmpty">
+      <text class="charts_title">{{ typeList[typeIndex] }}分类占比</text>
+      <qiun-data-charts type="ring" :canvas2d="true" :opts="PieOpts" :chartData="PieData" />
+    </view>
+    <view class="RankPick" v-if="!IsDataEmpty">
+      <text class="charts_title">{{ typeList[typeIndex] }}排行榜</text>
+      <view v-for="(item, index) in  RankData " :key="index">
+        <view class="RankPick_item">
+          <view class="RankPick_item_img">
+            <image class="RankPick_item_img_style" :src="item.IncomeExpenseUrl"></image>
           </view>
-          <view class="RankPick_item_title_two">
-            <u-line-progress active-color="#3c9cff" :percentage="item.Rang"></u-line-progress>
+          <view class="RankPick_item_title">
+            <view class="RankPick_item_title_one">
+              <text>{{ item.IncomeExpenseName }}</text>
+              <text style="float: right;">{{ item.Amount }}</text>
+            </view>
+            <view class="RankPick_item_title_two">
+              <u-line-progress active-color="#3c9cff" :percentage="item.Rang"></u-line-progress>
+            </view>
           </view>
         </view>
       </view>
     </view>
+    <view class="empty" v-if="IsDataEmpty">
+      <u-empty mode="data" />
+    </view>
+    <u-back-top :scroll-top="scrollTop" :icon-style="iconStyle" :custom-style="customStyle"></u-back-top>
   </view>
-  <view class="empty" v-if="IsDataEmpty">
-    <u-empty mode="data" />
-  </view>
-  <u-back-top :scroll-top="scrollTop" :icon-style="iconStyle" :custom-style="customStyle"></u-back-top>
 </template>
 <script setup lang="ts">
 import { onPageScroll, onShow } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue';
-import { WeeksInYear, getMonthInDate, getWeeksInDate, getWeeksInYear, getYearsInDate } from '.';
+import { WeeksInYear, getMonthInDate, getWeeksInDate, getYearsInDate } from '.';
 import { GetStatisticsRankRequestData, PostStatisticsLineRequestData, StatisticsRankData } from '@/api/demo/model/StatisticsModel';
 import { useUserStore } from '@/stores/modules/user';
 import { postStatisticsRank, postStatisticsPie, postStatisticsLine, getBookEarliest } from '@/api/demo/statistics';
 const userStore = useUserStore();
-let DefaultId = userStore.getDefaultId;
+const DefaultId = ref<string>(null);
 const nowYear = ref<number>(new Date().getFullYear());
 const typeList = ref(['支出', '收入']);
 const typeIndex = ref(0);
@@ -73,8 +78,11 @@ const LineData = ref({});
 const PieData = ref({});
 const RankData = ref<StatisticsRankData[]>([]);
 const IsDataEmpty = ref<boolean>(false);
+//整个账本无数据
+const IsViewEmpty = ref<boolean>(false);
+const now = new Date();
 let BookEarliestTimeStr: string;
-const LineOpts = {
+let LineOpts = {
   color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
   padding: [15, 10, 0, 15],
   enableScroll: true,
@@ -126,38 +134,41 @@ const PieOpts = {
   }
 };
 const requestRankData = ref<GetStatisticsRankRequestData>({
-  Id: DefaultId,
+  Id: DefaultId.value,
   StartTime: null,
   EndTime: null,
   Type: 1
 });
 const requestLineData = ref<PostStatisticsLineRequestData>({
-  Id: DefaultId,
+  Id: DefaultId.value,
   DateType: null,
   Year: 0
 });
 onShow(async () => {
-  // var time: any = await getBookEarliest(DefaultId);
-  // BookEarliestTimeStr = time.data;
+  DefaultId.value = userStore.getDefaultId;
+  requestRankData.value.Id = DefaultId.value;
+  requestLineData.value.Id = DefaultId.value;
+  var time: any = await getBookEarliest(DefaultId.value);
+  IsViewEmpty.value = time.data === null;
+  BookEarliestTimeStr = time.data;
   typeIndex.value = 0;
   DateCurIndex.value = 0;
-  dateList.value = getWeeksInDate('2023-11-02');
-  console.log(dateList.value);
-
-  // var now = new Date();
-  // dateList.value.filter(s => {
-  //   var startDay = new Date(`${s.startDay} 00:00:00`); // 给定的 fristDay
-  //   var endDay = new Date(`${s.endDay} 23:59:59`); // 给定的 endDay
-  //   if (startDay <= now && endDay >= now) {
-  //     DataIndex.value = s.index
-  //     requestRankData.value.StartTime = s.startDay;
-  //     requestRankData.value.EndTime = s.endDay;
-  //     requestLineData.value.StartTime = s.startDay;
-  //     requestLineData.value.EndTime = s.endDay;
-  //   }
-  // })
-  // requestLineData.value.DateType = '日';
-  // await RefreshData();
+  dateList.value = getWeeksInDate(BookEarliestTimeStr);
+  const index = dateList.value.findIndex(s => {
+    const { startDay, endDay } = s;
+    const startDateTime = new Date(`${startDay} 00:00:00`);
+    const endDateTime = new Date(`${endDay} 23:59:59`);
+    if (startDateTime <= now && endDateTime >= now) {
+      requestRankData.value.StartTime = s.startDay;
+      requestRankData.value.EndTime = s.endDay;
+      requestLineData.value.StartTime = s.startDay;
+      requestLineData.value.EndTime = s.endDay;
+      return true;
+    }
+  })
+  DataIndex.value = index;
+  requestLineData.value.DateType = '日';
+  await RefreshData();
 });
 /** 分类切换 */
 const sectionCurChange = async (index) => {
@@ -173,21 +184,21 @@ const sectionCurChange = async (index) => {
 const sectionDateCurChange = async (index) => {
   DateCurIndex.value = index;
   var name = dateCurList.value[index];
-  var now = new Date();
   if (name === '周') {
-    dateList.value = getWeeksInYear(nowYear.value);
-    dateList.value.filter(s => {
-      var startDay = new Date(`${s.startDay}`); // 给定的 fristDay
-      var endDay = new Date(`${s.endDay}`); // 给定的 endDay
-      if (startDay <= now && endDay >= now) {
-        DataIndex.value = s.index
-        requestLineData.value.DateType = '日';
-        requestLineData.value.StartTime = s.startDay;
-        requestLineData.value.EndTime = s.endDay;
+    dateList.value = getWeeksInDate(BookEarliestTimeStr);
+    const index = dateList.value.findIndex(s => {
+      const { startDay, endDay } = s;
+      const startDateTime = new Date(`${startDay} 00:00:00`);
+      const endDateTime = new Date(`${endDay} 23:59:59`);
+      if (startDateTime <= now && endDateTime >= now) {
         requestRankData.value.StartTime = s.startDay;
         requestRankData.value.EndTime = s.endDay;
+        requestLineData.value.StartTime = s.startDay;
+        requestLineData.value.EndTime = s.endDay;
+        return true;
       }
     })
+    DataIndex.value = index;
   } else if (name === '月') {
     var nowDate = new Date();
     dateList.value = getMonthInDate(BookEarliestTimeStr);
@@ -208,6 +219,8 @@ const sectionDateCurChange = async (index) => {
     DataIndex.value = YearIndex;
     requestLineData.value.DateType = '年';
     requestLineData.value.Year = parseInt(dateList.value[YearIndex].name);
+    requestRankData.value.StartTime = dateList.value[YearIndex].startDay;
+    requestRankData.value.EndTime = dateList.value[YearIndex].endDay;
   }
   await RefreshData();
 }
