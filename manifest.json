@@ -1,6 +1,11 @@
 {
     "mp-weixin" : {
-        "appid" : "wx2d1d131367669b6b"
+        "appid" : "wx2d1d131367669b6b",
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "仅用于天气等信息展示"
+            }
+        }
     },
     "appid" : "__UNI__5DB1420",
     "vueVersion" : "3",

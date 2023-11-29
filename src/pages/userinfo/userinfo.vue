@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-08 23:16:44
+ * @LastEditTime: 2023-11-29 00:55:09
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -12,7 +12,9 @@
   <view class="container">
     <view class="container_one">
       <view class="container_one_header">
-        <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="200rpx" @click="avatarClick"></u-avatar>
+        <button class="btn-normal" open-type="chooseAvatar" @click="onClickAvatar" @chooseavatar="onChooseAvatar">
+          <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="200rpx"></u-avatar>
+        </button>
       </view>
     </view>
     <view class="container_two">
@@ -23,7 +25,8 @@
         <view class="container_content_body">
           <text class="container_content_body_title">昵称</text>
           <view class="container_content_body_content">
-            <u-input :borderBottom="true" placeholder="昵称" class="input" v-model="userData.NickName"></u-input>
+            <u-input :borderBottom="true" type="nickname" placeholder="昵称" class="input"
+              v-model="userData.NickName"></u-input>
           </view>
         </view>
         <view class="container_content_body">
@@ -60,7 +63,6 @@
 import { reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/modules/user';
 import { UserInfo } from '@/api/demo/model/UserModel';
-import { LoginProviderEnum } from '@/enums/loginProviderEnum';
 import { ShowToast } from '@/utils/toast';
 import { ApiResult } from '@/api/model/baseModel';
 import { updateUserInfo } from '@/api/demo/user';
@@ -86,41 +88,32 @@ onShow(() => {
 })
 let avatarFile = null;
 const avatarClick = () => {
-  //#region 登录
-  // uni.login({
-  //   provider: LoginProviderEnum.微信,
-  //   success: (res) => {
-  //     console.log('微信登录成功', res.code)
-  //   },
-  //   fail: (res) => {
-  //     console.log('微信登录失败', res)
-  //   }
-  // });
-  // uni.getUserProfile({
-  //   provider: LoginProviderEnum.微信,
-  //   desc: "授权登录",
-  //   success: (info) => {
-  //     console.log(info.userInfo);
-  //   },
-  //   fail: (infoerror) => {
-  //     console.log('getUserProfile', infoerror)
-  //   }
-  // })
-  // uni.getUserInfo({
-  //   provider: 'weixin',
-  //   success: function (infoRes) {
-  //     console.log(infoRes.userInfo);
-  //   }
-  // });
-  //#endregion
   uni.chooseImage({
     count: 1,
-    success: (res) => {
-      avatarFile = res.tempFilePaths[0];
-      userData.value.HeadPortraitUrl = res.tempFilePaths[0];
+    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+    success: ({ tempFilePaths }) => {
+      avatarFile = tempFilePaths[0];
+      userData.value.HeadPortraitUrl = tempFilePaths[0];
     }
   })
 }
+// 点击头像按钮事件
+const onClickAvatar = () => {
+  // #ifdef MP-WEIXIN
+  return
+  // #endif
+  avatarClick();
+}
+// 选择头像事件 - 仅限微信小程序
+// #ifdef MP-WEIXIN
+const onChooseAvatar = ({ detail }) => {
+  avatarFile = { path: detail.avatarUrl };
+  userData.value.HeadPortraitUrl = detail.avatarUrl;
+  console.log(userData.value);
+  console.log(avatarFile);
+}
+// #endif
 const save = async () => {
   if (avatarFile !== null) {
     uni.uploadFile({
@@ -186,9 +179,20 @@ const cancel = () => {
 
   &_header {
     z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    width: 200rpx;
+    height: 200rpx;
+    margin: auto;
+    border-radius: 200rpx;
+
+    .btn-normal {
+      width: 200rpx;
+      height: 200rpx;
+      border-radius: 200rpx;
+    }
+
   }
 
   &_body {

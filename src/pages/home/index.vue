@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-05 21:47:38
+ * @LastEditTime: 2023-11-29 00:47:42
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -14,7 +14,8 @@
   </view>
   <view class="avatar">
     <view class="avatar_header">
-      <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="160rpx"></u-avatar>
+      <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="160rpx" @click="login">
+      </u-avatar>
     </view>
     <view class="avatar_body">
       <u-cell-group>
@@ -63,6 +64,7 @@ import { useUserStore } from '@/stores/modules/user';
 import { ref } from 'vue';
 import { UserInfo } from '@/api/demo/model/UserModel';
 import { onShow } from '@dcloudio/uni-app';
+import { LoginProviderEnum } from '@/enums/loginProviderEnum';
 const userStore = useUserStore();
 const userData = ref<UserInfo>({
   Id: null,
@@ -85,7 +87,30 @@ onShow(async () => {
     userData.value = { ...userStore.getUser };
   }
 })
-const PayCode = ref("/src/static/home/PayCode.jpg");
+const login = () => {
+  //#region 登录
+  uni.login({
+    provider: LoginProviderEnum.微信,
+    success: (res) => {
+      console.log('微信登录成功', res.code)
+    },
+    fail: (res) => {
+      console.log('微信登录失败', res)
+    }
+  });
+  uni.getUserProfile({
+    provider: LoginProviderEnum.微信,
+    desc: "授权登录",
+    success: (info) => {
+      console.log(info.userInfo);
+    },
+    fail: (infoerror) => {
+      console.log('getUserProfile', infoerror)
+    }
+  })
+  //#endregion
+}
+const PayCode = ref("../../static/home/PayCode.jpg");
 const PayCodeShow = ref(false);
 const PayCodeOpen = () => {
   PayCodeShow.value = true;
@@ -136,14 +161,16 @@ const userinfoCilck = () => {
   margin-top: -90rpx;
 
   &_header {
+    border: 1rpx solid red;
     z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &>.uavatar {
-      border: 12rpx #ffff solid;
-    }
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    width: 160rpx;
+    height: 160rpx;
+    margin: auto;
+    border-radius: 50%;
+    border: 12rpx #ffff solid;
   }
 
   &_body {

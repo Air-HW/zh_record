@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-02 18:35:57
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-05 20:57:24
+ * @LastEditTime: 2023-11-28 22:09:37
  * @FilePath: \zh_record\src\utils\http\unirequest\index.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -43,12 +43,15 @@ export const request = <T>(api: string, method: Method, data?: any, header?: obj
       timeout: TIMEOUT,
       dataType: 'json',
       success: (res) => {
+        uni.hideLoading();
         if (res.statusCode === 200) {
           resolve(res.data as T);
+        } else if (res.statusCode === 401) {
+          ShowToast("身份过期，请重新登录", "error");
+          reject(res.data);
         } else {
           reject(res.data);
         }
-        uni.hideLoading();
       },
       fail: (err) => {
         uni.hideLoading();
