@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-29 00:55:09
+ * @LastEditTime: 2023-11-29 23:22:02
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -38,7 +38,14 @@
         <view class="container_content_body">
           <text class="container_content_body_title">出生日期</text>
           <view class="container_content_body_content">
-            <u-input :borderBottom="true" placeholder="出生日期" class="input" v-model="userData.BrithDay"></u-input>
+            <u-input :borderBottom="true" placeholder="出生日期" :disabled="true" class="input" v-model="userData.BrithDay">
+              <template #suffix>
+                <u-icon name="calendar" color="#3c9cff" size="30" @click="dataPickerClick"></u-icon>
+                <u-datetime-picker ref="datetimePickerRef" :show="IsBrithDayShow" v-model="BrithDay" mode="date"
+                  :closeOnClickOverlay="true" @close="dataPickerClose" @cancel="dataPickerClose"
+                  @confirm="dataPickerConfirm" :minDate="minDate"></u-datetime-picker>
+              </template>
+            </u-input>
           </view>
         </view>
         <view class="container_content_body">
@@ -68,6 +75,7 @@ import { ApiResult } from '@/api/model/baseModel';
 import { updateUserInfo } from '@/api/demo/user';
 import { onShow } from '@dcloudio/uni-app';
 import { BASE_URL } from '@/utils/http/unirequest';
+import { TimeStampFormatDate, formatDate } from '@/utils/helper';
 const customStyle = reactive({
   width: '250rpx',
 });
@@ -81,19 +89,36 @@ const userData = ref<UserInfo>({
   OpenID: "",
   HeadPortraitUrl: "",
   Email: "",
-  BrithDay: null
+  BrithDay: ""
 })
+const IsBrithDayShow = ref(false);
+const minDate = ref(new Date(1900, 1, 1).getTime())
+const BrithDay = ref();
 onShow(() => {
   userData.value = { ...userinfo };
+  userData.value.BrithDay = formatDate(new Date(userData.value.BrithDay));
+  BrithDay.value = userData.value.BrithDay;
 })
 let avatarFile = null;
+const dataPickerClick = () => {
+  IsBrithDayShow.value = true;
+}
+const dataPickerClose = () => {
+  IsBrithDayShow.value = false;
+}
+const dataPickerConfirm = ({ value }) => {
+  IsBrithDayShow.value = false;
+  const dateStr = TimeStampFormatDate(value);
+  userData.value.BrithDay = dateStr;
+  BrithDay.value = dateStr;
+}
 const avatarClick = () => {
   uni.chooseImage({
     count: 1,
     sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
     sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-    success: ({ tempFilePaths }) => {
-      avatarFile = tempFilePaths[0];
+    success: ({ tempFilePaths, tempFiles }) => {
+      avatarFile = tempFiles[0];
       userData.value.HeadPortraitUrl = tempFilePaths[0];
     }
   })
@@ -110,15 +135,13 @@ const onClickAvatar = () => {
 const onChooseAvatar = ({ detail }) => {
   avatarFile = { path: detail.avatarUrl };
   userData.value.HeadPortraitUrl = detail.avatarUrl;
-  console.log(userData.value);
-  console.log(avatarFile);
 }
 // #endif
 const save = async () => {
   if (avatarFile !== null) {
     uni.uploadFile({
       url: `${BASE_URL}/api/WxUser/${userData.value.Id}`,
-      filePath: avatarFile,
+      filePath: avatarFile.path,
       name: 'File',
       header: {
         "Authorization": `Bearer ${userStore.getToken}`
@@ -179,18 +202,24 @@ const cancel = () => {
 
   &_header {
     z-index: 1;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 200rpx;
     height: 200rpx;
+    border-radius: 50%;
     margin: auto;
-    border-radius: 200rpx;
 
     .btn-normal {
       width: 200rpx;
       height: 200rpx;
-      border-radius: 200rpx;
+      border-radius: 50%;
+      border: none;
+      background-color: transparent;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
   }

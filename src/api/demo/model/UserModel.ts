@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 22:57:36
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-10-31 22:49:30
+ * @LastEditTime: 2023-11-29 22:48:38
  * @FilePath: \zh_record\src\api\demo\model\UserModel.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -26,7 +26,7 @@ export interface UserInfo {
   /** 邮箱 */
   Email: string;
   /** 出生日期 */
-  BrithDay: Date;
+  BrithDay: string;
 }
 
 export type UserInfoResultModel = ApiResult<UserInfo>;

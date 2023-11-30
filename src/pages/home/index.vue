@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-29 00:47:42
+ * @LastEditTime: 2023-11-29 23:05:40
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -98,16 +98,6 @@ const login = () => {
       console.log('微信登录失败', res)
     }
   });
-  uni.getUserProfile({
-    provider: LoginProviderEnum.微信,
-    desc: "授权登录",
-    success: (info) => {
-      console.log(info.userInfo);
-    },
-    fail: (infoerror) => {
-      console.log('getUserProfile', infoerror)
-    }
-  })
   //#endregion
 }
 const PayCode = ref("../../static/home/PayCode.jpg");
@@ -163,9 +153,6 @@ const userinfoCilck = () => {
   &_header {
     border: 1rpx solid red;
     z-index: 1;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
     width: 160rpx;
     height: 160rpx;
     margin: auto;

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-26 22:55:15
+ * @LastEditTime: 2023-11-29 23:21:32
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -36,8 +36,8 @@
         <u-form-item label="金额" prop="Amount" label-width="80px" class="form-item">
           <u-input v-model="model.Amount" :borderBottom="true" placeholder="请输入金额" class="input"></u-input>
           <template #right>
-            <u-datetime-picker :show="DataShow" v-model="SelectDate" @confirm="confirmData" @cancel="closeData"
-              mode="date"></u-datetime-picker>
+            <u-datetime-picker ref="datetimePickerRef" :show="DataShow" v-model="SelectDate" @confirm="confirmData"
+              @cancel="closeData" @close="closeData" mode="date" :closeOnClickOverlay="true"></u-datetime-picker>
             <u-button type="primary" size="small" @click="ShowDataPikc">{{ model.RecordTime }}</u-button>
           </template>
         </u-form-item>
@@ -62,6 +62,9 @@ import { ShowToast } from "@/utils/toast";
 import { InsertOrUpdateRecordRequestData } from "@/api/demo/model/RecordModel";
 import { IncomeExpenseTypeList } from "@/api/demo/model/IncomeExpenseTypeModel";
 import { onShow } from "@dcloudio/uni-app";
+const btnStyle = reactive({
+  marginBottom: '20rpx'
+});
 const userStore = useUserStore();
 let DefaultId = userStore.getDefaultId;
 let userinfo = userStore.getUser;
@@ -73,6 +76,23 @@ const state = reactive<IncomeExpenseType>({
   list: [],
   listIncome: []
 });
+const curList = reactive(['支出', '收入']);
+const curNow = ref(0)
+const typeId = ref("");
+const showPopup = ref(false);
+const selectedIndex = ref(-1);
+const SelectDate = ref(TimeStampFormatDate(Date.now()));
+const uForms = ref();
+const DataShow = ref(false);
+//入参实体
+const model = reactive<InsertOrUpdateRecordRequestData>({
+  AccountBookId: DefaultId,
+  WxUserId: userinfo?.Id,
+  TypeId: typeId.value,
+  Amount: null,
+  Remarks: null,
+  RecordTime: SelectDate.value
+});
 onShow(async () => {
   DefaultId = userStore.getDefaultId;
   userinfo = userStore.getUser;
@@ -81,17 +101,10 @@ onShow(async () => {
   });
   state.list = res.data.filter(item => item.Type === 1);
   state.listIncome = res.data.filter(item => item.Type === 0);
-})
-const curList = reactive(['支出', '收入']);
-const curNow = ref(0)
+});
 const sectionChange = (index) => {
   curNow.value = index;
-}
-
-const typeId = ref("");
-const showPopup = ref(false);
-const selectedIndex = ref(-1);
-const SelectDate = ref(TimeStampFormatDate(Date.now()));
+};
 let scrollList = reactive([]);
 const handleClick = async (index) => {
   if (curNow.value === 0) {
@@ -102,25 +115,16 @@ const handleClick = async (index) => {
   selectedIndex.value = index;
   showPopup.value = true;
   typeId.value = scrollList[index].Id;
-}
+};
 const scrollHandleClick = async (index) => {
   selectedIndex.value = index;
   typeId.value = scrollList[index].Id;
-}
+};
 //关闭弹出层
 const closePopup = () => {
   selectedIndex.value = -1;
   showPopup.value = false;
-}
-//入参实体
-const model = reactive<InsertOrUpdateRecordRequestData>({
-  AccountBookId: DefaultId,
-  WxUserId: userinfo?.Id,
-  TypeId: typeId.value,
-  Amount: null,
-  Remarks: null,
-  RecordTime: SelectDate.value
-});
+};
 //表单校验
 const rules = ref({
   Amount: [
@@ -134,8 +138,6 @@ const rules = ref({
     }
   ]
 });
-
-const uForms = ref();
 //提交表单
 const submitForm = async () => {
   uForms.value.validate().then(async (res) => {
@@ -156,7 +158,7 @@ const submitForm = async () => {
     }
   }).catch(() => {
   })
-}
+};
 //表单重置
 const clearForm = async () => {
   for (const key in model) {
@@ -169,15 +171,11 @@ const clearForm = async () => {
       model[key] = '';
     }
   }
-}
-const btnStyle = reactive({
-  marginBottom: '20rpx'
-});
-const DataShow = ref(false);
+};
 //打开日期选择器
 const ShowDataPikc = () => {
   DataShow.value = true;
-}
+};
 //确认选择时间
 const confirmData = (e) => {
   const FormatDate = TimeStampFormatDate(e.value);
