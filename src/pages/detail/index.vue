@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-26 23:04:46
+ * @LastEditTime: 2023-12-05 20:15:51
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -225,7 +225,7 @@ const date = ref([
     rect: null
   },
 ]);
-const title = ref("嗨, 小刘");
+const title = ref("嗨");
 const subtitle = ref("Good morning!");
 const icon = ref("../../static/icon/sun.png");
 const latestActive = ref(true);
@@ -417,8 +417,10 @@ onShow(() => {
         currentHour >= 18 && currentHour <= 23 ? 'Good evening!' : 'Good morning!';
   subtitle.value = subtitleEn;
   const userinfo = store.getUser;
-  title.value = `嗨，${userinfo.NickName}`;
-  getReordParam.value.Id = store.getDefaultId;
+  if (userinfo) {
+    title.value = `嗨，${userinfo.NickName}`;
+    getReordParam.value.Id = store.getDefaultId;
+  }
   RefreshData();
 })
 

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-12 16:34:16
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-26 17:27:44
+ * @LastEditTime: 2023-12-06 00:49:39
  * @FilePath: \zh_record\src\api\demo\statistics.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -10,6 +10,7 @@
  */
 import { request } from "@/utils/http/unirequest";
 import { GetStatisticsRankRequestData, PostStatisticsLineRequestData, StatisticsLineResultModel, StatisticsPieResultModel, StatisticsRankResultModel } from "./model/StatisticsModel";
+import { ApiResult } from "../model/baseModel";
 
 enum Api {
   PostStatisticsRank = '/api/Statistics/statistics-rank',
@@ -54,6 +55,6 @@ export const postStatisticsLine = async (param: PostStatisticsLineRequestData) =
  * @returns 
  */
 export const getBookEarliest = async (Id: string) => {
-  const response = await request(`${Api.BookEarliest}/${Id}`, 'GET');
+  const response = await request<ApiResult<string>>(`${Api.BookEarliest}/${Id}`, 'GET');
   return response;
 }

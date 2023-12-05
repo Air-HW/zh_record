@@ -2,13 +2,12 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 15:37:29
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-26 22:57:00
+ * @LastEditTime: 2023-12-03 21:24:17
  * @FilePath: \zh_record\src\api\demo\list.ts
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
-import axiosInstance from '@/utils/http/axios';
 import { CustomIncomeExpenseTypeListResultModel, CustomRequestData, IncomeExpenseTypeResultModel } from './model/IncomeExpenseTypeModel';
 import { ApiResult } from '../model/baseModel';
 import { InsertOrUpdateRecordRequestData } from './model/RecordModel';

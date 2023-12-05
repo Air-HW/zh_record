@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-29 23:22:02
+ * @LastEditTime: 2023-12-05 22:49:37
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -13,7 +13,7 @@
     <view class="container_one">
       <view class="container_one_header">
         <button class="btn-normal" open-type="chooseAvatar" @click="onClickAvatar" @chooseavatar="onChooseAvatar">
-          <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="200rpx"></u-avatar>
+          <u-avatar class="uavatar" :src="HeadPortraitPath" size="200rpx"></u-avatar>
         </button>
       </view>
     </view>
@@ -76,6 +76,7 @@ import { updateUserInfo } from '@/api/demo/user';
 import { onShow } from '@dcloudio/uni-app';
 import { BASE_URL } from '@/utils/http/unirequest';
 import { TimeStampFormatDate, formatDate } from '@/utils/helper';
+import { SingleUpload } from '@/api/demo/upload';
 const customStyle = reactive({
   width: '250rpx',
 });
@@ -94,8 +95,10 @@ const userData = ref<UserInfo>({
 const IsBrithDayShow = ref(false);
 const minDate = ref(new Date(1900, 1, 1).getTime())
 const BrithDay = ref();
+const HeadPortraitPath = ref();
 onShow(() => {
   userData.value = { ...userinfo };
+  HeadPortraitPath.value = userData.value.HeadPortraitUrl;
   userData.value.BrithDay = formatDate(new Date(userData.value.BrithDay));
   BrithDay.value = userData.value.BrithDay;
 })
@@ -119,7 +122,7 @@ const avatarClick = () => {
     sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
     success: ({ tempFilePaths, tempFiles }) => {
       avatarFile = tempFiles[0];
-      userData.value.HeadPortraitUrl = tempFilePaths[0];
+      HeadPortraitPath.value = tempFilePaths[0];
     }
   })
 }
@@ -134,46 +137,21 @@ const onClickAvatar = () => {
 // #ifdef MP-WEIXIN
 const onChooseAvatar = ({ detail }) => {
   avatarFile = { path: detail.avatarUrl };
-  userData.value.HeadPortraitUrl = detail.avatarUrl;
+  HeadPortraitPath.value = detail.avatarUrl;
 }
 // #endif
 const save = async () => {
-  if (avatarFile !== null) {
-    uni.uploadFile({
-      url: `${BASE_URL}/api/WxUser/${userData.value.Id}`,
-      filePath: avatarFile.path,
-      name: 'File',
-      header: {
-        "Authorization": `Bearer ${userStore.getToken}`
-      },
-      formData: {
-        'NickName': userData.value.NickName,
-        'Sex': userData.value.Sex,
-        'Phone': userData.value.Phone,
-        'Email': userData.value.Email,
-        'BrithDay': userData.value.BrithDay
-      },
-      success: (res) => {
-        const data = JSON.parse(res.data) as ApiResult<UserInfo>;
-        if (data.isSuccess) {
-          userStore.setUser(data.data);
-          ShowToast("修改成功", "success");
-        } else {
-          ShowToast(data.msg, "error");
-        }
-      },
-      fail: (err) => {
-        ShowToast(err.errMsg, "error");
-      }
-    })
-  } else {
-    const res = await updateUserInfo(userData.value.Id, userData.value);
-    if (res.isSuccess) {
-      userStore.setUser(res.data);
-      ShowToast("修改成功", "success");
-    } else {
-      ShowToast(res.msg, "error");
+  try {
+    if (avatarFile !== null) {
+      const data = await SingleUpload(avatarFile.path);
+      userData.value.HeadPortraitUrl = data;
+      avatarFile = null;
     }
+    const res = await updateUserInfo(userData.value.Id, userData.value);
+    userStore.setUser(res.data);
+    ShowToast("修改成功", "success");
+  } catch (error) {
+    ShowToast(error, "error");
   }
 }
 const cancel = () => {

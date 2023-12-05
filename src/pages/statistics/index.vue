@@ -2,17 +2,14 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:16:20
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-27 23:47:45
+ * @LastEditTime: 2023-12-05 20:22:48
  * @FilePath: \zh_record\src\pages\statistics\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
 -->
 <template>
-  <view class="empty" v-if="IsViewEmpty">
-    <u-empty mode="data" />
-  </view>
-  <view v-if="!IsViewEmpty">
+  <view>
     <view class="titlePick">
       <view class="titlePick_cur">
         <u-subsection :list="typeList" mode="subsection" :current="typeIndex" @change="sectionCurChange"></u-subsection>
@@ -25,15 +22,15 @@
     <view>
       <u-tabs :list="dateList" :current="DataIndex" @click="dateClikc"></u-tabs>
     </view>
-    <view class="datePikc">
+    <view class="datePikc" v-if="!IsViewEmpty">
       <text class="charts_title">总{{ typeList[typeIndex] }}趋势</text>
       <qiun-data-charts type="line" :opts="LineOpts" :canvas2d="true" :chartData="LineData" :ontouch="true" />
     </view>
-    <view class="ringPikc" v-if="!IsDataEmpty">
+    <view class="ringPikc" v-if="!IsViewEmpty">
       <text class="charts_title">{{ typeList[typeIndex] }}分类占比</text>
       <qiun-data-charts type="ring" :canvas2d="true" :opts="PieOpts" :chartData="PieData" />
     </view>
-    <view class="RankPick" v-if="!IsDataEmpty">
+    <view class="RankPick" v-if="!IsViewEmpty">
       <text class="charts_title">{{ typeList[typeIndex] }}排行榜</text>
       <view v-for="(item, index) in  RankData " :key="index">
         <view class="RankPick_item">
@@ -52,10 +49,10 @@
         </view>
       </view>
     </view>
-    <view class="empty" v-if="IsDataEmpty">
+    <u-back-top :scroll-top="scrollTop" :icon-style="iconStyle" :custom-style="customStyle"></u-back-top>
+    <view class="empty" v-if="IsViewEmpty">
       <u-empty mode="data" />
     </view>
-    <u-back-top :scroll-top="scrollTop" :icon-style="iconStyle" :custom-style="customStyle"></u-back-top>
   </view>
 </template>
 <script setup lang="ts">
@@ -65,6 +62,8 @@ import { WeeksInYear, getMonthInDate, getWeeksInDate, getYearsInDate } from '.';
 import { GetStatisticsRankRequestData, PostStatisticsLineRequestData, StatisticsRankData } from '@/api/demo/model/StatisticsModel';
 import { useUserStore } from '@/stores/modules/user';
 import { postStatisticsRank, postStatisticsPie, postStatisticsLine, getBookEarliest } from '@/api/demo/statistics';
+import { formatDate } from '@/utils/helper';
+import { ShowToast } from '@/utils/toast';
 const userStore = useUserStore();
 const DefaultId = ref<string>(null);
 const nowYear = ref<number>(new Date().getFullYear());
@@ -77,12 +76,11 @@ const DataIndex = ref<number>(0);
 const LineData = ref({});
 const PieData = ref({});
 const RankData = ref<StatisticsRankData[]>([]);
-const IsDataEmpty = ref<boolean>(false);
 //整个账本无数据
-const IsViewEmpty = ref<boolean>(false);
+const IsViewEmpty = ref<boolean>(true);
 const now = new Date();
-let BookEarliestTimeStr: string;
-let LineOpts = {
+let BookEarliestTimeStr: string = formatDate(new Date());
+const LineOpts = {
   color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
   padding: [15, 10, 0, 15],
   enableScroll: true,
@@ -146,29 +144,34 @@ const requestLineData = ref<PostStatisticsLineRequestData>({
 });
 onShow(async () => {
   DefaultId.value = userStore.getDefaultId;
-  requestRankData.value.Id = DefaultId.value;
-  requestLineData.value.Id = DefaultId.value;
-  var time: any = await getBookEarliest(DefaultId.value);
-  IsViewEmpty.value = time.data === null;
-  BookEarliestTimeStr = time.data;
-  typeIndex.value = 0;
-  DateCurIndex.value = 0;
-  dateList.value = getWeeksInDate(BookEarliestTimeStr);
-  const index = dateList.value.findIndex(s => {
-    const { startDay, endDay } = s;
-    const startDateTime = new Date(`${startDay} 00:00:00`);
-    const endDateTime = new Date(`${endDay} 23:59:59`);
-    if (startDateTime <= now && endDateTime >= now) {
-      requestRankData.value.StartTime = s.startDay;
-      requestRankData.value.EndTime = s.endDay;
-      requestLineData.value.StartTime = s.startDay;
-      requestLineData.value.EndTime = s.endDay;
-      return true;
-    }
-  })
-  DataIndex.value = index;
-  requestLineData.value.DateType = '日';
-  await RefreshData();
+  if (DefaultId.value) {
+    requestRankData.value.Id = DefaultId.value;
+    requestLineData.value.Id = DefaultId.value;
+    var time = await getBookEarliest(DefaultId.value);
+    IsViewEmpty.value = time.data === null;
+    BookEarliestTimeStr = time.data === null ? formatDate(new Date()) : time.data;
+    typeIndex.value = 0;
+    DateCurIndex.value = 0;
+    dateList.value = getWeeksInDate(BookEarliestTimeStr);
+    const index = dateList.value.findIndex(s => {
+      const { startDay, endDay } = s;
+      const startDateTime = new Date(`${startDay} 00:00:00`);
+      const endDateTime = new Date(`${endDay} 23:59:59`);
+      if (startDateTime <= now && endDateTime >= now) {
+        requestRankData.value.StartTime = s.startDay;
+        requestRankData.value.EndTime = s.endDay;
+        requestLineData.value.StartTime = s.startDay;
+        requestLineData.value.EndTime = s.endDay;
+        return true;
+      }
+    })
+    DataIndex.value = index;
+    requestLineData.value.DateType = '日';
+    await RefreshData();
+  } else {
+    ShowToast("请登录", "error");
+    dateList.value = getWeeksInDate(BookEarliestTimeStr);
+  }
 });
 /** 分类切换 */
 const sectionCurChange = async (index) => {
@@ -251,25 +254,27 @@ onPageScroll((e) => {
 })
 
 const RefreshData = async () => {
-  const reqLine = await postStatisticsLine(requestLineData.value);
-  LineData.value = reqLine.data;
-  const pie = {
-    series: [
-      {
-        data: []
-      }
-    ]
-  };
-  const reqRank = await postStatisticsRank(requestRankData.value);
-  const reqPie = await postStatisticsPie(requestRankData.value);
-  if (reqRank.data.length <= 0) {
-    IsDataEmpty.value = true;
-  } else {
-    IsDataEmpty.value = false;
+  if (DefaultId.value) {
+    const reqLine = await postStatisticsLine(requestLineData.value);
+    LineData.value = reqLine.data;
+    const pie = {
+      series: [
+        {
+          data: []
+        }
+      ]
+    };
+    const reqRank = await postStatisticsRank(requestRankData.value);
+    const reqPie = await postStatisticsPie(requestRankData.value);
+    if (reqRank.data.length <= 0) {
+      IsViewEmpty.value = true;
+    } else {
+      IsViewEmpty.value = false;
+    }
+    RankData.value = reqRank.data;
+    pie.series[0].data = reqPie.data;
+    PieData.value = pie;
   }
-  RankData.value = reqRank.data;
-  pie.series[0].data = reqPie.data;
-  PieData.value = pie;
 }
 </script>
 <style scoped lang="scss">

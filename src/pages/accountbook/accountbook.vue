@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:13:26
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-05 20:35:05
+ * @LastEditTime: 2023-12-03 22:46:54
  * @FilePath: \zh_record\src\pages\accountbook\accountbook.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -24,7 +24,8 @@
           </view>
         </view>
         <view class="container_record_two">
-          <u-button type="primary" shape="circle" :customStyle="customStyle" text="分享"></u-button>
+          <u-button type="primary" shape="circle" :customStyle="customStyle" text="分享"
+            @click="shareClick(item.Id)"></u-button>
           <u-button type="primary" shape="circle" :plain="bookId !== item.Id" :customStyle="customStyle" text="默认"
             @click="defaultClick(item.Id)"></u-button>
         </view>
@@ -39,6 +40,7 @@ import { onShow } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue';
 import { BookList } from '.';
 import { UpdateBookRequestData } from '@/api/demo/model/BookModel';
+import { LoginProviderEnum } from '@/enums/loginProviderEnum';
 var store = useUserStore();
 interface Book {
   list: BookList[]
@@ -87,6 +89,17 @@ const onKeyInput = (event, index) => {
 const defaultClick = (Id: string) => {
   store.setDefaultId(Id);
   bookId.value = Id;
+}
+const shareClick = (Id: string) => {
+  console.log(Id);
+  // #ifdef MP-WEIXIN
+  uni.share({
+    provider: LoginProviderEnum.微信,
+    /** 分享形式，如图文、纯文字、纯图片、音乐、视频、小程序等。默认图文 0。不同分享服务商支持的形式不同，具体参考下面type值说明。 */
+    type: 1,
+    scene: 'WXSceneSession'
+  });
+  // #endif
 }
 </script>
 <style scoped lang="scss">

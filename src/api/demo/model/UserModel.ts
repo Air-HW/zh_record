@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 22:57:36
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-29 22:48:38
+ * @LastEditTime: 2023-12-03 21:51:47
  * @FilePath: \zh_record\src\api\demo\model\UserModel.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -29,4 +29,21 @@ export interface UserInfo {
   BrithDay: string;
 }
 
+/** 微信用户登录入参 */
+export interface WxLogin {
+  /** 登录凭证（code） */
+  Code: string
+}
+
+/** 微信用户登录反参 */
+export interface WxLoginRequestData {
+  /** 接口请求token */
+  token: string,
+  /** 过期时间 */
+  expires_in: string,
+  /** token类型 */
+  token_type: string
+}
+
 export type UserInfoResultModel = ApiResult<UserInfo>;
+export type WxLoginRequestModel = ApiResult<WxLoginRequestData>;

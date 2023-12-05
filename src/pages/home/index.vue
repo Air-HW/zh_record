@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-29 23:05:40
+ * @LastEditTime: 2023-12-06 00:20:06
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -59,12 +59,14 @@
   </view>
 </template>
 <script setup lang="ts">
-import { getUserInfo } from '@/api/demo/user';
+import { getUserInfo, wxLogin } from '@/api/demo/user';
 import { useUserStore } from '@/stores/modules/user';
-import { ref } from 'vue';
-import { UserInfo } from '@/api/demo/model/UserModel';
+import { reactive, ref } from 'vue';
+import { UserInfo, WxLogin } from '@/api/demo/model/UserModel';
 import { onShow } from '@dcloudio/uni-app';
 import { LoginProviderEnum } from '@/enums/loginProviderEnum';
+import { ShowToast } from '@/utils/toast';
+import { getBookDefaultId } from '@/api/demo/book';
 const userStore = useUserStore();
 const userData = ref<UserInfo>({
   Id: null,
@@ -75,6 +77,9 @@ const userData = ref<UserInfo>({
   HeadPortraitUrl: null,
   Email: null,
   BrithDay: null
+})
+const wxLoginRequest = reactive<WxLogin>({
+  Code: null
 })
 onShow(async () => {
   if (userData.value.Id === null) {
@@ -88,17 +93,26 @@ onShow(async () => {
   }
 })
 const login = () => {
-  //#region 登录
+  // #ifdef MP-WEIXIN
   uni.login({
     provider: LoginProviderEnum.微信,
-    success: (res) => {
-      console.log('微信登录成功', res.code)
+    success: async (res) => {
+      wxLoginRequest.Code = res.code;
+      const req = await wxLogin(wxLoginRequest);
+      userStore.setToken(req.data.token);
+      const reqUserInfo = await getUserInfo();
+      userStore.setUser(reqUserInfo.data);
+      userData.value = reqUserInfo.data;
+      const reqDefault = await getBookDefaultId();
+      userStore.setDefaultId(reqDefault.data);
+      ShowToast("登录成功", "success");
     },
     fail: (res) => {
+      ShowToast("登录失败", "error");
       console.log('微信登录失败', res)
     }
   });
-  //#endregion
+  // #endif
 }
 const PayCode = ref("../../static/home/PayCode.jpg");
 const PayCodeShow = ref(false);
