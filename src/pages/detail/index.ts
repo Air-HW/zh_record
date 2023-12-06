@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-07 20:31:02
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-26 23:09:00
+ * @LastEditTime: 2023-12-06 22:50:54
  * @FilePath: \zh_record\src\pages\detail\index.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -12,6 +12,7 @@
 import { RecordDetail } from "@/api/demo/model/RecordModel";
 import { ChartData } from "@/api/demo/model/StatisticsModel";
 import { WeekDayCn } from "@/enums/WeekDayEnum";
+import { formattedDate } from "@/utils/helper";
 
 /**
  * 收支数据列表渲染实体
@@ -50,13 +51,6 @@ export const processRecordData = (data: RecordDetail[]): RecordDetailView[] => {
     };
   });
 }
-
-/** 月日格式化（xx月xx日） */
-const formattedDate = (date: Date) => {
-  const month = date.getMonth() + 1; // 月份从0开始，需要加1  
-  const day = date.getDate();
-  return `${month}月${day}日`;
-};
 
 /** 饼图返回格式 */
 export const PieChartData = (charData: ChartData[]) => {

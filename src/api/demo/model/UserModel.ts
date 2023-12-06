@@ -39,6 +39,8 @@ export interface WxLogin {
 export interface WxLoginRequestData {
   /** 接口请求token */
   token: string,
+  /** 刷新token */
+  refresh_token: string,
   /** 过期时间 */
   expires_in: string,
   /** token类型 */

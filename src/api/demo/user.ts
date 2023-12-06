@@ -2,12 +2,13 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 22:55:47
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-06 00:51:29
+ * @LastEditTime: 2023-12-07 00:03:18
  * @FilePath: \zh_record\src\api\demo\user.ts
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
+import { useUserStore } from '@/stores/modules/user';
 import { UserInfoResultModel, WxLogin, WxLoginRequestModel } from './model/UserModel';
 import { request } from '@/utils/http/unirequest';
 
@@ -15,9 +16,10 @@ enum Api {
   UserInfo = '/api/WxUser/user-info',
   PutUserInfo = '/api/WxUser',
   WxLogin = '/api/WxUser/wx-login',
-  getToken = '/api/WxUser'
+  RefreshToken = '/api/WxUser/refresh-token'
 }
 
+const userStore = useUserStore();
 
 /**
  * 微信用户登录
@@ -26,6 +28,8 @@ enum Api {
  */
 export const wxLogin = async (data: WxLogin) => {
   const response = await request<WxLoginRequestModel>(Api.WxLogin, 'POST', data);
+  userStore.setToken(response.data.token);
+  userStore.setRefreshToken(response.data.refresh_token);
   return response;
 }
 
@@ -50,18 +54,13 @@ export const updateUserInfo = async (WxUserId: string, data: any) => {
   return response;
 }
 
-interface TokenData {
-  token: string,
-  expires_in: string,
-  token_type: string
-}
-
 /**
- * 获取token
- * @param WxUserId 微信用户Id
+ * 刷新请求token
  * @returns
  */
-export const getUserToken = async (WxUserId: string) => {
-  const response = await request<WxLoginRequestModel>(Api.getToken + "/" + WxUserId, 'GET');
+export const getRefreshToken = async () => {
+  const response = await request<WxLoginRequestModel>(Api.RefreshToken, 'GET', null, { "_isRefreshToken": true });
+  userStore.setToken(response.data.token);
+  userStore.setRefreshToken(response.data.refresh_token);
   return response;
 }

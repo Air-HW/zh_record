@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-06 00:20:06
+ * @LastEditTime: 2023-12-06 22:45:00
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -98,8 +98,7 @@ const login = () => {
     provider: LoginProviderEnum.微信,
     success: async (res) => {
       wxLoginRequest.Code = res.code;
-      const req = await wxLogin(wxLoginRequest);
-      userStore.setToken(req.data.token);
+      await wxLogin(wxLoginRequest);
       const reqUserInfo = await getUserInfo();
       userStore.setUser(reqUserInfo.data);
       userData.value = reqUserInfo.data;
