@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:13:26
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-03 22:46:54
+ * @LastEditTime: 2023-12-10 20:33:47
  * @FilePath: \zh_record\src\pages\accountbook\accountbook.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -24,8 +24,7 @@
           </view>
         </view>
         <view class="container_record_two">
-          <u-button type="primary" shape="circle" :customStyle="customStyle" text="分享"
-            @click="shareClick(item.Id)"></u-button>
+          <u-button type="primary" shape="circle" :customStyle="customStyle" text="分享" open-type="share"></u-button>
           <u-button type="primary" shape="circle" :plain="bookId !== item.Id" :customStyle="customStyle" text="默认"
             @click="defaultClick(item.Id)"></u-button>
         </view>
@@ -36,7 +35,7 @@
 <script setup lang="ts">
 import { getBook, updateBook } from '@/api/demo/book';
 import { useUserStore } from '@/stores/modules/user';
-import { onShow } from '@dcloudio/uni-app';
+import { onShareAppMessage, onShow } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue';
 import { BookList } from '.';
 import { UpdateBookRequestData } from '@/api/demo/model/BookModel';
@@ -90,17 +89,14 @@ const defaultClick = (Id: string) => {
   store.setDefaultId(Id);
   bookId.value = Id;
 }
-const shareClick = (Id: string) => {
-  console.log(Id);
-  // #ifdef MP-WEIXIN
-  uni.share({
-    provider: LoginProviderEnum.微信,
-    /** 分享形式，如图文、纯文字、纯图片、音乐、视频、小程序等。默认图文 0。不同分享服务商支持的形式不同，具体参考下面type值说明。 */
-    type: 1,
-    scene: 'WXSceneSession'
-  });
-  // #endif
-}
+onShareAppMessage(() => {
+  return {
+    title: store.userInfo.NickName + '邀请你一起记账啦',
+    path: '/pages/ShareBills/ShareBills?',
+    imageUrl: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fc03a255b-2dee-4ec6-afd3-9b5ca0af9d55%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1704788470&t=f9f7d7612c092f7560e0e74d5e69acf3',
+    query: ''
+  }
+})
 </script>
 <style scoped lang="scss">
 .container {
