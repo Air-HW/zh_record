@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-10 20:20:45
+ * @LastEditTime: 2023-12-13 23:19:48
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -14,7 +14,7 @@
   </view>
   <view class="avatar">
     <view class="avatar_header">
-      <u-avatar class="uavatar" :src="userData.HeadPortraitUrl" size="160rpx" @click="login">
+      <u-avatar class="uavatar" :text="text" :src="userData.HeadPortraitUrl" size="160rpx" @click="login">
       </u-avatar>
     </view>
     <view class="avatar_body">
@@ -29,7 +29,7 @@
             <u-icon size="26" color="#3c9cff" name="list-dot"></u-icon>
           </template>
         </u-cell>
-        <u-cell title="账单导出" isLink>
+        <u-cell title="账单导出" isLink @click="billExport">
           <template #icon>
             <u-icon size="26" color="#3c9cff" name="share-square"></u-icon>
           </template>
@@ -68,6 +68,7 @@ import { LoginProviderEnum } from '@/enums/loginProviderEnum';
 import { ShowToast } from '@/utils/toast';
 import { getBookDefaultId } from '@/api/demo/book';
 const userStore = useUserStore();
+const text = ref("请登录");
 const userData = ref<UserInfo>({
   Id: null,
   NickName: null,
@@ -87,9 +88,11 @@ onShow(async () => {
     if (res.isSuccess) {
       userStore.setUser(res.data);
       userData.value = res.data;
+      text.value = null;
     }
   } else {
     userData.value = { ...userStore.getUser };
+    text.value = null;
   }
 })
 const login = () => {
@@ -97,6 +100,7 @@ const login = () => {
   uni.login({
     provider: LoginProviderEnum.微信,
     success: async (res) => {
+      text.value = null;
       wxLoginRequest.Code = res.code;
       await wxLogin(wxLoginRequest);
       const reqUserInfo = await getUserInfo();
@@ -122,14 +126,25 @@ const PayCodeClose = () => {
   PayCodeShow.value = false;
 }
 const accountbookCilck = () => {
-  uni.navigateTo({
-    url: "/pages/accountbook/accountbook"
-  });
+  if (userStore.getUser) {
+    uni.navigateTo({
+      url: "/pages/accountbook/accountbook"
+    });
+  } else {
+    ShowToast("请先登录", "error");
+  }
 }
 const userinfoCilck = () => {
-  uni.navigateTo({
-    url: "/pages/userinfo/userinfo"
-  });
+  if (userStore.getUser) {
+    uni.navigateTo({
+      url: "/pages/userinfo/userinfo"
+    });
+  } else {
+    ShowToast("请先登录", "error");
+  }
+}
+const billExport = () => {
+  ShowToast("😀正在开发中...", "none");
 }
 </script>
 <style scoped lang="scss">

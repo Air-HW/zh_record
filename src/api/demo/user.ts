@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-10-29 22:55:47
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-07 00:03:18
+ * @LastEditTime: 2023-12-13 22:52:27
  * @FilePath: \zh_record\src\api\demo\user.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -50,7 +50,7 @@ export const getUserInfo = async () => {
  * @returns
  */
 export const updateUserInfo = async (WxUserId: string, data: any) => {
-  const response = await request<UserInfoResultModel>(Api.PutUserInfo + "/" + WxUserId, 'POST', data);
+  const response = await request<UserInfoResultModel>(`${Api.PutUserInfo}/${WxUserId}`, 'POST', data);
   return response;
 }
 

@@ -2,31 +2,13 @@
   <view class="container">
     <view class="card">
       <view class="card_content">
-        <view>
-          <u-row>
-            <u-col span="12">
-              <view class="header">
-                header邀请你加入账单！
-              </view>
-            </u-col>
-          </u-row>
-        </view>
-        <view>
-          <u-row>
-            <u-col span="12">
-              <view class="body">
-                body邀请你加入账单！
-              </view>
-            </u-col>
-          </u-row>
+        <view class="card_content_body">
+          {{ body }}
         </view>
         <view class="card_content_foot">
           <u-row>
-            <u-col span="5" offset="0.5">
+            <u-col span="6" offset="3">
               <u-button type="primary" icon="man-add" text="加入账单" @click="Join" shape="circle"></u-button>
-            </u-col>
-            <u-col span="5" offset="1">
-              <u-button type="error" icon="man-delete" text="拒绝加入" @click="NotJoin" shape="circle"></u-button>
             </u-col>
           </u-row>
         </view>
@@ -35,11 +17,33 @@
   </view>
 </template>
 <script setup lang="ts">
-const Join = () => {
-  console.log("加入");
-}
-const NotJoin = () => {
-  console.log("拒绝加入");
+import { joinAccountBook } from '@/api/demo/book';
+import { JoinAccountBookInputRequestData } from '@/api/demo/model/BookModel';
+import { ShowToast } from '@/utils/toast';
+import { onLoad } from '@dcloudio/uni-app';
+import { ref } from 'vue';
+const body = ref("邀请你加入账单");
+const joinRequest = ref<JoinAccountBookInputRequestData>({
+  AccountBookId: null,
+  WxUserId: null
+});
+onLoad((query) => {
+  joinRequest.value.AccountBookId = query.AccountBookId;
+  joinRequest.value.WxUserId = query.WxUserId;
+  body.value = `${query.NickName}${body.value}`
+})
+const Join = async () => {
+  const res = await joinAccountBook(joinRequest.value)
+  if (res.data == true) {
+    ShowToast("加入成功", "success");
+  } else {
+    ShowToast(res.msg ?? "加入失败", "error");
+  }
+  setTimeout(() => {
+    uni.switchTab({
+      url: '/pages/home/index'
+    });
+  }, 2000);
 }
 </script>
 <style scoped lang="scss">
@@ -63,21 +67,15 @@ const NotJoin = () => {
     flex-direction: column;
 
     &_foot {
-      border: 1rpx solid red;
       margin-top: auto;
-      margin-bottom: 20rpx;
+      margin-bottom: 30rpx;
     }
 
-    .header {
-      border: 1rpx solid red;
-      text-align: center;
-      height: 100rpx;
-    }
-
-    .body {
-      border: 1rpx solid red;
-      text-align: center;
-      margin-top: 30rpx;
+    &_body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
   }
 }

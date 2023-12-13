@@ -33,4 +33,12 @@ export interface UpdateBookRequestData {
   Titile: string
 }
 
+/** 加入账本入参 */
+export interface JoinAccountBookInputRequestData {
+  /** 账本Id */
+  AccountBookId: string,
+  /** 微信用户Id */
+  WxUserId: string
+}
+
 export type BookResultModel = ApiResult<BookModel[]>;
