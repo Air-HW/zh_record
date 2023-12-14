@@ -33,17 +33,22 @@ onLoad((query) => {
   body.value = `${query.NickName}${body.value}`
 })
 const Join = async () => {
-  const res = await joinAccountBook(joinRequest.value)
-  if (res.data == true) {
-    ShowToast("加入成功", "success");
-  } else {
-    ShowToast(res.msg ?? "加入失败", "error");
+  try {
+    const res = await joinAccountBook(joinRequest.value)
+    if (res.data == true) {
+      ShowToast("加入成功", "success");
+    } else {
+      ShowToast(res.msg ?? "加入失败", "error");
+    }
+  } catch (error) {
+    ShowToast("加入失败", "error");
+  } finally {
+    setTimeout(() => {
+      uni.switchTab({
+        url: '/pages/home/index'
+      });
+    }, 2000);
   }
-  setTimeout(() => {
-    uni.switchTab({
-      url: '/pages/home/index'
-    });
-  }, 2000);
 }
 </script>
 <style scoped lang="scss">
