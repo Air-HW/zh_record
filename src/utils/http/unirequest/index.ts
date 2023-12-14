@@ -2,20 +2,17 @@
  * @Author: 张书瑞
  * @Date: 2023-11-02 18:35:57
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-06 23:50:24
+ * @LastEditTime: 2023-12-15 01:52:29
  * @FilePath: \zh_record\src\utils\http\unirequest\index.ts
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
-import { WxLogin } from "@/api/demo/model/UserModel";
-import { getRefreshToken, wxLogin } from "@/api/demo/user";
-import { TOKEN_KEY } from "@/enums/cacheEnum";
-import { LoginProviderEnum } from "@/enums/loginProviderEnum";
+import { getRefreshToken } from "@/api/demo/user";
 import { useUserStore } from "@/stores/modules/user";
 import { ShowToast } from "@/utils/toast";
 
-export const BASE_URL = "https://localhost:7234";
+export const BASE_URL = "https://xl.ilyday.com";
 const TIMEOUT = 10000;
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 const userStore = useUserStore();
@@ -30,10 +27,10 @@ const userStore = useUserStore();
  * @returns 
  */
 export const request = <T>(api: string, method: Method, data?: any, header?: object) => {
-  uni.showLoading({
-    title: "请求中...",
-    mask: true
-  });
+  // uni.showLoading({
+  //   title: "请求中...",
+  //   mask: true
+  // });
   const url = BASE_URL + api;
   const token = userStore.getToken;
   const refresh_token = userStore.getRefreshToken;
@@ -55,7 +52,7 @@ export const request = <T>(api: string, method: Method, data?: any, header?: obj
       timeout: TIMEOUT,
       dataType: 'json',
       success: async (res) => {
-        uni.hideLoading();
+        // uni.hideLoading();
         if (res.statusCode === 200) {
           resolve(res.data as T);
         } else if (res.statusCode === 401 && !_isRefreshToken) {
@@ -102,7 +99,7 @@ export const request = <T>(api: string, method: Method, data?: any, header?: obj
         }
       },
       fail: (err) => {
-        uni.hideLoading();
+        // uni.hideLoading();
         ShowToast("请求失败", "error");
         reject(err);
       }

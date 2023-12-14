@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-05 22:49:37
+ * @LastEditTime: 2023-12-15 01:25:54
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -25,8 +25,8 @@
         <view class="container_content_body">
           <text class="container_content_body_title">昵称</text>
           <view class="container_content_body_content">
-            <u-input :borderBottom="true" type="nickname" placeholder="昵称" class="input"
-              v-model="userData.NickName"></u-input>
+            <u-input :borderBottom="true" type="nickname" placeholder="昵称" class="input" v-model="userData.NickName"
+              @input="onInputNickName" @blur="onInputNickName"></u-input>
           </view>
         </view>
         <view class="container_content_body">
@@ -158,6 +158,11 @@ const cancel = () => {
   uni.switchTab({
     url: '/pages/home/index'
   });
+}
+const onInputNickName = (val) => {
+  if (val) {
+    userData.value.NickName = val
+  }
 }
 </script>
 <style scoped lang="scss">

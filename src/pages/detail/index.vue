@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-05 20:15:51
+ * @LastEditTime: 2023-12-15 01:31:34
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -227,7 +227,7 @@ const date = ref([
 ]);
 const title = ref("嗨");
 const subtitle = ref("Good morning!");
-const icon = ref("../../static/icon/sun.png");
+const icon = ref("../../static/weather/sun.png");
 const latestActive = ref(true);
 const byMonthActive = ref(false);
 const nowMonth = new Date().getMonth() + 1;

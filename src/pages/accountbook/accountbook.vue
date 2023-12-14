@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:13:26
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-10 20:33:47
+ * @LastEditTime: 2023-12-15 02:05:52
  * @FilePath: \zh_record\src\pages\accountbook\accountbook.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -24,7 +24,8 @@
           </view>
         </view>
         <view class="container_record_two">
-          <u-button type="primary" shape="circle" :customStyle="customStyle" text="分享" open-type="share"></u-button>
+          <u-button type="primary" shape="circle" :customStyle="customStyle" text="分享" open-type="share"
+            @click="handleShare(item.Id)"></u-button>
           <u-button type="primary" shape="circle" :plain="bookId !== item.Id" :customStyle="customStyle" text="默认"
             @click="defaultClick(item.Id)"></u-button>
         </view>
@@ -39,7 +40,6 @@ import { onShareAppMessage, onShow } from '@dcloudio/uni-app';
 import { reactive, ref } from 'vue';
 import { BookList } from '.';
 import { UpdateBookRequestData } from '@/api/demo/model/BookModel';
-import { LoginProviderEnum } from '@/enums/loginProviderEnum';
 var store = useUserStore();
 interface Book {
   list: BookList[]
@@ -89,11 +89,15 @@ const defaultClick = (Id: string) => {
   store.setDefaultId(Id);
   bookId.value = Id;
 }
+const AccountBookId = ref("");
+const handleShare = (Id: string) => {
+  AccountBookId.value = Id;
+}
 onShareAppMessage(() => {
   return {
     title: store.userInfo.NickName + '邀请你一起记账啦',
-    path: '/pages/ShareBills/ShareBills?',
-    imageUrl: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fc03a255b-2dee-4ec6-afd3-9b5ca0af9d55%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1704788470&t=f9f7d7612c092f7560e0e74d5e69acf3',
+    path: `/pages/ShareBills/ShareBills?AccountBookId=${AccountBookId}&WxUserId=${store.userInfo.Id}&NickName=${store.userInfo.NickName}`,
+    imageUrl: store.userInfo.HeadPortraitUrl,
     query: ''
   }
 })

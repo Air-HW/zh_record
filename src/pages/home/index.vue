@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-13 23:19:48
+ * @LastEditTime: 2023-12-15 01:58:23
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -96,26 +96,28 @@ onShow(async () => {
   }
 })
 const login = () => {
-  // #ifdef MP-WEIXIN
-  uni.login({
-    provider: LoginProviderEnum.微信,
-    success: async (res) => {
-      text.value = null;
-      wxLoginRequest.Code = res.code;
-      await wxLogin(wxLoginRequest);
-      const reqUserInfo = await getUserInfo();
-      userStore.setUser(reqUserInfo.data);
-      userData.value = reqUserInfo.data;
-      const reqDefault = await getBookDefaultId();
-      userStore.setDefaultId(reqDefault.data);
-      ShowToast("登录成功", "success");
-    },
-    fail: (res) => {
-      ShowToast("登录失败", "error");
-      console.log('微信登录失败', res)
-    }
-  });
-  // #endif
+  if (!userStore.getUser) {
+    // #ifdef MP-WEIXIN
+    uni.login({
+      provider: LoginProviderEnum.微信,
+      success: async (res) => {
+        text.value = null;
+        wxLoginRequest.Code = res.code;
+        await wxLogin(wxLoginRequest);
+        const reqUserInfo = await getUserInfo();
+        userStore.setUser(reqUserInfo.data);
+        userData.value = reqUserInfo.data;
+        const reqDefault = await getBookDefaultId();
+        userStore.setDefaultId(reqDefault.data);
+        ShowToast("登录成功", "success");
+      },
+      fail: (res) => {
+        ShowToast("登录失败", "error");
+        console.log('微信登录失败', res)
+      }
+    });
+    // #endif
+  }
 }
 const PayCode = ref("../../static/home/PayCode.jpg");
 const PayCodeShow = ref(false);

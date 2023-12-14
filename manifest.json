@@ -11,8 +11,8 @@
     "vueVersion" : "3",
     "locale" : "zh-Hans",
     "fallbackLocale" : "zh-Hans",
-    "name" : "随手记",
-    "versionName" : "随手记v1.0",
+    "name" : "发财日记",
+    "versionName" : "发财日记v2.0",
     "app-plus" : {
         "modules" : {
             "Share" : {}
