@@ -13,8 +13,16 @@
 
   </view>
   <view class="avatar">
+    <u-modal :show="isAuth" title="微信授权" :showCancelButton="true" confirmColor="#3c9cff" @confirm="login"
+      @cancel="notAuth">
+      <view class="content">
+        <view class="auth-icon"><u-icon name="weixin-fill" size="80"></u-icon></view>
+        <view class="auth-title">申请获取以下权限</view>
+        <view class="auth-subtitle">● 获得你的公开信息(昵称、头像、性别等)</view>
+      </view>
+    </u-modal>
     <view class="avatar_header">
-      <u-avatar class="uavatar" :text="text" :src="userData.HeadPortraitUrl" size="160rpx" @click="login">
+      <u-avatar class="uavatar" :text="text" :src="userData.HeadPortraitUrl" size="160rpx" @click="authClick">
       </u-avatar>
     </view>
     <view class="avatar_body">
@@ -67,6 +75,7 @@ import { onShow } from '@dcloudio/uni-app';
 import { LoginProviderEnum } from '@/enums/loginProviderEnum';
 import { ShowToast } from '@/utils/toast';
 import { getBookDefaultId } from '@/api/demo/book';
+const isAuth = ref(false);
 const userStore = useUserStore();
 const text = ref("请登录");
 const userData = ref<UserInfo>({
@@ -95,29 +104,42 @@ onShow(async () => {
     text.value = null;
   }
 })
-const login = () => {
+const authClick = () => {
   if (!userStore.getUser) {
-    // #ifdef MP-WEIXIN
-    uni.login({
-      provider: LoginProviderEnum.微信,
-      success: async (res) => {
-        text.value = null;
-        wxLoginRequest.Code = res.code;
-        await wxLogin(wxLoginRequest);
-        const reqUserInfo = await getUserInfo();
-        userStore.setUser(reqUserInfo.data);
-        userData.value = reqUserInfo.data;
-        const reqDefault = await getBookDefaultId();
-        userStore.setDefaultId(reqDefault.data);
-        ShowToast("登录成功", "success");
-      },
-      fail: (res) => {
-        ShowToast("登录失败", "error");
-        console.log('微信登录失败', res)
-      }
-    });
-    // #endif
+    isAuth.value = true;
   }
+}
+const login = () => {
+  uni.showLoading({
+    title: "登录中...",
+    mask: true
+  });
+  // #ifdef MP-WEIXIN
+  uni.login({
+    provider: LoginProviderEnum.微信,
+    success: async (res) => {
+      text.value = null;
+      wxLoginRequest.Code = res.code;
+      await wxLogin(wxLoginRequest);
+      const reqUserInfo = await getUserInfo();
+      userStore.setUser(reqUserInfo.data);
+      userData.value = reqUserInfo.data;
+      const reqDefault = await getBookDefaultId();
+      userStore.setDefaultId(reqDefault.data);
+      ShowToast("登录成功", "success");
+      uni.hideLoading();
+      return;
+    },
+    fail: (res) => {
+      ShowToast("登录失败", "error");
+      console.log('微信登录失败', res)
+    }
+  });
+  // #endif
+  uni.hideLoading();
+}
+const notAuth = () => {
+  isAuth.value = false;
 }
 const PayCode = ref("../../static/home/PayCode.jpg");
 const PayCodeShow = ref(false);
@@ -201,4 +223,19 @@ const billExport = () => {
   width: 600rpx;
   height: 600rpx;
 }
-</style>
+
+.auth-icon {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-title {
+  color: #585858;
+  font-size: 34rpx;
+  margin-bottom: 40rpx;
+}
+
+.auth-subtitle {
+  color: #888;
+  font-size: 28rpx;
+}</style>
