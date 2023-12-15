@@ -19,9 +19,11 @@
 <script setup lang="ts">
 import { joinAccountBook } from '@/api/demo/book';
 import { JoinAccountBookInputRequestData } from '@/api/demo/model/BookModel';
+import { useUserStore } from '@/stores/modules/user';
 import { ShowToast } from '@/utils/toast';
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
+const userStore = useUserStore();
 const body = ref("邀请你加入账单");
 const joinRequest = ref<JoinAccountBookInputRequestData>({
   AccountBookId: null,
@@ -29,13 +31,23 @@ const joinRequest = ref<JoinAccountBookInputRequestData>({
 });
 onLoad((query) => {
   joinRequest.value.AccountBookId = query.AccountBookId;
-  joinRequest.value.WxUserId = query.WxUserId;
   body.value = `${query.NickName}${body.value}`
 })
 const Join = async () => {
+  const userinfo = userStore.getUser;
+  if (!userinfo) {
+    ShowToast("请先登录", "error");
+    setTimeout(() => {
+      uni.switchTab({
+        url: '/pages/home/index'
+      });
+    }, 2000);
+    return;
+  }
+  joinRequest.value.WxUserId = userinfo.Id;
   try {
     const res = await joinAccountBook(joinRequest.value)
-    if (res.data == true) {
+    if (res.data === true) {
       ShowToast("加入成功", "success");
     } else {
       ShowToast(res.msg ?? "加入失败", "error");
