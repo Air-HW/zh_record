@@ -96,7 +96,7 @@ const handleShare = (Id: string) => {
 onShareAppMessage(() => {
   return {
     title: store.userInfo.NickName + '邀请你一起记账啦',
-    path: `/pages/ShareBills/ShareBills?AccountBookId=${AccountBookId}&WxUserId=${store.userInfo.Id}&NickName=${store.userInfo.NickName}`,
+    path: `/pages/accountbook/joinAccountBook?AccountBookId=${AccountBookId.value}&WxUserId=${store.userInfo.Id}&NickName=${store.userInfo.NickName}`,
     imageUrl: store.userInfo.HeadPortraitUrl,
     query: ''
   }

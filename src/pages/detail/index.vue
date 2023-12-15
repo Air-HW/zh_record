@@ -377,27 +377,26 @@ const RefreshData = async () => {
 
 const uGetRect = (selector: string, all?: 'selectAll' | 'select'): any => {
   return new Promise((resolve) => {
-    uni.createSelectorQuery()
-      .in(this)[all ? 'selectAll' : 'select'](selector)
-      .boundingClientRect((rect) => {
-        if (all && Array.isArray(rect) && rect.length) {
-          resolve(rect)
-        }
-        if (!all && rect) {
-          resolve(rect)
-        }
-      }).exec()
-  })
+    const query = uni.createSelectorQuery();
+    const context = all ? query.selectAll(selector) : query.select(selector);
+    context.boundingClientRect().exec((rect) => {
+      if ((all && Array.isArray(rect[0]) && rect[0].length) || (!all && rect[0])) {
+        resolve(rect[0]);
+      } else {
+        resolve([]);
+      }
+    });
+  });
 }
 
 const init = () => {
   setTimeout(async () => {
     const tabRect = date.value[cardCur.value - 1];
     const wrapper = await uGetRect('.wrapper');
-    await date.value.map(async x => {
+    await Promise.all(date.value.map(async x => {
       const itemIndex = await uGetRect(`.item--${x.key}`, 'selectAll');
       x.rect = itemIndex[0];
-    });
+    }));
     const offsetLeft = date.value.slice(0, cardCur.value - 1)
       .reduce((total, cur) => {
         return total + cur.rect.width + 7.5
