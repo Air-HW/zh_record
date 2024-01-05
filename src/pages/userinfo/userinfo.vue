@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-15 01:25:54
+ * @LastEditTime: 2023-12-15 20:09:05
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -29,7 +29,7 @@
               @input="onInputNickName" @blur="onInputNickName"></u-input>
           </view>
         </view>
-        <view class="container_content_body">
+        <!-- <view class="container_content_body">
           <text class="container_content_body_title">联系电话</text>
           <view class="container_content_body_content">
             <u-input :borderBottom="true" placeholder="联系电话" class="input" v-model="userData.Phone"></u-input>
@@ -57,7 +57,7 @@
               <u-radio :customStyle="{ marginRight: '30rpx' }" label="保密" name="2" />
             </u-radio-group>
           </view>
-        </view>
+        </view> -->
         <view class="container_content_bottom">
           <u-button shape="circle" type="info" :customStyle="customStyle" class="submit-btn" @click="cancel">取消</u-button>
           <u-button shape="circle" type="primary" :customStyle="customStyle" class="clear-btn" @click="save">保存</u-button>
@@ -90,7 +90,7 @@ const userData = ref<UserInfo>({
   OpenID: "",
   HeadPortraitUrl: "",
   Email: "",
-  BrithDay: ""
+  BrithDay: null
 })
 const IsBrithDayShow = ref(false);
 const minDate = ref(new Date(1900, 1, 1).getTime())
@@ -99,8 +99,8 @@ const HeadPortraitPath = ref();
 onShow(() => {
   userData.value = { ...userinfo };
   HeadPortraitPath.value = userData.value.HeadPortraitUrl;
-  userData.value.BrithDay = formatDate(new Date(userData.value.BrithDay));
-  BrithDay.value = userData.value.BrithDay;
+  // userData.value.BrithDay = formatDate(new Date(userData.value.BrithDay));
+  // BrithDay.value = userData.value.BrithDay;
 })
 let avatarFile = null;
 const dataPickerClick = () => {

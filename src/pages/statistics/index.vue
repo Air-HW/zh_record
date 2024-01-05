@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:16:20
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-05 20:22:48
+ * @LastEditTime: 2024-01-03 09:39:05
  * @FilePath: \zh_record\src\pages\statistics\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -231,14 +231,14 @@ const dateClikc = async (data: WeeksInYear) => {
   var dateType = dateCurList.value[DateCurIndex.value];
   if (dateType === '周' || dateType === '月') {
     requestLineData.value.DateType = '日';
-    requestLineData.value.StartTime = data.startDay;
-    requestLineData.value.EndTime = data.endDay;
-    requestRankData.value.StartTime = data.startDay;
-    requestRankData.value.EndTime = data.endDay;
   } else if (dateType === '年') {
     requestLineData.value.DateType = '年';
     requestLineData.value.Year = parseInt(data.name);
   }
+  requestLineData.value.StartTime = data.startDay;
+  requestLineData.value.EndTime = data.endDay;
+  requestRankData.value.StartTime = data.startDay;
+  requestRankData.value.EndTime = data.endDay;
   await RefreshData();
 }
 const scrollTop = ref(0);

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-12 13:40:29
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-27 23:02:43
+ * @LastEditTime: 2024-01-03 09:39:24
  * @FilePath: \zh_record\src\pages\statistics\index.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -64,9 +64,9 @@ export function getMonthInDate(date: string): WeeksInYear[] {
   const currDate = new Date(date);
   const nowDate = new Date();
   //获取开始计算日期
-  const StartComputeDate = currDate > nowDate ? nowDate :currDate;
+  const StartComputeDate = currDate > nowDate ? nowDate : currDate;
   //获取结束计算日期
-  const EndComputeDate = currDate > nowDate ? currDate :nowDate;
+  const EndComputeDate = currDate > nowDate ? currDate : nowDate;
   let StartComputeMonth = StartComputeDate.getMonth();
   let StartComputeYear = StartComputeDate.getFullYear();
   let endDay = new Date(StartComputeYear, StartComputeMonth + 1, 0).getDate();
@@ -170,8 +170,8 @@ export function getYearsInDate(date: string): WeeksInYear[] {
     const year = StartComputeYear + index;
     weeksInYear.push({
       name: `${year}`,
-      startDay: `${StartComputeYear}-01-01`,
-      endDay: `${year}-12-31`
+      startDay: `${year}-01-01 00:00:00`,
+      endDay: `${year}-12-31 23:59:59`
     });
   }
   return weeksInYear;

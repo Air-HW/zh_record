@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-11 21:31:29
+ * @LastEditTime: 2024-01-05 01:25:45
  * @FilePath: \zh_record\src\pages.json
  * @Description:
  * @email: 1592955886@qq.com
@@ -20,6 +20,7 @@
     {
       "path": "pages/detail/index",
       "style": {
+        "navigationStyle": "custom", // 隐藏系统导航栏
         "navigationBarTitleText": "明细"
       }
     },

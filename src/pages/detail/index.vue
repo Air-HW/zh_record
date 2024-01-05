@@ -2,14 +2,23 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-15 01:31:34
+ * @LastEditTime: 2024-01-05 09:00:18
  * @FilePath: \zh_record\src\pages\detail\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
 -->
 <template>
-  <view class="content">
+  <u-navbar title="明细" bgColor="#3c9cff" height="44px" :safeAreaInsetTop="true" :titleStyle="titleStyle">
+    <template #left>
+      <view class="navbar-year" @click="changeYear">
+        <span>{{ getReordParam.Year }}</span>
+      </view>
+    </template>
+  </u-navbar>
+  <u-datetime-picker :show="yearPic" v-model="yearPicValue" @confirm="confirmYearData" @cancel="closeYearData"
+    :closeOnClickOverlay="true" @close="closeYearData" mode="year-month"></u-datetime-picker>
+  <view class="content" :style="{ 'margin-top': navbarTop + 'px' }">
     <view class="book">
       <view class="title">
         <view class="titletext-container">
@@ -94,7 +103,8 @@
               </view>
               <view class="detailitem-pay-title">
                 <u-cell size="large" :title="data.NickName" :border="false"
-                  :value="data.Type == 0 ? `+${data.Amount}` : `-${data.Amount}`" :label="data.IncomeExpenseName"
+                  :value="data.Type == 0 ? `+${data.Amount}` : `-${data.Amount}`"
+                  :label="data.IncomeExpenseName + (data.Remarks ? ' | ' + data.Remarks : '')"
                   @click="clikcRecordItem(data)"></u-cell>
               </view>
             </view>
@@ -121,7 +131,7 @@
           <u-input v-model="model.Amount" :borderBottom="true" placeholder="请输入金额" class="input"></u-input>
           <template #right>
             <u-datetime-picker :show="DataShow" v-model="SelectDate" @confirm="confirmData" @cancel="closeData"
-              mode="date"></u-datetime-picker>
+              mode="date" :closeOnClickOverlay="true" @close="closeData"></u-datetime-picker>
             <u-button type="primary" size="small" @click="ShowDataPikc">{{ model.RecordTime }}</u-button>
           </template>
         </u-form-item>
@@ -146,7 +156,7 @@ import { getChartData, getRecord } from "@/api/demo/record";
 import { useUserStore } from "@/stores/modules/user";
 import { ShowToast } from "@/utils/toast";
 import { onPageScroll, onShow } from "@dcloudio/uni-app";
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { RecordDetailView, PieChartData, processRecordData } from ".";
 import { deleteAccountRecord, getIncomeExpenseType, updateAccountRecord } from "@/api/demo/list";
 import { IncomeExpenseTypeList } from "@/api/demo/model/IncomeExpenseTypeModel";
@@ -279,6 +289,35 @@ const scrollList = ref<IncomeExpenseTypeList[]>([]);
 const DefaultId = store.getDefaultId;
 const SelectDate = ref("");
 const DataShow = ref(false);
+
+let titleStyle: { [key: string]: any } = { color: 'white', fontWeight: 'bold' };
+// #ifdef MP-WEIXIN
+titleStyle = { color: 'white' };
+// #endif
+const yearPic = ref(false);
+const yearPicValue = ref(`${nowYear}-${nowMonth}`);
+let navbarTop = 0;
+onMounted(() => {
+  navbarTop = uni.getSystemInfoSync().statusBarHeight + 44;
+})
+const changeYear = () => {
+  yearPic.value = true;
+}
+const confirmYearData = async (e) => {
+  const FormatDate = TimeStampFormatDate(e.value);
+  const dateList = FormatDate.split("-");
+  getReordParam.value.Year = parseInt(dateList[0]);
+  getReordParam.value.Month = parseInt(dateList[1]);
+  cardCur.value = getReordParam.value.Month;
+  yearPic.value = false;
+  latestActive.value = false;
+  byMonthActive.value = true;
+  init();
+  await RefreshData();
+}
+const closeYearData = () => {
+  yearPic.value = false;
+}
 const scrollHandleClick = async (index) => {
   model.value.TypeId = scrollList.value[index].Id;
 }
@@ -317,7 +356,7 @@ const submitForm = async () => {
       if (data.isSuccess) {
         ShowToast("编辑成功", "success");
         showPopup.value = false;
-        RefreshData();
+        await RefreshData();
       }
       else {
         ShowToast(data.msg, "error");
@@ -332,7 +371,7 @@ const deleteData = async () => {
   if (res.isSuccess) {
     ShowToast("删除成功", "success");
     showPopup.value = false;
-    RefreshData();
+    await RefreshData();
   }
   else {
     ShowToast(res.msg, "error");
@@ -399,15 +438,15 @@ const init = () => {
     }));
     const offsetLeft = date.value.slice(0, cardCur.value - 1)
       .reduce((total, cur) => {
-        return total + cur.rect.width + 7.5
+        return total + cur.rect.width + 7.5;
       }, 0);
     let scrollLeft1 = offsetLeft - (wrapper.width - tabRect.rect.width) / 2;
     scrollLeft1 = Math.min(scrollLeft1, wrapper.width - tabRect.rect.width);
     scrollLeft.value = Math.max(0, scrollLeft1);
-  })
+  });
 }
 
-onShow(() => {
+onShow(async () => {
   const now = new Date();
   const currentHour = now.getHours();
   const subtitleEn = currentHour >= 0 && currentHour < 11 ? 'Good morning!' :
@@ -420,25 +459,24 @@ onShow(() => {
     title.value = `嗨，${userinfo.NickName}`;
     getReordParam.value.Id = store.getDefaultId;
   }
-  RefreshData();
+  await RefreshData();
 })
 
-const latestClick = () => {
-  if (cardCur.value != nowMonth && getReordParam.value.Month != nowMonth) {
-    cardCur.value = nowMonth;
-    getReordParam.value.Month = nowMonth;
-    RefreshData();
-  }
+const latestClick = async () => {
+  cardCur.value = nowMonth;
+  getReordParam.value.Month = nowMonth;
+  getReordParam.value.Year = nowYear;
   latestActive.value = true;
   byMonthActive.value = false;
+  await RefreshData();
 };
 
-const dateClick = (item: any) => {
+const dateClick = async (item: any) => {
   if (cardCur.value != item.key && getReordParam.value.Month != item.key) {
-    init();
     cardCur.value = item.key;
     getReordParam.value.Month = item.key;
-    RefreshData();
+    init();
+    await RefreshData();
   }
 };
 
@@ -458,7 +496,7 @@ const clikcRecordItem = async (item: RecordDetail) => {
   recordId.value = item.Id;
 };
 
-const byMonthActiveClick = () => {
+const byMonthActiveClick = async () => {
   init();
   latestActive.value = false;
   byMonthActive.value = true;
@@ -479,6 +517,17 @@ onPageScroll((e) => {
 </script>
 
 <style lang="scss" scoped>
+.navbar-year {
+  border: 2rpx dotted white;
+  padding: 10rpx 20rpx;
+  border-radius: 25rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30rpx;
+  color: white;
+}
+
 .content {
   margin: 0;
   padding: 0;
@@ -668,7 +717,6 @@ onPageScroll((e) => {
       }
 
       .detailitem-pay {
-        height: 130rpx;
         display: flex;
 
         .detailitem-pay-icon {

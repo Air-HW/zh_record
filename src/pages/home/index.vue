@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:40:01
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-15 01:58:23
+ * @LastEditTime: 2024-01-04 23:04:15
  * @FilePath: \zh_record\src\pages\home\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -92,28 +92,30 @@ const wxLoginRequest = reactive<WxLogin>({
   Code: null
 })
 onShow(async () => {
-  if (userData.value.Id === null) {
-    const res = await getUserInfo();
-    if (res.isSuccess) {
-      userStore.setUser(res.data);
-      userData.value = res.data;
-      text.value = null;
-    }
-  } else {
+  if (userStore.getUser) {
     userData.value = { ...userStore.getUser };
     text.value = null;
   }
+  // if (!userStore.getUser) {
+  //   const res = await getUserInfo();
+  //   if (res.isSuccess) {
+  //     userStore.setUser(res.data);
+  //     userData.value = res.data;
+  //     text.value = null;
+  //   }
+  // } else {
+  //   userData.value = { ...userStore.getUser };
+  //   text.value = null;
+  // }
 })
 const authClick = () => {
+  // #ifdef MP-WEIXIN
   if (!userStore.getUser) {
     isAuth.value = true;
   }
+  // #endif
 }
 const login = () => {
-  uni.showLoading({
-    title: "登录中...",
-    mask: true
-  });
   // #ifdef MP-WEIXIN
   uni.login({
     provider: LoginProviderEnum.微信,
@@ -127,7 +129,7 @@ const login = () => {
       const reqDefault = await getBookDefaultId();
       userStore.setDefaultId(reqDefault.data);
       ShowToast("登录成功", "success");
-      uni.hideLoading();
+      isAuth.value = false;
       return;
     },
     fail: (res) => {
@@ -136,7 +138,6 @@ const login = () => {
     }
   });
   // #endif
-  uni.hideLoading();
 }
 const notAuth = () => {
   isAuth.value = false;
@@ -238,4 +239,5 @@ const billExport = () => {
 .auth-subtitle {
   color: #888;
   font-size: 28rpx;
-}</style>
+}
+</style>

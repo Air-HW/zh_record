@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-10 21:42:42
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-29 23:21:32
+ * @LastEditTime: 2024-01-05 09:00:28
  * @FilePath: \zh_record\src\pages\list\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -191,7 +191,6 @@ const closeData = () => {
 <style lang="scss" scoped>
 .formStyle {
   margin: 15px 15px;
-  // border: 1px solid red;
 }
 
 .scroll-list {
