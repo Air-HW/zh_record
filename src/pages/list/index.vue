@@ -44,7 +44,7 @@
         <u-form-item label="备注" prop="Remarks" label-width="80px" class="form-item">
           <u-textarea v-model="model.Remarks" placeholder="请输入备注"></u-textarea>
         </u-form-item>
-        <u-button :customStyle="btnStyle" shape="circle" type="primary" @click="submitForm"
+        <u-button :customStyle="btnStyle" :disabled="btnDisabled" shape="circle" type="primary" @click="submitForm"
           class="submit-btn">提交</u-button>
         <u-button :customStyle="btnStyle" shape="circle" type="error" @click="clearForm" class="clear-btn">重置</u-button>
       </u-form>
@@ -135,11 +135,24 @@ const rules = ref({
         return String(value);
       },
       message: '最多保留两位小数'
+    },
+    {
+      //设置金额最高不能大于50万
+      asyncValidator: (rule, value, callback) => {
+        if (value > 500000) {
+          callback(new Error('单次金额不能大于50万'));
+        } else {
+          callback();
+        }
+      }
     }
   ]
 });
+//按钮限制多次点击
+const btnDisabled = ref(false);
 //提交表单
 const submitForm = async () => {
+  btnDisabled.value = true;
   uForms.value.validate().then(async (res) => {
     if (res) {
       model.TypeId = typeId.value;
@@ -151,12 +164,15 @@ const submitForm = async () => {
         clearForm();
         closePopup();
         SelectDate.value = TimeStampFormatDate(Date.now());
+        btnDisabled.value = false;
       }
       else {
         ShowToast(data.msg, "error");
+        btnDisabled.value = false;
       }
     }
   }).catch(() => {
+    btnDisabled.value = false;
   })
 };
 //表单重置

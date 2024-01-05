@@ -296,9 +296,9 @@ titleStyle = { color: 'white' };
 // #endif
 const yearPic = ref(false);
 const yearPicValue = ref(`${nowYear}-${nowMonth}`);
-let navbarTop = 0;
+const navbarTop = ref(0);
 onMounted(() => {
-  navbarTop = uni.getSystemInfoSync().statusBarHeight + 44;
+  navbarTop.value = uni.getSystemInfoSync().statusBarHeight + 44;
 })
 const changeYear = () => {
   yearPic.value = true;
@@ -337,13 +337,25 @@ const model = ref<InsertOrUpdateRecordRequestData>({
 //表单校验
 const rules = ref({
   Amount: [
-    // { required: true, message: '请输入金额', trigger: 'blur' },
     {
       pattern: /^([1-9]\d*(\.\d{1,2})?|0\.\d{1,2})$/,
       transform(value) {
         return String(value);
       },
       message: '请输入大于0的金额,并且最多保留两位小数'
+    },
+    {
+      //设置金额最高不能大于50万
+      asyncValidator: (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请输入金额'));
+        }
+        if (value > 500000) {
+          callback(new Error('单次金额不能大于50万'));
+        } else {
+          callback();
+        }
+      }
     }
   ]
 });

@@ -8,11 +8,11 @@ export default {
       },
     });
     // #ifdef MP-WEIXIN
-    const updateManager = wx.getUpdateManager();
+    const updateManager = uni.getUpdateManager();
     updateManager.onCheckForUpdate(function (res) {
       if (res.hasUpdate) {
         updateManager.onUpdateReady(function () {
-          wx.showModal({
+          uni.showModal({
             title: '更新提示',
             content: '新版本已经准备好，是否重启应用？',
             success: function (res) {
@@ -23,7 +23,7 @@ export default {
           });
         });
         updateManager.onUpdateFailed(function () {
-          wx.showModal({
+          uni.showModal({
             title: '更新提示',
             content: '新版本下载失败，请检查您的网络状态并重启应用。',
             showCancel: false

@@ -27,10 +27,25 @@ const userStore = useUserStore();
  * @returns 
  */
 export const request = <T>(api: string, method: Method, data?: any, header?: object) => {
-  // uni.showLoading({
-  //   title: "请求中...",
-  //   mask: true
-  // });
+  let loadingCount = 0; //用于跟踪请求数量的计数器
+
+  const showLoading = () => {
+    if (loadingCount === 0) {
+      uni.showLoading({
+        title: "请求中...",
+        mask: true
+      });
+    }
+    loadingCount++;
+  };
+
+  const hideLoading = () => {
+    loadingCount--;
+    if (loadingCount === 0) {
+      uni.hideLoading();
+    }
+  };
+
   const url = BASE_URL + api;
   const token = userStore.getToken;
   const refresh_token = userStore.getRefreshToken;
@@ -44,6 +59,7 @@ export const request = <T>(api: string, method: Method, data?: any, header?: obj
   }
   //异步封装接口，使用Promise处理异步请求
   return new Promise<T>((resolve, reject) => {
+    showLoading();
     uni.request({
       url,
       method,
@@ -52,7 +68,7 @@ export const request = <T>(api: string, method: Method, data?: any, header?: obj
       timeout: TIMEOUT,
       dataType: 'json',
       success: async (res) => {
-        // uni.hideLoading();
+        hideLoading();
         if (res.statusCode === 200) {
           resolve(res.data as T);
         } else if (res.statusCode === 401 && !_isRefreshToken) {
@@ -99,7 +115,7 @@ export const request = <T>(api: string, method: Method, data?: any, header?: obj
         }
       },
       fail: (err) => {
-        // uni.hideLoading();
+        hideLoading();
         ShowToast("请求失败", "error");
         reject(err);
       }
