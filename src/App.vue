@@ -1,7 +1,6 @@
 <script>
 export default {
   onLaunch: function () {
-    console.log('App Launch')
     uni.getSystemInfo({
       success: (res) => {
         uni.$statusBarHeight = res.statusBarHeight;
@@ -34,10 +33,8 @@ export default {
     // #endif
   },
   onShow: function () {
-    console.log('App Show')
   },
   onHide: function () {
-    console.log('App Hide')
   },
 }
 </script>

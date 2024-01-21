@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-09 20:18:04
  * @LastEditors: 张书瑞
- * @LastEditTime: 2024-01-05 01:25:45
+ * @LastEditTime: 2024-01-21 21:53:37
  * @FilePath: \zh_record\src\pages.json
  * @Description:
  * @email: 1592955886@qq.com
@@ -64,6 +64,12 @@
       "path": "pages/accountbook/joinAccountBook",
       "style": {
         "navigationBarTitleText": "加入账单"
+      }
+    },
+    {
+      "path": "pages/statistics/piedetail/piedetail",
+      "style": {
+        "navigationBarTitleText": "明细"
       }
     }
   ],

@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-08 21:39:30
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-11-16 23:35:12
+ * @LastEditTime: 2024-01-21 19:45:40
  * @FilePath: \zh_record\src\api\demo\model\StatisticsModel.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -67,6 +67,18 @@ export interface PostStatisticsLineRequestData {
   EndTime?: string,
   /** DateType为年时，此参数当作按年查询 */
   Year: number
+}
+
+/** 指定收支类型下的明细 */
+export interface InExTypeDetailRequestData {
+  /** 账本Id */
+  Id: string,
+  /** 收支类型Id */
+  TypeId: string,
+  /** 统计开始时间 */
+  StartTime: string,
+  /** 统计结束时间 */
+  EndTime: string
 }
 
 /** 统计页面排行榜反参 */

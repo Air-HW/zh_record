@@ -2,21 +2,23 @@
  * @Author: 张书瑞
  * @Date: 2023-11-12 16:34:16
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-06 00:49:39
+ * @LastEditTime: 2024-01-21 21:40:33
  * @FilePath: \zh_record\src\api\demo\statistics.ts
  * @Description: 
  * @email: 1592955886@qq.com
  * Copyright (c) 2023 by 张书瑞, All Rights Reserved. 
  */
 import { request } from "@/utils/http/unirequest";
-import { GetStatisticsRankRequestData, PostStatisticsLineRequestData, StatisticsLineResultModel, StatisticsPieResultModel, StatisticsRankResultModel } from "./model/StatisticsModel";
+import { GetStatisticsRankRequestData, InExTypeDetailRequestData, PostStatisticsLineRequestData, StatisticsLineResultModel, StatisticsPieResultModel, StatisticsRankResultModel } from "./model/StatisticsModel";
 import { ApiResult } from "../model/baseModel";
+import { RecordDetailResultModel } from "./model/RecordModel";
 
 enum Api {
   PostStatisticsRank = '/api/Statistics/statistics-rank',
   PostStatisticsPie = '/api/Statistics/statistics-pie',
   PostStatisticsLine = '/api/Statistics/statistics-line',
-  BookEarliest = '/api/AccountBook/book-earliest'
+  BookEarliest = '/api/AccountBook/book-earliest',
+  IETypeDetail = '/api/AccountRecord/ie-type-detail'
 }
 
 /**
@@ -56,5 +58,15 @@ export const postStatisticsLine = async (param: PostStatisticsLineRequestData) =
  */
 export const getBookEarliest = async (Id: string) => {
   const response = await request<ApiResult<string>>(`${Api.BookEarliest}/${Id}`, 'GET');
+  return response;
+}
+
+/**
+ * 获取指定收支类型下的明细
+ * @param params 账本Id
+ * @returns 
+ */
+export const postIETypeDetail = async (para: InExTypeDetailRequestData) => {
+  const response = await request<RecordDetailResultModel>(Api.IETypeDetail, 'POST', para);
   return response;
 }

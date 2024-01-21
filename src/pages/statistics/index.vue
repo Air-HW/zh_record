@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-05-28 20:16:20
  * @LastEditors: 张书瑞
- * @LastEditTime: 2024-01-03 09:39:05
+ * @LastEditTime: 2024-01-21 20:06:40
  * @FilePath: \zh_record\src\pages\statistics\index.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -32,8 +32,8 @@
     </view>
     <view class="RankPick" v-if="!IsViewEmpty">
       <text class="charts_title">{{ typeList[typeIndex] }}排行榜</text>
-      <view v-for="(item, index) in  RankData " :key="index">
-        <view class="RankPick_item">
+      <view v-for="(item, index) in RankData" :key="index">
+        <view class="RankPick_item" @click="pieDetail(item)">
           <view class="RankPick_item_img">
             <image class="RankPick_item_img_style" :src="item.IncomeExpenseUrl"></image>
           </view>
@@ -275,6 +275,12 @@ const RefreshData = async () => {
     pie.series[0].data = reqPie.data;
     PieData.value = pie;
   }
+}
+
+const pieDetail = (item: StatisticsRankData) => {
+  uni.navigateTo({
+    url: `/pages/statistics/piedetail/piedetail?TypeId=${item.TypeId}&StartTime=${requestRankData.value.StartTime}&EndTime=${requestRankData.value.EndTime}`
+  });
 }
 </script>
 <style scoped lang="scss">
