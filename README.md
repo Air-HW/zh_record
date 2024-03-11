@@ -57,8 +57,9 @@
 
 ## 使用说明
 
-1. 启动开发服务器：npm run dev
-2. 在浏览器中打开 http://localhost:8080 来访问应用程序。
+1. 启动开发服务器VSCode：npm run dev:h5
+2. 或者通过HBuilder 进行配置运行该项目
+3. 在浏览器中打开 http://localhost:5173 来访问应用程序。
 
 ## 版本控制与协作
 
@@ -66,7 +67,7 @@
 
 git add .
 git commit -m 'commit message'
-git push origin master
+git push origin dev
 
 如果你想要参与该项目的开发，请 Fork 该仓库并创建一个新的分支，然后向我们发送一个合并请求。
 
