@@ -12,7 +12,7 @@ import { getRefreshToken } from "@/api/demo/user";
 import { useUserStore } from "@/stores/modules/user";
 import { ShowToast } from "@/utils/toast";
 
-export const BASE_URL = "https://xl.ilyday.com";
+export const BASE_URL = "http://localhost:8081";
 const TIMEOUT = 10000;
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 const userStore = useUserStore();
