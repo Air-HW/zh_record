@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-11-02 18:35:57
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-15 01:52:29
+ * @LastEditTime: 2024-01-21 22:02:08
  * @FilePath: \zh_record\src\utils\http\unirequest\index.ts
  * @Description: 
  * @email: 1592955886@qq.com
@@ -27,24 +27,24 @@ const userStore = useUserStore();
  * @returns 
  */
 export const request = <T>(api: string, method: Method, data?: any, header?: object) => {
-  let loadingCount = 0; //用于跟踪请求数量的计数器
+  // let loadingCount = 0; //用于跟踪请求数量的计数器
 
-  const showLoading = () => {
-    if (loadingCount === 0) {
-      uni.showLoading({
-        title: "请求中...",
-        mask: true
-      });
-    }
-    loadingCount++;
-  };
+  // const showLoading = () => {
+  //   if (loadingCount === 0) {
+  //     uni.showLoading({
+  //       title: "请求中...",
+  //       mask: true
+  //     });
+  //   }
+  //   loadingCount++;
+  // };
 
-  const hideLoading = () => {
-    loadingCount--;
-    if (loadingCount === 0) {
-      uni.hideLoading();
-    }
-  };
+  // const hideLoading = () => {
+  //   loadingCount--;
+  //   if (loadingCount === 0) {
+  //     uni.hideLoading();
+  //   }
+  // };
 
   const url = BASE_URL + api;
   const token = userStore.getToken;
@@ -59,7 +59,7 @@ export const request = <T>(api: string, method: Method, data?: any, header?: obj
   }
   //异步封装接口，使用Promise处理异步请求
   return new Promise<T>((resolve, reject) => {
-    showLoading();
+    // showLoading();
     uni.request({
       url,
       method,
@@ -68,7 +68,7 @@ export const request = <T>(api: string, method: Method, data?: any, header?: obj
       timeout: TIMEOUT,
       dataType: 'json',
       success: async (res) => {
-        hideLoading();
+        // hideLoading();
         if (res.statusCode === 200) {
           resolve(res.data as T);
         } else if (res.statusCode === 401 && !_isRefreshToken) {
@@ -115,7 +115,7 @@ export const request = <T>(api: string, method: Method, data?: any, header?: obj
         }
       },
       fail: (err) => {
-        hideLoading();
+        // hideLoading();
         ShowToast("请求失败", "error");
         reject(err);
       }

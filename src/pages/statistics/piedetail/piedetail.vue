@@ -59,7 +59,6 @@ onLoad(async (query) => {
   paraData.value.EndTime = query.EndTime;
   const req = await postIETypeDetail(paraData.value);
   recordDetailList.value = processRecordData(req.data);
-  console.log(recordDetailList);
 })
 const scrollTop = ref(0);
 const iconStyle = reactive({

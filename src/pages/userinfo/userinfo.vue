@@ -2,7 +2,7 @@
  * @Author: 张书瑞
  * @Date: 2023-08-20 18:26:09
  * @LastEditors: 张书瑞
- * @LastEditTime: 2023-12-15 20:09:05
+ * @LastEditTime: 2024-01-21 21:55:52
  * @FilePath: \zh_record\src\pages\userinfo\userinfo.vue
  * @Description: 
  * @email: 1592955886@qq.com
@@ -129,7 +129,7 @@ const avatarClick = () => {
 // 点击头像按钮事件
 const onClickAvatar = () => {
   // #ifdef MP-WEIXIN
-  return
+  return;
   // #endif
   avatarClick();
 }
