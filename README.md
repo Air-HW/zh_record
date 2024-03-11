@@ -4,7 +4,7 @@
 
 你可以通过 [这个链接](http://ilyday.com/) 查看应用程序信息。
 
-![](D:\小张携旅\zh_vitepress\xcx.png)
+![](http://ilyday.com/xcx.png)
 
 ## 项目简介
 
