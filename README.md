@@ -1,6 +1,10 @@
-# 小张携旅
+# 發财日记账
 
 这是一款用来记录每日收支情况的应用程序。
+
+你可以通过 [这个链接](http://ilyday.com/) 查看应用程序信息。
+
+![](D:\小张携旅\zh_vitepress\xcx.png)
 
 ## 项目简介
 
@@ -11,55 +15,45 @@
 - 记录每日的收入和支出
 - 支持多账户管理
 - 统计每日、每周、每月的收入和支出
-- 设置预算和目标，进行预算规划
-- 导出收支记录和统计报表
+- 支持自定义添加收支类型
+- 每日、周、月的收入和支出的数据图表可视化
 
 ## 技术栈
 
 本项目使用了以下技术栈：
 
-- Vue 3：主要框架
+- Vue3：主要框架
 - TypeScript：更加健壮的代码组织方式
-- uni-app：跨平台开发框架
-- uview-plus：优美的样式组件库
-- Pinia：Vue 3 生态中的状态管理库
+- Uni-App：跨平台开发框架
+- uView-plus：优美的样式组件库
+- Pinia：Vue3生态中的状态管理库
 - Axios：用于向后端请求数据的 HTTP 客户端
+- uCharts：用于数据可视化的图表库
 
 ## 开发环境设置
 
 1. 确保已经安装 Node.js 和 npm。
-2. 全局安装 uni-app 脚手架：npm install -g @vue/cli
-3. 克隆项目代码到本地：git clone https://github.com/your-github-username/your-repo.git
-4. 安装项目依赖：npm install
-5. 启动开发服务器：npm run dev
 
-## 目录结构
+   - Node.js 版本：v16.18.1
+   - npm 版本：8.19.2
 
-- public
-  - favicon.ico
-  - index.html
-- src
-  - api
-    - request.ts
-  - assets
-    - logo.png
-  - components
-    - HelloWorld.vue
-  - pages
-    - Index.vue
-  - plugins
-    - uview-ui.ts
-  - store
-    - index.ts
-  - utils
-    - date.ts
-  - App.vue
-  - main.ts
-  - shims-vue.d.ts
-- .gitignore
-- package.json
-- README.md
-- tsconfig.json
+2. 安装 Vue CLI 版本：5.0.8
+
+   ```
+   npm install -g @vue/cli
+   ```
+
+3. 安装项目依赖
+
+   ```
+   npm install or npm i
+   ```
+
+4. 编译并启动开发服务器
+
+   ```
+   npm run dev:h5
+   ```
 
 ## 使用说明
 
@@ -75,10 +69,6 @@ git commit -m 'commit message'
 git push origin master
 
 如果你想要参与该项目的开发，请 Fork 该仓库并创建一个新的分支，然后向我们发送一个合并请求。
-
-## 授权许可
-
-MIT
 
 ## 开发者信息
 
